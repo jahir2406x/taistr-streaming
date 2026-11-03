@@ -26,3 +26,7 @@ Desktop.ini
 .playwright-mcp/
 scratch/
 
+
+# Archivos comprimidos de despliegue
+*.zip
+*.tar.gz
