@@ -12,7 +12,7 @@ export const AJUSTES = {
   // Fecha de última actualización de tarifas que se muestra en el pie de página y en Garantía
   prices_updated_at: '2026-10-30',
   // URL principal del sitio (usa la variable de entorno SITE_URL si existe, o el valor de respaldo)
-  siteUrl: (typeof import.meta !== 'undefined' && import.meta.env?.SITE_URL) || 'https://taistr.com',
+  siteUrl: (typeof import.meta !== 'undefined' && import.meta.env?.SITE_URL) || 'https://serviciostai.com',
   // Token opcional de Cloudflare Web Analytics (sin cookies)
   cfBeaconToken: (typeof import.meta !== 'undefined' && import.meta.env?.PUBLIC_CF_BEACON_TOKEN) || '',
   // Código opcional de verificación para Google Search Console desde variable de entorno GOOGLE_SITE_VERIFICATION (sin valor por defecto)

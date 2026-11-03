@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 
 export default defineConfig({
-  site: 'https://taistr.com',
+  site: 'https://serviciostai.com',
   output: 'static',
   server: {
     port: 4321,

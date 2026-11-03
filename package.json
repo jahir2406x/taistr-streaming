@@ -19,6 +19,7 @@
     "seguridad": "node --experimental-strip-types scripts/seguridad.ts",
     "a11y": "node --experimental-strip-types scripts/a11y.ts",
     "verificar": "node --experimental-strip-types scripts/verificar.ts",
+    "deploy:cpanel": "node scripts/deploy-cpanel.mjs",
     "preview": "astro preview"
   },
   "dependencies": {
