@@ -1,0 +1,160 @@
+---
+import type { StreamingService } from '../../types/service';
+import { AJUSTES, TEXTOS_INICIO, TEXTOS_BOTONES } from '../../editar';
+import { formatPrice, resolvePlanPrice } from '../../core';
+import BotonWhatsApp from '../ui/BotonWhatsApp.astro';
+import InsigniaServicio from './InsigniaServicio.astro';
+
+interface Props {
+  service: StreamingService;
+  index?: number;
+}
+
+const { service, index = 0 } = Astro.props;
+
+const minPen = Math.min(...service.planes.map((p) => resolvePlanPrice(p.prices, 'PEN').amount));
+const formattedDefaultMin = formatPrice(minPen, 'PEN', 'es-PE');
+
+const minPricesByCurrency: Record<string, number> = {};
+for (const plan of service.planes) {
+  for (const [curr, val] of Object.entries(plan.prices)) {
+    if (typeof val === 'number' && (minPricesByCurrency[curr] === undefined || val < minPricesByCurrency[curr])) {
+      minPricesByCurrency[curr] = val;
+    }
+  }
+}
+
+const categoryLabels = TEXTOS_INICIO.catalogo.etiquetasCategoria;
+const acciones = TEXTOS_BOTONES.acciones;
+const buttonClass = [
+  'wa-btn-shine inline-flex items-center justify-center text-center text-xs sm:text-sm font-semibold px-3 py-2.5 rounded min-h-[44px] transition-colors',
+  service.disponible
+    ? 'bg-brand-whatsapp hover:bg-brand-whatsappHover text-white'
+    : 'bg-amber-600 hover:bg-amber-500 text-white',
+].join(' ');
+---
+
+<article
+  data-revelar
+  data-category={service.categoria}
+  style={`--service-accent: ${service.color_acento}; --i: ${index % 6};`}
+  class="service-card bg-[var(--surface-3)] border border-[var(--border-subtle)] rounded-[var(--radius-card)] overflow-hidden flex flex-col justify-between relative h-full"
+>
+  <!-- Franja superior con degradado de acento propio del servicio -->
+  <div
+    class="h-1 w-full relative z-10"
+    style={`background: linear-gradient(90deg, ${service.color_acento} 0%, color-mix(in srgb, ${service.color_acento} 40%, transparent) 100%);`}
+    aria-hidden="true"
+  ></div>
+
+  <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between gap-5 relative z-10">
+    <div class="space-y-3.5">
+      <!-- Cabecera de tarjeta: Insignia con elevación + estado -->
+      <div class="flex items-start justify-between gap-3">
+        <div class="flex items-center gap-3.5">
+          <InsigniaServicio servicio={service} tamano="md" esDecorativa={true} class="service-card-badge" />
+          <div>
+            <h3
+              class="font-display font-bold text-[length:var(--text-h3)] text-ink leading-tight"
+              style={`view-transition-name: svc-title-${service.slug};`}
+            >
+              <a
+                href={`/servicios/${service.slug}`}
+                title={`Ver planes y precios de ${service.nombre}`}
+                class="hover:text-brand transition-colors"
+              >
+                {service.nombre}
+              </a>
+            </h3>
+            <span class="text-xs text-ink-muted block mt-0.5">
+              {categoryLabels[service.categoria]}
+            </span>
+          </div>
+        </div>
+
+        {
+          service.disponible ? (
+            <span class="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded bg-emerald-950/70 text-emerald-300 border border-emerald-800/60 shrink-0">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
+              {acciones.disponible}
+            </span>
+          ) : (
+            <span class="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded bg-amber-950/70 text-amber-300 border border-amber-800/60 shrink-0">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-400" aria-hidden="true" />
+              {acciones.bajoConsulta}
+            </span>
+          )
+        }
+      </div>
+
+      <p class="text-sm text-ink-muted leading-relaxed">
+        {service.descripcion_corta}
+      </p>
+
+      <!-- Resumen rápido de características -->
+      <ul class="space-y-1.5 pt-1 text-xs text-ink-muted">
+        {
+          service.caracteristicas.slice(0, 3).map((item) => (
+            <li class="flex items-start gap-2">
+              <span
+                class="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
+                style={`background-color: ${service.color_acento};`}
+                aria-hidden="true"
+              />
+              <span>{item}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <!-- Pie de tarjeta con precio condicional y doble acción alineada abajo -->
+    <div class="pt-4 border-t border-ground-border space-y-3 mt-auto">
+      <div class="flex items-baseline justify-between gap-2 min-h-[28px]">
+        <span class="text-xs text-ink-muted">
+          {service.planes.length} {service.planes.length === 1 ? 'plan disponible' : 'planes disponibles'}
+        </span>
+        {
+          AJUSTES.SHOW_PRICES ? (
+            <div class="text-right">
+              <span class="text-xs text-ink-muted">Desde </span>
+              <span
+                data-price-map={JSON.stringify(minPricesByCurrency)}
+                class="geo-price font-display font-bold text-lg text-ink inline-block min-w-[5.5rem]"
+              >
+                {formattedDefaultMin}
+              </span>
+              <span class="text-xs text-ink-muted"> / mes*</span>
+            </div>
+          ) : (
+            <span class="text-xs font-medium text-brand">{acciones.consultarPrecio}</span>
+          )
+        }
+      </div>
+
+      <div class="grid grid-cols-2 gap-2.5">
+        <a
+          href={`/servicios/${service.slug}`}
+          title={`Ver todos los planes de ${service.nombre}`}
+          aria-label={`Ver planes de ${service.nombre}`}
+          class="service-card-secondary-btn inline-flex items-center justify-center text-center text-xs sm:text-sm font-medium text-ink bg-ground-elevated hover:bg-ground border border-ground-border px-3 py-2.5 rounded-[var(--radius-button)] min-h-[44px]"
+        >
+          {acciones.verPlanes} ({service.planes.length})
+        </a>
+
+        <BotonWhatsApp
+          tipo={service.disponible ? 'barra_movil' : 'consultar_disponibilidad'}
+          servicio={service.nombre}
+          precioFormateado={formattedDefaultMin}
+          disponible={service.disponible}
+          preciosMap={minPricesByCurrency}
+          mensajeServicioComprar={service.mensaje_comprar}
+          mensajeServicioDisponibilidad={service.mensaje_disponibilidad}
+          texto={service.disponible ? acciones.pedirAhora : acciones.consultarDisponibilidad}
+          title={service.disponible ? `Pedir suscripción de ${service.nombre} por WhatsApp` : `Consultar disponibilidad de ${service.nombre} por WhatsApp`}
+          class={buttonClass}
+        />
+      </div>
+    </div>
+  </div>
+</article>

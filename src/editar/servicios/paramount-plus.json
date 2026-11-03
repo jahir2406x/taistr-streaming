@@ -1,0 +1,60 @@
+{
+    "id":  "paramount-plus",
+    "nombre":  "Paramount+",
+    "slug":  "paramount-plus",
+    "iniciales":  "P+",
+    "categoria":  "video",
+    "eslogan":  "Paramount+ barato en Perú. Cine de Paramount Pictures, Nickelodeon y Showtime.",
+    "descripcion_corta":  "Perfil personal de Paramount+ exclusivo para Smart TV, celular y PC en soles.",
+    "descripcion_larga":  "Con Paramount+ tienes acceso directo a las películas de Paramount Pictures (Top Gun, Misión Imposible, Transformers), todo el contenido de Nickelodeon para los niños, las temporadas especiales de South Park y series aclamadas como Tulsa King, Halo y Yellowstone.",
+    "caracteristicas":  [
+                            "Películas de Paramount Pictures y clásicos del cine",
+                            "Todo el universo de Nickelodeon (Bob Esponja, Paw Patrol, iCarly)",
+                            "Series originales de Showtime y especiales exclusivos de South Park",
+                            "Perfil independiente para conservar tu progreso",
+                            "Garantía durante todo el periodo contratado con soporte por WhatsApp"
+                        ],
+    "planes":  [
+                   {
+                       "id":  "paramount-perfil-1m",
+                       "nombre":  "Perfil Personal",
+                       "duracion":  "1 mes",
+                       "pantallas":  "1 pantalla a la vez",
+                       "prices":  {
+                                      "PEN":  8,
+                                      "USD":  2.5,
+                                      "MXN":  45,
+                                      "ARS":  2900
+                                  },
+                       "nota":  "Excelente relación precio-calidad",
+                       "mensaje_comprar":  "",
+                       "mensaje_disponibilidad":  "",
+                       "incluye":  [
+                                       "1 pantalla a la vez en Full HD",
+                                       "Vigencia: 1 mes",
+                                       "Películas de Paramount Pictures y estrenos de cine",
+                                       "Universo Nickelodeon y series de Showtime",
+                                       "Descargas en app móvil para ver sin internet",
+                                       "Compatible con Smart TV, celulares, tablets y PC"
+                                   ],
+                       "nota_panel":  "Garantía completa durante todo el periodo contratado.",
+                       "descuentos":  {
+                                          "2":  0,
+                                          "3":  10,
+                                          "6":  20
+                                      }
+                   }
+               ],
+    "mensaje_whatsapp":  "Hola, quiero pedir Paramount+. ¿Está disponible?",
+    "color_acento":  "#0064FF",
+    "disponible":  true,
+    "faq":  [
+                {
+                    "pregunta":  "¿Cómo activo Paramount+ en mi Smart TV?",
+                    "respuesta":  "Te entregamos los datos de acceso para ingresar directamente o puedes pasarnos el código que aparece en la pantalla de tu televisor para vincularlo de inmediato."
+                }
+            ],
+    "mensaje_comprar":  "",
+    "mensaje_disponibilidad":  "",
+    "resumen_seo":  "perfil Full HD para Smart TV y móvil"
+}

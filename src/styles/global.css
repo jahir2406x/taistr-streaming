@@ -1,0 +1,967 @@
+/* Estilos globales de la web (con soporte para directivas de Tailwind CSS) */
+@import '../editar/tema.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  background-color: #09090B;
+  color: #F4F4F5;
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
+}
+
+[id] {
+  scroll-margin-top: clamp(4.5rem, 8vw, 6rem);
+}
+
+.nav-link-mobile[data-active="true"] {
+  color: var(--color-brand);
+  background-color: rgba(245, 158, 11, 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transform: none !important;
+    scroll-behavior: auto !important;
+  }
+  [data-revelar],
+  .hero-stagger,
+  .texto-pais-transicion {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
+
+html[data-anim="off"] :is(*, *::before, *::after) {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+}
+
+html[data-anim="off"] :is([data-revelar], .hero-stagger) {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-sans);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  text-wrap: balance;
+}
+
+h1 { letter-spacing: -0.028em; }
+h2 { letter-spacing: -0.022em; }
+h3, h4 { letter-spacing: -0.015em; }
+
+.geo-price {
+  font-variant-numeric: tabular-nums;
+}
+
+:is([data-texto-pais], .geo-price, .precio-fade-cambio) {
+  transition: opacity var(--anim-rapida) var(--ease-out), transform var(--anim-rapida) var(--ease-out), filter var(--anim-rapida) var(--ease-out);
+}
+
+:is(.texto-pais-transicion, .precio-fade-activo) {
+  opacity: 0.4;
+  transform: translateY(-2px) scale(0.985);
+  filter: blur(2px);
+}
+
+/* ==========================================================================
+   MULTI-PAÍS DINÁMICO: VISIBILIDAD Y ANIMACIÓN FLUIDA ENTRE PAÍSES
+   ========================================================================== */
+[data-geo-country] {
+  display: none !important;
+}
+
+html:is([data-country="PE"], :not([data-country])) [data-geo-country="PE"] {
+  display: block !important;
+}
+
+html[data-country="MX"] [data-geo-country="MX"] {
+  display: block !important;
+}
+
+html[data-country="AR"] [data-geo-country="AR"] {
+  display: block !important;
+}
+
+html[data-country="default"] [data-geo-country="default"] {
+  display: block !important;
+}
+
+html.js-anim:not([data-anim="off"]) [data-geo-country] {
+  animation: geoCountryFadeIn 280ms var(--ease-out);
+}
+
+@keyframes geoCountryFadeIn {
+  from {
+    opacity: 0.4;
+    transform: translateY(6px) scale(0.995);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+:focus-visible {
+  outline: 2px solid #F59E0B;
+  outline-offset: 3px;
+}
+
+/* Boleto interactivo con muescas laterales tipo cine y acento dinámico */
+.ticket-stub {
+  --ticket-accent: #F59E0B;
+  position: relative;
+  background: linear-gradient(165deg, rgba(16, 16, 22, 0.96) 0%, rgba(9, 9, 11, 0.98) 100%);
+  border: 1px solid color-mix(in srgb, var(--ticket-accent) 32%, #262630);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
+              0 10px 26px -10px color-mix(in srgb, var(--ticket-accent) 22%, transparent);
+  transition: border-color var(--anim-media) var(--ease-out),
+              box-shadow var(--anim-media) var(--ease-out);
+}
+
+.ticket-stub::before,
+.ticket-stub::after {
+  content: "";
+  position: absolute;
+  top: 54%;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background-color: #13131B;
+  border: 1px solid color-mix(in srgb, var(--ticket-accent) 32%, #262630);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.ticket-stub::before {
+  left: -7px;
+  clip-path: inset(0 0 0 50%);
+}
+
+.ticket-stub::after {
+  right: -7px;
+  clip-path: inset(0 50% 0 0);
+}
+
+/* Respuesta táctil física inmediata en botones y controles interactivos */
+.btn-press,
+.filter-btn,
+.nav-anchor-pill,
+.btn-secondary-glass,
+.service-card-secondary-btn,
+.hero-platform-chip,
+.hero-metric-card {
+  transition-property: transform, background-color, border-color, color, box-shadow;
+  transition-duration: var(--anim-rapida);
+  transition-timing-function: var(--ease-out);
+}
+
+.btn-press:active,
+.filter-btn:active,
+.nav-anchor-pill:active,
+.chip-transition:active,
+.btn-secondary-glass:active,
+.service-card-secondary-btn:active,
+.hero-platform-chip:active,
+.panel-medio-opcion:active,
+.panel-duracion-chip:active,
+.panel-duracion-opcion:active {
+  transform: scale(0.97);
+}
+
+.btn-secondary-glass {
+  background: linear-gradient(180deg, rgba(30, 30, 40, 0.85) 0%, rgba(20, 20, 27, 0.92) 100%);
+  border: 1px solid var(--border-subtle);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1), 0 4px 14px -4px rgba(0, 0, 0, 0.5);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn-secondary-glass:hover {
+    border-color: var(--border-highlight);
+    background: linear-gradient(180deg, rgba(36, 36, 48, 0.95) 0%, rgba(24, 24, 33, 0.98) 100%);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.18), 0 8px 20px -6px rgba(0, 0, 0, 0.65);
+    transform: translateY(-1px);
+  }
+  .card-hover {
+    transition: transform var(--anim-rapida) var(--ease-out), border-color var(--anim-rapida) ease;
+  }
+  .card-hover:hover,
+  .hero-metric-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--border-highlight);
+  }
+}
+
+/* Tarjeta interactiva de plan (--acento por servicio con respaldo #F59E0B) */
+.tarjeta-plan {
+  --acento: #F59E0B;
+  overflow: visible;
+  position: relative;
+}
+
+.cuadricula-planes {
+  grid-auto-rows: auto auto 1fr auto;
+}
+
+@media (min-width: 640px) {
+  .cuadricula-planes[data-planes="4"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.tarjeta-plan:not(.tarjeta-plan--destacada) {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.tarjeta-plan-titulo {
+  min-height: 1.4em;
+}
+
+@supports (grid-template-rows: subgrid) {
+  .tarjeta-plan:not(.tarjeta-plan--destacada) {
+    display: grid;
+    grid-row: span 4;
+    grid-template-rows: subgrid;
+    row-gap: 1rem;
+  }
+  .tarjeta-plan-titulo {
+    min-height: unset;
+  }
+}
+
+.tarjeta-plan:focus-visible {
+  outline: 2px solid var(--acento, #F59E0B);
+  outline-offset: 3px;
+}
+
+.tarjeta-plan:hover,
+.tarjeta-plan:focus-visible {
+  border-color: var(--acento, #F59E0B);
+  box-shadow: 0 0 0 1px var(--acento, #F59E0B), 0 10px 28px -12px var(--acento, #F59E0B);
+}
+
+.tarjeta-plan-popular,
+.tarjeta-plan-etiqueta {
+  position: absolute;
+  bottom: 100%;
+  left: 1.5rem;
+  margin-bottom: -1px;
+  z-index: 10;
+  pointer-events: none;
+  white-space: nowrap;
+  border-radius: 0.375rem 0.375rem 0 0;
+  border: 1px solid;
+  border-bottom: 0 !important;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 600;
+  padding: 0.25rem 0.625rem;
+}
+
+.tarjeta-plan-popular {
+  background-color: color-mix(in srgb, #F59E0B 20%, #16161C);
+  color: color-mix(in srgb, #F59E0B 85%, #FFFFFF);
+  border-color: color-mix(in srgb, #F59E0B 50%, #16161C);
+}
+
+.tarjeta-plan-etiqueta {
+  background-color: color-mix(in srgb, var(--acento, #F59E0B) 22%, #16161C);
+  color: color-mix(in srgb, var(--acento, #F59E0B) 85%, #FFFFFF);
+  border-color: color-mix(in srgb, var(--acento, #F59E0B) 50%, #16161C);
+}
+
+.tarjeta-plan-popular--consulta {
+  background-color: color-mix(in srgb, #D97706 20%, #16161C);
+  color: #FCD34D;
+  border-color: color-mix(in srgb, #D97706 50%, #16161C);
+}
+
+.tarjeta-plan--destacada {
+  border-color: color-mix(in srgb, var(--acento, #F59E0B) 70%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--acento, #F59E0B) 35%, transparent),
+    0 4px 20px -4px color-mix(in srgb, var(--acento, #F59E0B) 25%, transparent);
+}
+
+.tarjeta-plan--destacada:hover,
+.tarjeta-plan--destacada:focus-visible {
+  border-color: var(--acento, #F59E0B);
+  box-shadow:
+    0 0 0 1px var(--acento, #F59E0B),
+    0 6px 24px -4px color-mix(in srgb, var(--acento, #F59E0B) 40%, transparent);
+}
+
+.tarjeta-destacada-grid {
+  display: grid;
+  grid-template-areas: "header" "precio" "incluye" "cta";
+  gap: 1.25rem;
+}
+
+@media (min-width: 1024px) {
+  .tarjeta-destacada-grid {
+    grid-template-areas: "header incluye precio" "header incluye cta";
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.8fr) auto;
+    align-items: start;
+    gap: 1.25rem 2rem;
+  }
+  .tarjeta-destacada-area-incluye,
+  .tarjeta-destacada-area-precio,
+  .tarjeta-destacada-area-cta {
+    align-self: start;
+    border-left: 1px solid #262630;
+    padding-left: 1.5rem;
+  }
+  .tarjeta-destacada-area-precio { text-align: right; }
+  .tarjeta-destacada-area-cta { display: flex; justify-content: flex-end; }
+}
+
+.tarjeta-destacada-area-header { grid-area: header; align-self: start; }
+.tarjeta-destacada-area-incluye { grid-area: incluye; }
+.tarjeta-destacada-area-precio { grid-area: precio; }
+.tarjeta-destacada-area-cta { grid-area: cta; }
+
+.tarjeta-plan-cta {
+  color: #F4F4F5;
+  transition: color var(--anim-rapida) var(--ease-out);
+}
+
+.tarjeta-plan-flecha {
+  display: inline-block;
+  transition: transform var(--anim-rapida) var(--ease-out);
+}
+
+@media (hover: hover) and (min-width: 640px) {
+  .tarjeta-plan-cta { color: #A1A1AA; }
+}
+
+.tarjeta-plan:hover .tarjeta-plan-cta,
+.tarjeta-plan:focus-visible .tarjeta-plan-cta {
+  color: color-mix(in srgb, var(--acento, #F59E0B) 75%, #FFFFFF);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tarjeta-plan {
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.06), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
+    transition: transform var(--anim-rapida) var(--ease-out),
+                border-color var(--anim-rapida) var(--ease-out),
+                box-shadow var(--anim-media) var(--ease-out);
+  }
+  .tarjeta-plan:active {
+    transform: scale(0.985);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .tarjeta-plan:hover {
+      transform: translateY(-3px);
+    }
+  }
+  .tarjeta-plan:hover .tarjeta-plan-flecha,
+  .tarjeta-plan:focus-visible .tarjeta-plan-flecha {
+    transform: translateX(4px);
+  }
+}
+
+.panel-medio-opcion[aria-checked="true"] {
+  border-color: var(--acento, #F59E0B);
+  background-color: #16161C;
+}
+
+.panel-medio-opcion[aria-checked="true"] .panel-medio-radio {
+  border-color: var(--acento, #F59E0B);
+}
+
+.panel-medio-opcion[aria-checked="true"] .panel-medio-dot {
+  background-color: var(--acento, #F59E0B);
+  opacity: 1;
+}
+
+html[data-geo-ready="false"] .geo-price {
+  color: transparent !important;
+  background-color: #262630;
+  border-radius: 0.25rem;
+  user-select: none;
+}
+
+/* ==========================================================================
+   INSIGNIA / MONOGRAMA DE SERVICIOS (ACABADO 3D CON PROFUNDIDAD, BISEL Y LUZ)
+   ========================================================================== */
+.insignia-servicio {
+  --size: var(--insignia-md);
+  width: var(--size);
+  height: var(--size);
+  border-radius: 24%;
+  background:
+    radial-gradient(115% 115% at 24% 16%, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0) 58%),
+    linear-gradient(155deg,
+      color-mix(in srgb, var(--acento, #F59E0B) 88%, white 12%) 0%,
+      var(--acento, #F59E0B) 44%,
+      color-mix(in srgb, var(--acento, #F59E0B) 50%, black 50%) 100%
+    );
+  color: var(--texto-insignia, #FFFFFF);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-family: var(--font-sans);
+  line-height: 1;
+  user-select: none;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    inset 0 1.5px 1px rgba(255, 255, 255, 0.65),
+    inset 0 -3px 4px rgba(0, 0, 0, 0.55),
+    0 6px 16px -2px color-mix(in srgb, var(--acento, #F59E0B) 42%, transparent),
+    0 4px 10px -1px rgba(0, 0, 0, 0.7);
+  transition: transform var(--anim-media) var(--ease-spring),
+              box-shadow var(--anim-media) var(--ease-out);
+}
+
+.insignia-servicio::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(175deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.05) 38%, transparent 42%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.insignia-servicio::after {
+  content: '';
+  position: absolute;
+  bottom: 1px;
+  left: 18%;
+  right: 18%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.insignia-servicio span {
+  position: relative;
+  z-index: 2;
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5), 0 2px 4px rgba(0, 0, 0, 0.7);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+}
+
+.insignia-servicio[style*="#09090B"] span {
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4), 0 -1px 1px rgba(0, 0, 0, 0.85);
+  filter: drop-shadow(0 1px 1px rgba(255, 255, 255, 0.25));
+}
+
+.insignia-servicio--sm { --size: var(--insignia-sm); }
+.insignia-servicio--md { --size: var(--insignia-md); }
+.insignia-servicio--lg { --size: var(--insignia-lg); }
+.insignia-servicio[data-len="1"] { font-size: calc(var(--size) * 0.54); }
+.insignia-servicio[data-len="2"] { font-size: calc(var(--size) * 0.44); }
+.insignia-servicio[data-len="3"] { font-size: calc(var(--size) * 0.34); }
+
+.insignia-servicio img {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 24%;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.45));
+}
+
+/* ==========================================================================
+   SISTEMA DE SUPERFICIES, RITMO Y CONTENEDORES
+   ========================================================================== */
+.section-rhythm { padding-block: var(--section-py); }
+
+.section-below-fold {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 650px;
+}
+
+.section-kicker {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.7rem;
+  line-height: 1;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-brand);
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  padding: 0.3rem 0.65rem;
+  border-radius: 9999px;
+}
+
+.surface-card {
+  background: linear-gradient(165deg, rgba(25, 25, 34, 0.94) 0%, rgba(18, 18, 25, 0.98) 100%);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  contain: paint;
+  transition: transform var(--anim-rapida) var(--ease-out),
+              border-color var(--anim-rapida) var(--ease-out),
+              box-shadow var(--anim-media) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .surface-card:hover {
+    border-color: var(--border-highlight);
+    box-shadow: var(--shadow-card-hover);
+  }
+}
+
+details[open].surface-card {
+  border-color: rgba(245, 158, 11, 0.35);
+  box-shadow: var(--shadow-card-hover), 0 0 24px -10px rgba(245, 158, 11, 0.2);
+}
+
+/* ==========================================================================
+   HEADER CON EFECTO VIDRIO, COMPACTACIÓN Y SUBRAYADO DESLIZANTE
+   ========================================================================== */
+#site-header {
+  background-color: rgba(9, 9, 11, 0.78);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
+  transition-property: border-color, box-shadow, background-color, backdrop-filter;
+  transition-duration: var(--anim-media);
+  transition-timing-function: var(--ease-out);
+}
+
+#site-header .header-inner {
+  transition: height var(--anim-media) var(--ease-out);
+}
+
+@supports not (backdrop-filter: blur(14px)) {
+  #site-header { background-color: #09090B; }
+}
+
+#site-header.header-scrolled {
+  background-color: rgba(9, 9, 11, 0.92);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border-bottom-color: rgba(255, 255, 255, 0.13);
+  box-shadow: 0 10px 30px -6px rgba(0, 0, 0, 0.72), inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+}
+
+#site-header.header-scrolled .header-inner {
+  height: 3.35rem;
+}
+
+.nav-sliding-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 1px;
+  background: var(--color-brand);
+  border-radius: 999px;
+  opacity: 0;
+  transform-origin: left center;
+  transform: translate3d(var(--nav-x, 0px), 0, 0) scaleX(var(--nav-w, 0));
+  transition: transform var(--anim-media) var(--ease-spring),
+              opacity var(--anim-rapida) var(--ease-out);
+  pointer-events: none;
+}
+
+#site-nav[data-has-active="true"] .nav-sliding-indicator { opacity: 1; }
+.nav-link[data-active="true"] { color: var(--color-ink); }
+
+/* ==========================================================================
+   HERO: AURORA, RETÍCULA ARQUITECTÓNICA, TARJETA DE VIDRIO, MÉTRICAS Y CHIPS
+   ========================================================================== */
+.hero-grid-pattern {
+  background-size: 3.25rem 3.25rem;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 35%, #000 35%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 35%, #000 35%, transparent 100%);
+}
+
+.hero-noise-layer {
+  opacity: 0.032;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.hero-glass-card {
+  background: linear-gradient(155deg, rgba(26, 26, 36, 0.9) 0%, rgba(15, 15, 21, 0.96) 100%);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  box-shadow: 0 24px 52px -12px rgba(0, 0, 0, 0.78),
+              inset 0 1px 0 0 rgba(255, 255, 255, 0.18);
+}
+
+.hero-metric-card {
+  background: linear-gradient(180deg, rgba(25, 25, 34, 0.86) 0%, rgba(17, 17, 23, 0.72) 100%);
+  border: 1px solid var(--border-subtle);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08), 0 6px 18px -6px rgba(0, 0, 0, 0.45);
+}
+
+.hero-platform-strip {
+  overflow: visible;
+}
+
+.segmented-filter {
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.segmented-filter::-webkit-scrollbar {
+  display: none;
+}
+
+.hero-platform-chip {
+  background: linear-gradient(180deg, rgba(24, 24, 32, 0.88) 0%, rgba(17, 17, 23, 0.94) 100%);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hero-platform-chip:hover {
+    transform: translateY(-2px);
+    border-color: var(--chip-accent, #F59E0B);
+    background-color: var(--surface-3);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.15),
+                0 8px 20px -6px color-mix(in srgb, var(--chip-accent, #F59E0B) 48%, transparent);
+  }
+}
+
+@keyframes heroDrift1 {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(4%, 6%, 0) scale(1.06); }
+  100% { transform: translate3d(-3%, 3%, 0) scale(0.96); }
+}
+
+@keyframes heroDrift2 {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(-5%, -4%, 0) scale(1.05); }
+  100% { transform: translate3d(4%, -5%, 0) scale(0.95); }
+}
+
+html.js-anim:not([data-anim="off"]) .hero-glow-blob-1 {
+  animation: heroDrift1 24s ease-in-out infinite alternate;
+}
+
+html.js-anim:not([data-anim="off"]) .hero-glow-blob-2 {
+  animation: heroDrift2 28s ease-in-out infinite alternate;
+}
+
+html.js-anim:not([data-anim="off"]) .hero-aurora-section[data-offscreen="true"] .hero-glow-blob-1,
+html.js-anim:not([data-anim="off"]) .hero-aurora-section[data-offscreen="true"] .hero-glow-blob-2 {
+  animation-play-state: paused;
+}
+
+@supports (animation-timeline: view()) {
+  @keyframes auroraScrollParallax {
+    from { transform: translate3d(0, -4%, 0); }
+    to { transform: translate3d(0, 8%, 0); }
+  }
+  html.js-anim:not([data-anim="off"]) .hero-aurora-bg {
+    animation: auroraScrollParallax linear both;
+    animation-timeline: view();
+    animation-range: entry 0% exit 100%;
+  }
+}
+
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(10px) scale(0.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+html.js-anim:not([data-anim="off"]) .hero-stagger {
+  opacity: 0;
+  transform: translateY(10px) scale(0.985);
+  animation: heroFadeUp var(--anim-media) var(--ease-out) forwards;
+  animation-delay: calc(var(--i, 0) * 55ms);
+}
+
+.hero-country-gradient {
+  background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 50%, #FCD34D 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: #F59E0B;
+  display: inline-block;
+  padding-bottom: 0.28em;
+  margin-bottom: -0.28em;
+  padding-inline: 0.04em;
+  margin-inline: -0.04em;
+  vertical-align: baseline;
+  overflow: visible;
+  transition: opacity var(--anim-rapida) var(--ease-out), transform var(--anim-rapida) var(--ease-out);
+}
+
+/* ==========================================================================
+   SCROLL REVEAL (FÍSICA EMIL KOWALSKI CON GPU COMPOSITE Y STAGGER)
+   ========================================================================== */
+html.js-anim:not([data-anim="off"]) [data-revelar] {
+  opacity: 0;
+  transform: translate3d(0, 18px, 0);
+  transition: opacity 380ms var(--ease-out), transform 420ms var(--ease-out);
+}
+
+html.js-anim:not([data-anim="off"]) [data-revelar].revelado {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition: opacity 400ms var(--ease-out), transform 450ms var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 50ms);
+}
+
+.hero-platform-divider {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.comparativa-table tbody > tr + tr {
+  border-top: 1px solid var(--border-subtle) !important;
+}
+
+/* ==========================================================================
+   CATÁLOGO: CONTROL SEGMENTADO Y TARJETAS CON LUZ DE PUNTERO
+   ========================================================================== */
+.segmented-filter {
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+}
+
+.filter-sliding-indicator {
+  position: absolute;
+  top: 0.375rem;
+  bottom: 0.375rem;
+  left: 0;
+  width: 1px;
+  background-color: var(--color-brand);
+  border-radius: 0.5rem;
+  opacity: 0;
+  transform-origin: left center;
+  transform: translate3d(var(--ind-x, 6px), 0, 0) scaleX(var(--ind-w, 0));
+  transition: transform var(--anim-media) var(--ease-spring),
+              opacity var(--anim-rapida) var(--ease-out);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.segmented-filter[data-ready="true"] .filter-sliding-indicator { opacity: 1; }
+.segmented-filter[data-ready="true"] .filter-btn[aria-selected="true"] {
+  background-color: transparent !important;
+  color: #09090B !important;
+}
+
+@keyframes cardFilterEnter {
+  from { opacity: 0; transform: translateY(8px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+html.js-anim:not([data-anim="off"]) .service-card.is-filtering-in {
+  animation: cardFilterEnter 220ms var(--ease-out) both;
+  animation-delay: calc(var(--filter-i, 0) * 35ms);
+}
+
+.service-card {
+  contain: paint;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  background:
+    radial-gradient(120% 80% at 100% 0%, color-mix(in srgb, var(--service-accent, #F59E0B) 10%, transparent) 0%, transparent 65%),
+    linear-gradient(165deg, rgba(26, 26, 35, 0.96) 0%, rgba(17, 17, 23, 0.99) 100%);
+  transition-property: transform, border-color, box-shadow;
+  transition-duration: var(--anim-media);
+  transition-timing-function: var(--ease-out);
+}
+
+.service-card .service-card-badge {
+  transition: transform var(--anim-media) var(--ease-spring),
+              box-shadow var(--anim-media) var(--ease-out);
+}
+
+.service-card:focus-within {
+  border-color: color-mix(in srgb, var(--service-accent, #F59E0B) 75%, white);
+  box-shadow: var(--shadow-card-hover),
+              0 0 28px -6px color-mix(in srgb, var(--service-accent, #F59E0B) 38%, transparent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .service-card:hover {
+    transform: translateY(-4px);
+    border-color: color-mix(in srgb, var(--service-accent, #F59E0B) 78%, white);
+    box-shadow: var(--shadow-card-hover),
+                0 0 30px -6px color-mix(in srgb, var(--service-accent, #F59E0B) 42%, transparent);
+  }
+  .service-card:hover .service-card-badge,
+  .service-card:focus-within .service-card-badge {
+    transform: translateY(-2px) scale(1.05);
+  }
+  .service-card:hover .service-card-secondary-btn {
+    border-color: color-mix(in srgb, var(--service-accent, #F59E0B) 45%, #262630);
+  }
+  html.js-anim:not([data-anim="off"]) :is(.service-card, .tarjeta-plan)::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      340px circle at var(--x, 50%) var(--y, 0%),
+      color-mix(in srgb, var(--service-accent, var(--acento, #F59E0B)) 16%, transparent),
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity var(--anim-media) var(--ease-out);
+    pointer-events: none;
+    z-index: 0;
+  }
+  html.js-anim:not([data-anim="off"]) :is(.service-card, .tarjeta-plan):hover::before {
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   WHATSAPP, ATRACCIÓN MAGNÉTICA Y MICRO-INTERACCIONES
+   ========================================================================== */
+.wa-btn-shine {
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.26), 0 6px 20px -6px rgba(22, 163, 74, 0.55);
+  transform: translate3d(var(--mag-x, 0px), var(--mag-y, 0px), 0);
+  transition-property: transform, background-color, box-shadow;
+  transition-duration: var(--anim-rapida);
+  transition-timing-function: var(--ease-out);
+}
+
+.wa-btn-shine::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -75%;
+  width: 50%;
+  height: 200%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.24), transparent);
+  transform: skewX(-20deg) translateX(-150%);
+  transition: transform 600ms var(--ease-out);
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .wa-btn-shine:hover {
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.34), 0 10px 26px -4px rgba(22, 163, 74, 0.7);
+  }
+  .wa-btn-shine:hover::after {
+    transform: skewX(-20deg) translateX(450%);
+  }
+}
+
+.wa-btn-shine:active {
+  transform: translate3d(var(--mag-x, 0px), var(--mag-y, 0px), 0) scale(0.97);
+}
+
+@keyframes waPulseRing {
+  0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.65); }
+  70% { box-shadow: 0 0 0 14px rgba(22, 163, 74, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
+}
+
+html.js-anim:not([data-anim="off"]) .floating-wa-pulse {
+  animation: waPulseRing 2s cubic-bezier(0.2, 0, 0, 1) 3 forwards;
+}
+
+/* ==========================================================================
+   ARMADOR RÁPIDO Y CHIPS SPRING
+   ========================================================================== */
+.chip-transition,
+.panel-medio-opcion,
+.panel-duracion-chip,
+.panel-duracion-opcion {
+  transition: transform var(--anim-rapida) var(--ease-spring),
+              border-color var(--anim-rapida) var(--ease-out),
+              background-color var(--anim-rapida) var(--ease-out),
+              color var(--anim-rapida) var(--ease-out),
+              box-shadow var(--anim-rapida) var(--ease-out);
+}
+
+.chip-transition[aria-pressed="true"],
+.chip-transition[aria-checked="true"],
+.chip-transition[data-active="true"] {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px -4px rgba(245, 158, 11, 0.35);
+}
+
+/* ==========================================================================
+   PLAN DESTACADO (PERFIL EXTRA): DESTELLO CÓNICO LENTO
+   ========================================================================== */
+@property --conic-angle {
+  syntax: "<angle>";
+  initial-value: 45deg;
+  inherits: false;
+}
+
+@keyframes conicBorderAngle {
+  to { --conic-angle: 405deg; }
+}
+
+html.js-anim:not([data-anim="off"]) .tarjeta-plan--destacada {
+  --conic-angle: 45deg;
+  background:
+    linear-gradient(#16161C, #16161C) padding-box,
+    conic-gradient(
+      from var(--conic-angle),
+      color-mix(in srgb, var(--acento, #F59E0B) 85%, white),
+      color-mix(in srgb, var(--acento, #F59E0B) 25%, #262630) 35%,
+      color-mix(in srgb, var(--acento, #F59E0B) 90%, white) 65%,
+      color-mix(in srgb, var(--acento, #F59E0B) 25%, #262630)
+    ) border-box;
+  border: 1px solid transparent;
+  animation: conicBorderAngle 14s linear infinite;
+}
+
+/* ==========================================================================
+   FAQ: APERTURA SUAVE CON INTERPOLATE-SIZE Y DETAILS-CONTENT
+   ========================================================================== */
+@supports (interpolate-size: allow-keywords) {
+  :root { interpolate-size: allow-keywords; }
+  details::details-content {
+    opacity: 0;
+    block-size: 0;
+    overflow-y: clip;
+    transition: content-visibility var(--anim-media) allow-discrete,
+                block-size var(--anim-media) var(--ease-out),
+                opacity var(--anim-media) var(--ease-out);
+  }
+  details[open]::details-content {
+    opacity: 1;
+    block-size: auto;
+  }
+}

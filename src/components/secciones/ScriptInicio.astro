@@ -1,0 +1,204 @@
+---
+import { AJUSTES, SERVICIOS } from '../../editar';
+
+const services = SERVICIOS;
+---
+
+<script
+  is:inline
+  define:vars={{
+    servicesClient: services.map((s) => ({
+      slug: s.slug,
+      nombre: s.nombre,
+      color_acento: s.color_acento,
+      disponible: s.disponible,
+      mensaje_comprar: s.mensaje_comprar || '',
+      mensaje_disponibilidad: s.mensaje_disponibilidad || '',
+      planes: s.planes,
+    })),
+    showPrices: AJUSTES.SHOW_PRICES,
+    defaultDurationLabel: (AJUSTES.duraciones[0] || { etiqueta: '1 mes' }).etiqueta,
+  }}
+>
+  (function () {
+    var tablist = document.getElementById('catalogo-tablist');
+    var filterButtons = document.querySelectorAll('.filter-btn');
+    var cards = document.querySelectorAll('.service-card');
+
+    function syncFilterIndicator(activeBtn) {
+      if (!tablist || !activeBtn) return;
+      tablist.style.setProperty('--ind-x', activeBtn.offsetLeft + 'px');
+      tablist.style.setProperty('--ind-w', String(activeBtn.offsetWidth));
+      tablist.setAttribute('data-ready', 'true');
+    }
+
+    filterButtons.forEach(function (btn) {
+      if (btn.getAttribute('aria-selected') === 'true') syncFilterIndicator(btn);
+      btn.addEventListener('click', function () {
+        var selected = btn.getAttribute('data-filter');
+        filterButtons.forEach(function (b) {
+          var isCurrent = b === btn;
+          b.setAttribute('aria-selected', isCurrent ? 'true' : 'false');
+          b.classList.toggle('bg-brand', isCurrent);
+          b.classList.toggle('text-ground', isCurrent);
+          b.classList.toggle('font-semibold', isCurrent);
+          b.classList.toggle('font-medium', !isCurrent);
+          b.classList.toggle('text-ink-muted', !isCurrent);
+        });
+        syncFilterIndicator(btn);
+        var visibleIdx = 0;
+        cards.forEach(function (card) {
+          var category = card.getAttribute('data-category');
+          var show = selected === 'todos' || category === selected;
+          card.style.display = show ? '' : 'none';
+          if (show) {
+            card.classList.remove('is-filtering-in');
+            card.style.setProperty('--filter-i', String(visibleIdx % 6));
+            void card.offsetWidth;
+            card.classList.add('is-filtering-in');
+            visibleIdx++;
+          }
+        });
+      });
+    });
+
+    window.addEventListener('resize', function () {
+      var active = tablist ? tablist.querySelector('[aria-selected="true"]') : null;
+      if (active) syncFilterIndicator(active);
+    }, { passive: true });
+
+    var serviceSelect = document.getElementById('quick-service');
+    var planSelect = document.getElementById('quick-plan');
+    var ticketStubEl = document.getElementById('quick-ticket-stub');
+    var ticketDotEl = document.getElementById('ticket-accent-dot');
+    var screensEl = document.getElementById('ticket-screens');
+    var durationEl = document.getElementById('ticket-duration');
+    var priceEl = document.getElementById('ticket-price');
+    var noteEl = document.getElementById('ticket-note');
+    var waBtn = document.getElementById('quick-wa-btn');
+    var waLabel = document.getElementById('quick-wa-label');
+    var chipsContainer = document.querySelector('[data-payment-chips]');
+    var payNoteEl = document.querySelector('[data-payment-note]');
+    var armadorPaymentId = '';
+
+    function getSelectedService() {
+      var slug = serviceSelect ? serviceSelect.value : '';
+      return servicesClient.find(function (s) { return s.slug === slug; }) || servicesClient[0];
+    }
+
+    function formatPlanForCurrentCountry(plan) {
+      var geo = window.__STREAMING_GEO__;
+      if (!geo) return '';
+      var st = geo.getState();
+      var res = geo.resolvePriceObj(plan.prices, st.country.currency);
+      var fmtCountry = res.currency === 'USD' ? geo.resolveCountryObj('default') : st.country;
+      return geo.formatPriceStr(res.amount, res.currency, fmtCountry.locale);
+    }
+
+    function renderArmadorChips() {
+      var geo = window.__STREAMING_GEO__;
+      if (!geo || !chipsContainer) return;
+      var st = geo.getState();
+      if (!armadorPaymentId || !st.payments.some(function (p) { return p.id === armadorPaymentId; })) {
+        armadorPaymentId = st.payments[0] ? st.payments[0].id : 'binance';
+      }
+      var selectedPay = st.payments.find(function (p) { return p.id === armadorPaymentId; }) || st.payments[0];
+      chipsContainer.textContent = '';
+      st.payments.forEach(function (pm) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        var isSel = selectedPay && pm.id === selectedPay.id;
+        btn.setAttribute('aria-pressed', isSel ? 'true' : 'false');
+        btn.className = isSel
+          ? 'chip-transition text-xs font-semibold px-2.5 py-1.5 rounded border border-brand bg-brand/15 text-brand'
+          : 'chip-transition text-xs font-medium px-2.5 py-1.5 rounded border border-ground-border bg-ground hover:bg-ground-elevated text-ink-muted hover:text-ink';
+        btn.textContent = pm.name;
+        btn.addEventListener('click', function () {
+          armadorPaymentId = pm.id;
+          renderArmadorChips();
+          updateTicketDetails();
+        });
+        chipsContainer.appendChild(btn);
+      });
+      if (payNoteEl) {
+        payNoteEl.textContent = selectedPay && selectedPay.note ? selectedPay.note : '';
+        payNoteEl.style.display = selectedPay && selectedPay.note ? '' : 'none';
+      }
+    }
+
+    function rebuildPlanOptions(preserveIndex) {
+      if (!planSelect) return;
+      var currentIdx = preserveIndex ? parseInt(planSelect.value, 10) || 0 : 0;
+      var svc = getSelectedService();
+      planSelect.textContent = '';
+      svc.planes.forEach(function (p, idx) {
+        var opt = document.createElement('option');
+        opt.value = String(idx);
+        var formatted = showPrices ? formatPlanForCurrentCountry(p) : '';
+        opt.textContent = p.nombre + ' · ' + (defaultDurationLabel || p.duracion) + (showPrices && formatted ? ' — ' + formatted : '');
+        planSelect.appendChild(opt);
+      });
+      if (currentIdx < svc.planes.length) planSelect.value = String(currentIdx);
+    }
+
+    function updateTicketDetails() {
+      var svc = getSelectedService();
+      var planIdx = planSelect ? parseInt(planSelect.value, 10) || 0 : 0;
+      var plan = svc.planes[planIdx] || svc.planes[0];
+      if (!plan) return;
+
+      var formattedPrice = showPrices ? formatPlanForCurrentCountry(plan) : null;
+      var nextPriceTxt = showPrices ? formattedPrice : 'Consultar precio por WhatsApp';
+      var accent = svc.color_acento || '#F59E0B';
+      if (ticketStubEl) ticketStubEl.style.setProperty('--ticket-accent', accent);
+      if (ticketDotEl) {
+        ticketDotEl.style.backgroundColor = accent;
+        ticketDotEl.style.boxShadow = '0 0 8px ' + accent;
+      }
+      if (screensEl) screensEl.textContent = plan.pantallas;
+      if (durationEl) durationEl.textContent = defaultDurationLabel || plan.duracion;
+      if (priceEl) {
+        if (priceEl.textContent !== nextPriceTxt) {
+          priceEl.classList.add('precio-fade-activo');
+          priceEl.textContent = nextPriceTxt;
+          setTimeout(function () { priceEl.classList.remove('precio-fade-activo'); }, 150);
+        }
+      }
+      if (noteEl) noteEl.textContent = plan.nota;
+
+      var geo = window.__STREAMING_GEO__;
+      if (geo && waBtn) {
+        var st = geo.getState();
+        var selectedPay = st.payments.find(function (p) { return p.id === armadorPaymentId; }) || st.payments[0];
+        var resCurrency = geo.resolvePriceObj(plan.prices, st.country.currency).currency;
+        var msg = geo.buildWaOrderMessage({
+          buttonType: svc.disponible ? 'armador_pedido' : 'consultar_disponibilidad',
+          serviceName: svc.nombre, planName: plan.nombre, duration: defaultDurationLabel || plan.duracion, screens: plan.pantallas,
+          formattedPrice: formattedPrice, currencyCode: resCurrency, countryCode: st.country.code,
+          countryName: st.country.name, paymentMethodName: selectedPay ? selectedPay.name : 'Binance (USD)',
+          available: svc.disponible, showPrices: showPrices,
+          msgPlanBuy: plan.mensaje_comprar, msgPlanAvail: plan.mensaje_disponibilidad,
+          msgSvcBuy: svc.mensaje_comprar, msgSvcAvail: svc.mensaje_disponibilidad,
+        });
+        waBtn.setAttribute('data-wa-text', encodeURIComponent(msg));
+      }
+
+      if (waLabel) {
+        waLabel.textContent = svc.disponible ? 'Pedir este plan por WhatsApp' : 'Consultar disponibilidad';
+      }
+    }
+
+    if (serviceSelect && planSelect) {
+      serviceSelect.addEventListener('change', function () { rebuildPlanOptions(false); updateTicketDetails(); });
+      planSelect.addEventListener('change', updateTicketDetails);
+      window.addEventListener('countrychange', function () {
+        renderArmadorChips();
+        rebuildPlanOptions(true);
+        updateTicketDetails();
+      });
+      renderArmadorChips();
+      rebuildPlanOptions(true);
+      updateTicketDetails();
+    }
+  })();
+</script>

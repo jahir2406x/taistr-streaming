@@ -1,0 +1,98 @@
+---
+import { TEXTOS_INICIO, TEXTOS_BOTONES, TEXTOS_POR_PAIS, PAISES, PAGOS } from '../../editar';
+import { resolverTextoPais } from '../../core';
+import BotonWhatsApp from '../ui/BotonWhatsApp.astro';
+import BloqueComunidad from './BloqueComunidad.astro';
+
+const faqGeneral = TEXTOS_INICIO.faqGeneral;
+const ctaFinal = TEXTOS_INICIO.ctaFinal;
+const nav = TEXTOS_BOTONES.navegacion;
+const defaultFaqPagoRespuesta = resolverTextoPais('faq_pago_respuesta', 'PE', {
+  porPais: TEXTOS_POR_PAIS,
+  paises: PAISES,
+  pagos: PAGOS,
+});
+---
+
+<!-- PREGUNTAS FRECUENTES GENERALES -->
+<section id="preguntas" class="section-rhythm section-below-fold border-t border-[var(--border-subtle)]">
+  <div class="max-w-[var(--container-max)] mx-auto px-[var(--container-px)]">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+      <!-- Columna izquierda fija/introductoria: título, descripción y ayuda directa -->
+      <div class="lg:col-span-5 space-y-4 lg:sticky lg:top-24" data-revelar>
+        <span class="section-kicker">{nav.preguntas}</span>
+        <h2 class="font-display font-bold text-[length:var(--text-h2)] text-ink">
+          {faqGeneral.titulo}
+        </h2>
+        <p class="text-sm sm:text-base text-ink-muted leading-relaxed">
+          {faqGeneral.subtitulo}
+        </p>
+        <div class="pt-2">
+          <BotonWhatsApp
+            tipo="consulta_general"
+            class="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors"
+          >
+            <span>¿Tienes otra duda? Escríbenos directamente →</span>
+          </BotonWhatsApp>
+        </div>
+      </div>
+
+      <!-- Columna derecha: Acordeón elegante alineado a la retícula -->
+      <div class="lg:col-span-7 space-y-3.5">
+        {
+          faqGeneral.preguntas.map((faq, index) => (
+            <details
+              data-revelar
+              style={`--i: ${index};`}
+              class="group surface-card overflow-hidden"
+              open={index === 0}
+            >
+              <summary class="cursor-pointer list-none px-5 py-4 font-display font-semibold text-sm sm:text-base text-ink flex items-center justify-between gap-4 select-none hover:text-brand transition-colors">
+                <span>{faq.question}</span>
+                <span
+                  class="text-brand font-bold text-lg transition-transform duration-200 group-open:rotate-45 shrink-0"
+                  aria-hidden="true"
+                >
+                  +
+                </span>
+              </summary>
+              <div
+                class="px-5 pb-5 pt-2 text-xs sm:text-sm text-ink-muted leading-relaxed border-t border-[var(--border-subtle)]"
+                {...(index === 0 ? { 'data-texto-pais': 'faq_pago_respuesta' } : {})}
+              >
+                {index === 0 ? defaultFaqPagoRespuesta : faq.answer}
+              </div>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CIERRE: LLAMADA FINAL A LA ACCIÓN + CANAL OFICIAL DE PROMOCIONES -->
+<section class="section-rhythm section-below-fold border-t border-[var(--border-subtle)]">
+  <div class="max-w-[var(--container-max)] mx-auto px-[var(--container-px)] space-y-6">
+    <div data-revelar class="hero-glass-card rounded-[var(--radius-card-lg)] p-6 sm:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div class="space-y-2 max-w-xl">
+        <h2 class="font-display font-bold text-[length:var(--text-h2)] text-ink">
+          {ctaFinal.titulo}
+        </h2>
+        <p class="text-sm sm:text-base text-ink-muted leading-relaxed">
+          {ctaFinal.descripcion}
+        </p>
+      </div>
+
+      <BotonWhatsApp
+        tipo="consulta_general"
+        class="wa-btn-shine btn-magnetic inline-flex items-center justify-center gap-2 bg-brand-whatsapp hover:bg-brand-whatsappHover text-white font-semibold text-base px-6 py-3.5 rounded-[var(--radius-button)] shadow-[0_8px_24px_-6px_rgba(22,163,74,0.5)] shrink-0 transition-colors"
+      >
+        <span>{ctaFinal.boton}</span>
+      </BotonWhatsApp>
+    </div>
+
+    <!-- Canal Oficial de Promociones y Comunidad -->
+    <BloqueComunidad />
+  </div>
+</section>
+

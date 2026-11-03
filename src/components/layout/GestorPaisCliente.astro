@@ -1,0 +1,261 @@
+---
+import { MARCA, AJUSTES, PAISES, PAGOS, MENSAJES_WHATSAPP, TEXTOS_POR_PAIS } from '../../editar';
+import { resolverTextoPais } from '../../core';
+
+const paisesTextosResolved: Record<string, Record<string, string>> = {};
+for (const c of PAISES) {
+  paisesTextosResolved[c.code] = {};
+  for (const clave of Object.keys(TEXTOS_POR_PAIS)) {
+    paisesTextosResolved[c.code][clave] = resolverTextoPais(clave, c.code, {
+      porPais: TEXTOS_POR_PAIS,
+      paises: PAISES,
+      pagos: PAGOS,
+    });
+  }
+}
+---
+
+<script id="streaming-textos-pais" type="application/json" set:html={JSON.stringify(paisesTextosResolved)} />
+
+<script
+  is:inline
+  define:vars={{
+    countriesClient: PAISES,
+    paymentsClient: PAGOS,
+    showPricesClient: AJUSTES.SHOW_PRICES,
+    templatesClient: MENSAJES_WHATSAPP,
+    brandNameClient: MARCA.nombre,
+    countryTextsClient: paisesTextosResolved,
+  }}
+>
+  (function () {
+    var STORAGE_KEY = 'user_country';
+    var DEFAULT_COUNTRY = { code: 'default', name: 'Otros países', currency: 'USD', locale: 'es-419', enabled: true };
+
+    function resolveCountryObj(code) {
+      var fallback = countriesClient.find(function (c) { return c.code === 'default'; }) || DEFAULT_COUNTRY;
+      if (!code) return fallback;
+      var norm = String(code).trim().toUpperCase();
+      if (norm === 'DEFAULT') return fallback;
+      return countriesClient.find(function (c) { return c.enabled && String(c.code).toUpperCase() === norm; }) || fallback;
+    }
+
+    function resolvePriceObj(pricesMap, targetCurrency) {
+      var code = String(targetCurrency || 'USD').toUpperCase();
+      if (pricesMap && typeof pricesMap[code] === 'number' && pricesMap[code] > 0) return { amount: pricesMap[code], currency: code };
+      return { amount: pricesMap && typeof pricesMap.USD === 'number' ? pricesMap.USD : 0, currency: 'USD' };
+    }
+
+    function formatPriceStr(amount, currency, locale) {
+      var iso = String(currency || 'USD').toUpperCase();
+      var hasDecimals = Math.round(amount * 100) % 100 !== 0;
+      var formatted = String(amount);
+      try {
+        formatted = new Intl.NumberFormat(locale || 'es-419', {
+          style: 'currency', currency: iso, currencyDisplay: 'symbol',
+          minimumFractionDigits: hasDecimals ? 2 : 0, maximumFractionDigits: 2,
+        }).format(amount).replace(/\u00A0/g, ' ').trim();
+      } catch (_) {}
+      return formatted.toUpperCase().slice(-iso.length - 1) === ' ' + iso ? formatted : formatted + ' ' + iso;
+    }
+
+    function getPaymentsForCountry(countryCode) {
+      var code = resolveCountryObj(countryCode).code;
+      return paymentsClient.filter(function (pm) {
+        if (!pm.enabled) return false;
+        return code === 'default'
+          ? pm.countries.indexOf('*') !== -1 || pm.countries.indexOf('default') !== -1
+          : pm.countries.indexOf(code) !== -1 || pm.countries.indexOf('*') !== -1;
+      }).sort(function (a, b) { return a.order - b.order; });
+    }
+
+    function cleanMsg(str) {
+      return str
+        .replace(/\{\s*[a-zA-Z0-9_]+\s*\}/g, '')
+        .replace(/\(\s*(?:desde\s*)?(?:·\s*)?\)/gi, '')
+        .replace(/\(\s*·\s*([^)]+)\)/g, '($1)')
+        .replace(/\(\s*([^)]+?)\s*·\s*\)/g, '($1)')
+        .replace(/\(\s*\)/g, '')
+        .replace(/\s+([,.:;?!])/g, '$1')
+        .replace(/[ \t]{2,}/g, ' ')
+        .trim();
+    }
+
+    function buildWaOrderMessage(opts) {
+      var isOther = !opts.countryCode || opts.countryCode === 'default';
+      var payRaw = (opts.paymentMethodName || 'Binance (Binance ID / USDT)').trim();
+      var payLabel = isOther
+        ? (payRaw.toLowerCase().indexOf('binance') === 0 ? 'Binance (USD)' : payRaw.toUpperCase().indexOf('(USD)') !== -1 ? payRaw : payRaw + ' (USD)')
+        : payRaw;
+      var avail = opts.available !== false;
+      var btnType = opts.buttonType || (!avail ? 'consultar_disponibilidad' : opts.planName ? 'comprar_plan' : 'barra_movil');
+      var tpl = (!avail
+        ? (opts.msgPlanAvail || opts.msgSvcAvail || templatesClient.consultar_disponibilidad)
+        : (opts.msgPlanBuy || opts.msgSvcBuy || templatesClient[btnType])) || templatesClient.consulta_general;
+      var map = {
+        marca: brandNameClient, servicio: opts.serviceName || '', plan: opts.planName || '',
+        precio: showPricesClient && opts.formattedPrice ? opts.formattedPrice : '',
+        moneda: opts.currencyCode || '', duracion: opts.duration || '',
+        pais: isOther ? 'otro país' : (opts.countryName || 'Perú'), medio_pago: payLabel, pantallas: opts.screens || '',
+      };
+      return cleanMsg(String(tpl).replace(/\{([a-zA-Z0-9_]+)\}/g, function (_, k) { return map[k] !== undefined ? map[k] : ''; }));
+    }
+
+    var state = { countryCode: 'PE', country: resolveCountryObj('PE'), payments: getPaymentsForCountry('PE') };
+
+    function applyCountryToDOM() {
+      var selector = document.getElementById('country-selector');
+      if (selector && selector.value !== state.country.code) selector.value = state.country.code;
+      var defaultPay = state.payments[0] || { id: 'binance', name: 'Binance (Binance ID / USDT)', note: '' };
+
+      if (showPricesClient) {
+        document.querySelectorAll('[data-price-map]').forEach(function (el) {
+          try {
+            var res = resolvePriceObj(JSON.parse(el.getAttribute('data-price-map') || '{}'), state.country.currency);
+            el.textContent = formatPriceStr(res.amount, res.currency, (res.currency === 'USD' ? resolveCountryObj('default') : state.country).locale);
+          } catch (_) {}
+        });
+      }
+
+      var countryLabel = state.country.nombre_texto || state.country.name;
+      document.querySelectorAll('[data-geo-country-label]').forEach(function (el) { el.textContent = countryLabel; });
+      var payNamesList = state.payments.map(function (p) { return p.name; }).join(' · ');
+      document.querySelectorAll('[data-geo-payments-summary]').forEach(function (el) { el.textContent = payNamesList; });
+
+      var countryTextsMap = (function () {
+        try {
+          var tEl = document.getElementById('streaming-textos-pais');
+          if (tEl && tEl.textContent) return JSON.parse(tEl.textContent);
+        } catch (_) {}
+        return countryTextsClient || {};
+      })();
+      var activeTexts = countryTextsMap[state.country.code] || countryTextsMap['default'] || countryTextsMap['PE'] || {};
+      document.querySelectorAll('[data-texto-pais]').forEach(function (el) {
+        var key = el.getAttribute('data-texto-pais');
+        if (key && activeTexts[key] !== undefined) {
+          var nextVal = activeTexts[key];
+          if (el.textContent !== nextVal) {
+            el.classList.add('texto-pais-transicion');
+            if (key === 'hero_titulo') {
+              var cLabel = state.country.nombre_texto || state.country.name;
+              if (cLabel && nextVal.indexOf(cLabel) !== -1) {
+                var p = nextVal.split(cLabel);
+                el.textContent = '';
+                el.appendChild(document.createTextNode(p[0]));
+                var gradSpan = document.createElement('span');
+                gradSpan.className = 'hero-country-gradient';
+                gradSpan.textContent = cLabel;
+                el.appendChild(gradSpan);
+                el.appendChild(document.createTextNode(p.slice(1).join(cLabel)));
+              } else {
+                el.textContent = nextVal;
+              }
+            } else {
+              el.textContent = nextVal;
+            }
+            setTimeout(function () {
+              el.classList.remove('texto-pais-transicion');
+            }, 180);
+          }
+        }
+      });
+
+      if (state.country && state.country.locale) {
+        document.documentElement.setAttribute('lang', state.country.locale.split('-')[0] || 'es');
+      }
+
+      document.querySelectorAll('[data-wa-service]').forEach(function (link) {
+        var fmtPrice = null, resCurr = state.country.currency;
+        if (showPricesClient) {
+          try {
+            var pRaw = link.getAttribute('data-wa-prices');
+            if (pRaw) {
+              var resP = resolvePriceObj(JSON.parse(pRaw), state.country.currency);
+              resCurr = resP.currency;
+              fmtPrice = formatPriceStr(resP.amount, resP.currency, (resP.currency === 'USD' ? resolveCountryObj('default') : state.country).locale);
+            }
+          } catch (_) {}
+        }
+        link.setAttribute('data-wa-text', encodeURIComponent(buildWaOrderMessage({
+          serviceName: link.getAttribute('data-wa-service') || '', planName: link.getAttribute('data-wa-plan') || undefined,
+          duration: link.getAttribute('data-wa-duration') || undefined, screens: link.getAttribute('data-wa-screens') || undefined,
+          formattedPrice: fmtPrice, currencyCode: resCurr, countryCode: state.country.code, countryName: state.country.name,
+          paymentMethodName: defaultPay.name, available: link.getAttribute('data-wa-available') !== 'false',
+          msgPlanBuy: link.getAttribute('data-wa-msg-plan-buy') || '', msgPlanAvail: link.getAttribute('data-wa-msg-plan-avail') || '',
+          msgSvcBuy: link.getAttribute('data-wa-msg-svc-buy') || '', msgSvcAvail: link.getAttribute('data-wa-msg-svc-avail') || '',
+        })));
+      });
+    }
+
+    window.__STREAMING_GEO__ = {
+      getState: function () { return state; }, resolveCountryObj: resolveCountryObj, resolvePriceObj: resolvePriceObj,
+      formatPriceStr: formatPriceStr, getPaymentsForCountry: getPaymentsForCountry, buildWaOrderMessage: buildWaOrderMessage,
+      setCountry: function (newCode, persist) {
+        var resolved = resolveCountryObj(newCode);
+        state.countryCode = resolved.code; state.country = resolved; state.payments = getPaymentsForCountry(resolved.code);
+        if (persist) { try { localStorage.setItem(STORAGE_KEY, resolved.code); } catch (_) {} }
+        document.documentElement.setAttribute('data-country', resolved.code);
+        document.documentElement.setAttribute('data-geo-ready', 'true');
+        applyCountryToDOM();
+        window.dispatchEvent(new CustomEvent('countrychange', { detail: state }));
+      },
+    };
+
+    var selectorEl = document.getElementById('country-selector');
+    if (selectorEl) selectorEl.addEventListener('change', function (e) { window.__STREAMING_GEO__.setCountry(e.target ? e.target.value : 'default', true); });
+
+    document.addEventListener('click', function (e) {
+      var target = e.target && e.target.closest ? e.target.closest('[data-wa-link]') : null;
+      if (!target) return;
+      if (target.getAttribute('aria-disabled') === 'true') {
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      var ep = target.getAttribute('data-wa-phone'), et = target.getAttribute('data-wa-text');
+      if (ep && et) {
+        try {
+          var cleanText = decodeURIComponent(et).replace(/[\u0000-\u0009\u000B-\u001F\u007F-\u009F]/g, '').trim().slice(0, 900);
+          target.setAttribute('href', 'https://wa.me/' + atob(ep).replace(/\D/g, '') + '?text=' + encodeURIComponent(cleanText));
+        } catch (_) {}
+      }
+    });
+
+    (async function () {
+      try {
+        var q = window.location.search;
+        if (q) {
+          var qp = new URLSearchParams(q).get('pais');
+          if (qp) {
+            var qu = qp.trim().toUpperCase();
+            if (qu === 'PE' || qu === 'MX' || qu === 'AR') {
+              window.__STREAMING_GEO__.setCountry(qu, true);
+              return;
+            }
+          }
+        }
+      } catch (_) {}
+      try { var s = localStorage.getItem(STORAGE_KEY); if (s) { window.__STREAMING_GEO__.setCountry(s, false); return; } } catch (_) {}
+      try {
+        var ctrl = new AbortController(), t = setTimeout(function () { ctrl.abort(); }, 800);
+        var res = await fetch('/api/geo', { method: 'GET', headers: { Accept: 'application/json' }, cache: 'no-store', signal: ctrl.signal });
+        clearTimeout(t);
+        if (res && res.ok) {
+          var d = await res.json();
+          if (d && typeof d.country === 'string' && d.country.length === 2) { window.__STREAMING_GEO__.setCountry(resolveCountryObj(d.country).code, false); return; }
+        }
+      } catch (_) {}
+      try {
+        var langs = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ''];
+        for (var i = 0; i < langs.length; i++) {
+          var p = String(langs[i]).split(/[-_]/);
+          if (p.length > 1) {
+            var m = countriesClient.find(function (c) { return c.enabled && c.code !== 'default' && c.code.toUpperCase() === p[1].toUpperCase(); });
+            if (m) { window.__STREAMING_GEO__.setCountry(m.code, false); return; }
+          }
+        }
+      } catch (_) {}
+      window.__STREAMING_GEO__.setCountry('default', false);
+    })();
+  })();
+</script>

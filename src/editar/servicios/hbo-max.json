@@ -1,0 +1,83 @@
+{
+    "id":  "hbo-max",
+    "nombre":  "HBO Max",
+    "slug":  "hbo-max",
+    "iniciales":  "HBO",
+    "categoria":  "video",
+    "eslogan":  "Max (HBO) barato en Perú en 4K. Series originales, cine Warner y Champions League.",
+    "descripcion_corta":  "Perfil personal Platino o cuenta completa Max en soles (S/) con pago por Yape.",
+    "descripcion_larga":  "La plataforma ideal para amantes de las grandes producciones: series icónicas de HBO, películas de Warner Bros. pocos días después de su paso por el cine, el universo DC, Cartoon Network y Adult Swim en alta definición.",
+    "caracteristicas":  [
+                            "Series exclusivas de HBO y Max Originals desde el día de estreno",
+                            "Películas de Warner Bros., DC y saga completa de Harry Potter",
+                            "Perfil personalizado con recomendaciones propias",
+                            "Descargas disponibles en la app móvil para ver sin conexión",
+                            "Funciona en todos los Smart TV, celulares y consolas"
+                        ],
+    "planes":  [
+                   {
+                       "id":  "hbomax-perfil-1m",
+                       "nombre":  "Perfil Personal Platino",
+                       "duracion":  "1 mes",
+                       "pantallas":  "1 pantalla en 4K UHD",
+                       "prices":  {
+                                      "PEN":  5,
+                                      "USD":  1.5,
+                                      "MXN":  30,
+                                      "ARS":  2400
+                                  },
+                       "nota":  "Activación en menos de 10 minutos",
+                       "mensaje_comprar":  "",
+                       "mensaje_disponibilidad":  "",
+                       "incluye":  [
+
+                                   ],
+                       "nota_panel":  "",
+                       "descuentos":  {
+                                          "2":  0,
+                                          "3":  10,
+                                          "6":  20
+                                      }
+                   },
+                   {
+                       "id":  "hbomax-completa-1m",
+                       "nombre":  "Cuenta Completa",
+                       "duracion":  "1 mes",
+                       "pantallas":  "5 perfiles · 4 pantallas a la vez",
+                       "prices":  {
+                                      "PEN":  22,
+                                      "USD":  6.5,
+                                      "MXN":  130,
+                                      "ARS":  10500
+                                  },
+                       "nota":  "Cuenta privada con correo asignado",
+                       "mensaje_comprar":  "",
+                       "mensaje_disponibilidad":  "",
+                       "incluye":  [
+
+                                   ],
+                       "nota_panel":  "",
+                       "descuentos":  {
+                                          "2":  0,
+                                          "3":  5,
+                                          "6":  8
+                                      }
+                   }
+               ],
+    "mensaje_whatsapp":  "Hola, me interesa un plan de HBO Max. ¿Está disponible?",
+    "color_acento":  "#8B5CF6",
+    "disponible":  true,
+    "faq":  [
+                {
+                    "pregunta":  "¿Qué aplicación debo descargar en mi televisor?",
+                    "respuesta":  "Debes buscar la aplicación oficial \u0027Max\u0027 en la tienda de tu Smart TV o celular; tus credenciales funcionan directamente allí."
+                },
+                {
+                    "pregunta":  "¿Qué pasa si HBO Max (Max) me pide un código de verificación o de viaje al iniciar sesión?",
+                    "respuesta":  "Cualquier código de acceso temporal, inicio de sesión o validación de hogar que pida la plataforma llega de forma automática a nuestra página web de consulta que te brindamos al activar tu plan, para que ingreses sin demoras a cualquier hora."
+                }
+            ],
+    "mensaje_comprar":  "",
+    "mensaje_disponibilidad":  "",
+    "resumen_seo":  "perfil Platino 4K o cuenta completa"
+}

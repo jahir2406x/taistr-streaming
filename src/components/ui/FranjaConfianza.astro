@@ -1,0 +1,70 @@
+---
+import { MARCA, PAGOS, TEXTOS_GARANTIA, TEXTOS_INICIO } from '../../editar';
+import panelCompraData from '../../editar/textos/panel-compra.json';
+
+interface Props {
+  variante?: 'hero' | 'panel' | 'barra';
+  class?: string;
+}
+
+const { variante = 'hero', class: className = '' } = Astro.props;
+
+// Reutilización estricta de textos existentes en src/editar/
+const garantiaTexto = TEXTOS_GARANTIA.garantia_corta;
+const fraseSinCobros = TEXTOS_INICIO.beneficios.items[3]?.descripcion.split('.')[0] || "No guardamos tarjetas ni hacemos cobros automáticos";
+const primerMedioNota = PAGOS[0]?.note || "";
+const fraseTiempo = panelCompraData.tiempoEntregaTexto;
+---
+
+{
+  variante === 'panel' ? (
+    <div class:list={['franja-confianza-panel flex flex-col items-center gap-1 text-[11px] text-ink-muted text-center py-1.5', className]}>
+      <div class="flex items-center gap-1.5 text-emerald-400 font-medium">
+        <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <span>{garantiaTexto}</span>
+      </div>
+      <p class="text-ink-subtle leading-tight">{fraseSinCobros}</p>
+    </div>
+  ) : variante === 'hero' ? (
+    <div class:list={['franja-confianza-hero grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2 max-w-xl text-xs text-ink-muted', className]}>
+      <div class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-[var(--surface-2)] border border-[var(--border-subtle)]">
+        <svg class="w-4 h-4 text-emerald-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <span class="truncate">{garantiaTexto}</span>
+      </div>
+      <div class="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-[var(--surface-2)] border border-[var(--border-subtle)]">
+        <svg class="w-4 h-4 text-brand shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="5" width="20" height="14" rx="2"/>
+          <line x1="2" y1="10" x2="22" y2="10"/>
+        </svg>
+        <span class="truncate">{fraseSinCobros}</span>
+      </div>
+    </div>
+  ) : (
+    <div class:list={['franja-confianza-barra grid grid-cols-1 sm:grid-cols-3 gap-3 p-4 rounded-xl bg-ground-card border border-ground-border text-xs text-ink-muted', className]}>
+      <div class="flex items-center gap-2.5">
+        <svg class="w-4 h-4 text-emerald-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <span>{garantiaTexto}</span>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <svg class="w-4 h-4 text-brand shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="2" y="5" width="20" height="14" rx="2"/>
+          <line x1="2" y1="10" x2="22" y2="10"/>
+        </svg>
+        <span>{fraseSinCobros}</span>
+      </div>
+      <div class="flex items-center gap-2.5">
+        <svg class="w-4 h-4 text-sky-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <span>{MARCA.tiempoRespuesta}</span>
+      </div>
+    </div>
+  )
+}

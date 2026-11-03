@@ -1,0 +1,115 @@
+---
+import { PAISES, PAGOS } from '../../editar';
+import { getPaymentMethodsForCountry, type WhatsAppButtonType } from '../../core';
+import { crearMensajeWhatsApp, buildWhatsAppUrl, getEncodedPhone } from '../../utils/whatsapp';
+
+interface Props {
+  tipo: WhatsAppButtonType;
+  texto?: string;
+  class?: string;
+  id?: string;
+  ariaLabel?: string;
+  title?: string;
+  servicio?: string;
+  plan?: string;
+  duracion?: string;
+  pantallas?: string;
+  precioFormateado?: string;
+  moneda?: string;
+  codigoPais?: string;
+  nombrePais?: string;
+  medioPago?: string;
+  disponible?: boolean;
+  preciosMap?: Record<string, number>;
+  mensajePlanComprar?: string;
+  mensajePlanDisponibilidad?: string;
+  mensajeServicioComprar?: string;
+  mensajeServicioDisponibilidad?: string;
+  mensajePersonalizado?: string;
+}
+
+const {
+  tipo,
+  texto,
+  class: className = '',
+  id,
+  ariaLabel,
+  title,
+  servicio,
+  plan,
+  duracion,
+  pantallas,
+  precioFormateado,
+  moneda = 'PEN',
+  codigoPais = 'PE',
+  nombrePais = 'Perú',
+  medioPago,
+  disponible = true,
+  preciosMap,
+  mensajePlanComprar,
+  mensajePlanDisponibilidad,
+  mensajeServicioComprar,
+  mensajeServicioDisponibilidad,
+  mensajePersonalizado,
+} = Astro.props;
+
+const defaultPay =
+  medioPago ??
+  (getPaymentMethodsForCountry(codigoPais, PAGOS, PAISES)[0]?.name || PAGOS[0]?.name || '');
+
+const finalMessage =
+  mensajePersonalizado ??
+  crearMensajeWhatsApp({
+    tipo,
+    servicio,
+    plan,
+    duracion,
+    pantallas,
+    precio: precioFormateado,
+    moneda,
+    codigoPais,
+    pais: nombrePais,
+    medioPago: defaultPay,
+    disponible,
+    mensajePlanComprar,
+    mensajePlanDisponibilidad,
+    mensajeServicioComprar,
+    mensajeServicioDisponibilidad,
+  });
+
+const waUrl = buildWhatsAppUrl(finalMessage);
+const encodedPhone = getEncodedPhone();
+const encodedMsg = encodeURIComponent(finalMessage);
+const isDynamicCard = Boolean(preciosMap && servicio);
+const usesScreens = [
+  mensajePlanComprar,
+  mensajePlanDisponibilidad,
+  mensajeServicioComprar,
+  mensajeServicioDisponibilidad,
+].some((m) => m && m.includes('{pantallas}'));
+---
+
+<a
+  id={id}
+  href={waUrl}
+  data-wa-link
+  data-wa-phone={encodedPhone}
+  data-wa-text={encodedMsg}
+  data-wa-service={isDynamicCard ? servicio : undefined}
+  data-wa-plan={isDynamicCard ? plan : undefined}
+  data-wa-duration={isDynamicCard ? duracion : undefined}
+  data-wa-screens={isDynamicCard && usesScreens ? pantallas : undefined}
+  data-wa-available={isDynamicCard ? String(disponible) : undefined}
+  data-wa-prices={isDynamicCard && preciosMap ? JSON.stringify(preciosMap) : undefined}
+  data-wa-msg-plan-buy={isDynamicCard && mensajePlanComprar ? mensajePlanComprar : undefined}
+  data-wa-msg-plan-avail={isDynamicCard && mensajePlanDisponibilidad ? mensajePlanDisponibilidad : undefined}
+  data-wa-msg-svc-buy={isDynamicCard && mensajeServicioComprar ? mensajeServicioComprar : undefined}
+  data-wa-msg-svc-avail={isDynamicCard && mensajeServicioDisponibilidad ? mensajeServicioDisponibilidad : undefined}
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label={ariaLabel}
+  title={title || ariaLabel}
+  class={className}
+>
+  <slot>{texto}</slot>
+</a>

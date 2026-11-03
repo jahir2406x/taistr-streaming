@@ -1,0 +1,674 @@
+---
+import { AJUSTES, TEXTOS_PANEL_COMPRA, TEXTOS_GARANTIA } from '../../editar';
+---
+
+<script
+  is:inline
+  define:vars={{
+    panelTexts: TEXTOS_PANEL_COMPRA,
+    garantiaTexts: TEXTOS_GARANTIA,
+    showPricesPanel: AJUSTES.SHOW_PRICES,
+    globalDuraciones: AJUSTES.duraciones,
+    redondeoSteps: AJUSTES.redondeo,
+  }}
+>
+  (function () {
+    var dialog = document.getElementById('panel-compra');
+    var caja = document.getElementById('panel-compra-caja');
+    var closeBtn = document.getElementById('panel-compra-cerrar');
+    var subtituloEl = document.getElementById('panel-servicio-subtitulo');
+    var badgeEl = document.getElementById('panel-insignia-badge');
+    var planNombreEl = document.getElementById('panel-plan-nombre');
+    var svcNombreEl = document.getElementById('panel-servicio-nombre');
+    var precioEl = document.getElementById('panel-plan-precio');
+    var duracionEl = document.getElementById('panel-plan-duracion');
+    var ahorroEl = document.getElementById('panel-plan-ahorro');
+    var garantiaEl = document.getElementById('panel-plan-garantia');
+    var ganchoEl = document.getElementById('panel-plan-gancho');
+    var notaBoxEl = document.getElementById('panel-plan-nota-box');
+    var notaPanelEl = document.getElementById('panel-plan-nota-panel');
+    var duracionesListaEl = document.getElementById('panel-duraciones-lista');
+    var incluyeEl = document.getElementById('panel-plan-incluye');
+    var mediosListaEl = document.getElementById('panel-medios-lista');
+    var ctaBtn = document.getElementById('panel-wa-cta');
+    var statusEl = document.getElementById('panel-wa-status');
+
+    var session = null;
+    var lastTrigger = null;
+
+    function getTextColorForHex(hex) {
+      var clean = String(hex || '#F59E0B').replace('#', '');
+      if (clean.length !== 6) return '#FFFFFF';
+      var r = parseInt(clean.slice(0, 2), 16) / 255;
+      var g = parseInt(clean.slice(2, 4), 16) / 255;
+      var b = parseInt(clean.slice(4, 6), 16) / 255;
+      var lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      return lum > 0.62 ? '#09090B' : '#FFFFFF';
+    }
+
+    function computeDurationPrice(meses, descuentoPct) {
+      var geo = window.__STREAMING_GEO__;
+      var st = geo ? geo.getState() : { country: { code: 'PE', currency: 'PEN', locale: 'es-PE' } };
+      var curr = (st.country && st.country.currency) || 'PEN';
+      var locale = curr === 'USD' ? 'es-419' : ((st.country && st.country.locale) || 'es-PE');
+
+      var baseMonthly = geo ? geo.resolvePriceObj(session.prices, curr) : { amount: session.prices[curr] || session.prices.USD || 0, currency: curr };
+      var monthlyAmt = baseMonthly.amount;
+      var effectiveCurr = baseMonthly.currency;
+
+      var durKey = String(meses);
+      var amt = 0;
+      var isExact = false;
+
+      if (session.pricesDuration && session.pricesDuration[durKey]) {
+        var dMap = session.pricesDuration[durKey];
+        if (typeof dMap[effectiveCurr] === 'number' && dMap[effectiveCurr] > 0) {
+          amt = dMap[effectiveCurr];
+          isExact = true;
+        } else if (effectiveCurr !== 'USD' && typeof dMap.USD === 'number' && dMap.USD > 0) {
+          amt = dMap.USD;
+          isExact = true;
+        }
+      }
+
+      if (!isExact) {
+        var pct = Math.max(0, Math.min(90, Number(descuentoPct) || 0));
+        var raw = monthlyAmt * meses * (1 - pct / 100);
+        var step = (redondeoSteps && typeof redondeoSteps[effectiveCurr] === 'number')
+          ? redondeoSteps[effectiveCurr]
+          : (effectiveCurr === 'USD' ? 0.01 : 1);
+        if (step === 1) {
+          amt = Math.round(raw);
+        } else if (step === 0.01) {
+          amt = Math.round(raw * 100) / 100;
+        } else {
+          amt = Math.round(Math.round(raw / step + 1e-9) * step * 100) / 100;
+        }
+      }
+
+      var baseTotal = monthlyAmt * meses;
+      var savings = Math.round((baseTotal - amt) * 100) / 100;
+      if (savings <= 0) savings = 0;
+
+      var formattedPrice = showPricesPanel && geo
+        ? geo.formatPriceStr(amt, effectiveCurr, locale)
+        : (showPricesPanel ? (amt + ' ' + effectiveCurr) : 'Consultar precio por WhatsApp');
+
+      var savingsFormatted = showPricesPanel && savings > 0 && geo
+        ? geo.formatPriceStr(savings, effectiveCurr, locale)
+        : '';
+
+      return {
+        amount: amt,
+        currency: effectiveCurr,
+        formatted: formattedPrice,
+        savingsAmount: savings,
+        savingsFormatted: savingsFormatted,
+        isExact: isExact
+      };
+    }
+
+    var precioFadeTimer = null;
+    function updateSummaryPrice() {
+      if (!session) return;
+      var curDur = (session.availableDurations && session.availableDurations.find(function (d) { return d.meses === session.selectedMonths; })) || { meses: 1, etiqueta: '1 mes', descuento_pct: 0 };
+      var priceRes = computeDurationPrice(curDur.meses, curDur.descuento_pct);
+
+      if (precioEl) {
+        var prevTxt = precioEl.textContent;
+        precioEl.textContent = priceRes.formatted;
+        if (prevTxt && prevTxt !== priceRes.formatted && dialog && dialog.open) {
+          precioEl.classList.add('precio-fade-activo');
+          if (ahorroEl) ahorroEl.classList.add('precio-fade-activo');
+          clearTimeout(precioFadeTimer);
+          precioFadeTimer = setTimeout(function () {
+            precioEl.classList.remove('precio-fade-activo');
+            if (ahorroEl) ahorroEl.classList.remove('precio-fade-activo');
+          }, 140);
+        }
+      }
+      if (duracionEl) duracionEl.textContent = curDur.etiqueta;
+
+      if (ahorroEl) {
+        if (showPricesPanel && priceRes.savingsAmount > 0) {
+          ahorroEl.textContent = (panelTexts.ahorrasEtiqueta || 'Ahorras') + ' ' + priceRes.savingsFormatted;
+          ahorroEl.classList.remove('hidden');
+        } else {
+          ahorroEl.classList.add('hidden');
+          ahorroEl.textContent = '';
+        }
+      }
+    }
+
+    function syncCtaButton() {
+      if (!ctaBtn || !session) return;
+      var geo = window.__STREAMING_GEO__;
+      var st = geo ? geo.getState() : { country: { code: 'PE', name: 'Perú' }, payments: [] };
+      var selectedPay = st.payments.find(function (p) { return p.id === session.selectedPaymentId; }) || null;
+
+      if (!selectedPay) {
+        ctaBtn.setAttribute('aria-disabled', 'true');
+        ctaBtn.setAttribute('tabindex', '-1');
+        ctaBtn.removeAttribute('href');
+        ctaBtn.textContent = panelTexts.botonSinMedio;
+        ctaBtn.style.backgroundColor = '';
+        ctaBtn.style.borderColor = '';
+        ctaBtn.style.color = '';
+        ctaBtn.classList.add('bg-ground-card', 'text-ink-subtle', 'cursor-not-allowed', 'opacity-75');
+        if (statusEl) statusEl.textContent = '';
+        return;
+      }
+
+      var curDur = (session.availableDurations && session.availableDurations.find(function (d) { return d.meses === session.selectedMonths; })) || { meses: 1, etiqueta: '1 mes', descuento_pct: 0 };
+      var priceInfo = computeDurationPrice(curDur.meses, curDur.descuento_pct);
+
+      var msg = geo.buildWaOrderMessage({
+        buttonType: 'comprar_plan',
+        serviceName: session.serviceName,
+        planName: session.planName,
+        duration: curDur.etiqueta,
+        screens: session.planScreens,
+        formattedPrice: priceInfo.formatted,
+        currencyCode: priceInfo.currency,
+        countryCode: st.country.code,
+        countryName: st.country.name,
+        paymentMethodName: selectedPay.name,
+        available: true,
+        showPrices: showPricesPanel,
+        msgPlanBuy: session.msgPlanBuy,
+        msgPlanAvail: session.msgPlanAvail,
+        msgSvcBuy: session.msgSvcBuy,
+        msgSvcAvail: session.msgSvcAvail,
+      });
+
+      var ep = ctaBtn.getAttribute('data-wa-phone') || '';
+      ctaBtn.setAttribute('data-wa-text', encodeURIComponent(msg));
+      try {
+        var phone = atob(ep).replace(/\D/g, '');
+        ctaBtn.setAttribute('href', 'https://wa.me/' + phone + '?text=' + encodeURIComponent(msg));
+      } catch (_) {}
+
+      ctaBtn.setAttribute('aria-disabled', 'false');
+      ctaBtn.setAttribute('tabindex', '0');
+      ctaBtn.textContent = panelTexts.botonConMedio;
+      ctaBtn.classList.remove('bg-ground-card', 'text-ink-subtle', 'cursor-not-allowed', 'opacity-75');
+      ctaBtn.style.backgroundColor = session.accent;
+      ctaBtn.style.borderColor = session.accent;
+      ctaBtn.style.color = getTextColorForHex(session.accent);
+      if (statusEl) statusEl.textContent = selectedPay.name + ' seleccionado. ' + panelTexts.botonConMedio;
+    }
+
+    function renderIncludesForDuration(duracionLabel, meses) {
+      if (!incluyeEl || !session || !session.includes) return;
+      incluyeEl.textContent = '';
+      var prefijo = (panelTexts.vigenciaPrefijo || 'Vigencia:').trim();
+      session.includes.forEach(function (rawItem) {
+        var txtStr = String(rawItem)
+          .replace(/\{duracion\}/g, duracionLabel)
+          .replace(/\{meses\}/g, String(meses));
+        if (txtStr.indexOf(prefijo) === 0) {
+          txtStr = prefijo + ' ' + duracionLabel;
+        }
+        var li = document.createElement('li');
+        li.className = 'flex items-center gap-2';
+        var dot = document.createElement('span');
+        dot.className = 'w-1.5 h-1.5 rounded-full shrink-0';
+        dot.style.backgroundColor = session.accent;
+        var txt = document.createElement('span');
+        txt.textContent = txtStr;
+        li.appendChild(dot);
+        li.appendChild(txt);
+        incluyeEl.appendChild(li);
+      });
+    }
+
+    function updateGarantiaForDuration(duracionLabel, meses) {
+      if (!garantiaEl || !garantiaTexts || !garantiaTexts.garantia_panel) return;
+      garantiaEl.textContent = garantiaTexts.garantia_panel
+        .replace(/\{duracion\}/g, duracionLabel)
+        .replace(/\{meses\}/g, String(meses));
+    }
+
+    function updateSelectedDuration(meses, focusTarget) {
+      if (!session || !duracionesListaEl) return;
+      session.selectedMonths = meses;
+
+      var buttons = duracionesListaEl.querySelectorAll('button[data-panel-duration-months]');
+      buttons.forEach(function (btn) {
+        var m = parseInt(btn.getAttribute('data-panel-duration-months'), 10);
+        var isSel = m === session.selectedMonths;
+        btn.setAttribute('aria-checked', isSel ? 'true' : 'false');
+        btn.setAttribute('tabindex', isSel ? '0' : '-1');
+
+        if (isSel) {
+          btn.style.borderColor = session.accent || 'var(--color-brand)';
+          btn.style.boxShadow = 'inset 0 0 0 1px ' + (session.accent || 'var(--color-brand)');
+          btn.classList.add('bg-ground-card');
+          if (focusTarget && typeof btn.focus === 'function') btn.focus({ preventScroll: true });
+        } else {
+          btn.style.borderColor = '';
+          btn.style.boxShadow = '';
+          btn.classList.remove('bg-ground-card');
+        }
+      });
+
+      var curDur = (session.availableDurations && session.availableDurations.find(function (d) { return d.meses === session.selectedMonths; })) || { meses: 1, etiqueta: '1 mes', descuento_pct: 0 };
+      renderIncludesForDuration(curDur.etiqueta, curDur.meses);
+      updateGarantiaForDuration(curDur.etiqueta, curDur.meses);
+      updateSummaryPrice();
+      syncCtaButton();
+    }
+
+    function renderDurationOptions(focusSelected) {
+      if (!duracionesListaEl || !session) return;
+      duracionesListaEl.textContent = '';
+
+      var durations = session.availableDurations || [];
+      durations.forEach(function (dur, idx) {
+        var isSel = session.selectedMonths === dur.meses;
+        var isFocusable = isSel || (!session.selectedMonths && idx === 0);
+        var priceRes = computeDurationPrice(dur.meses, dur.descuento_pct);
+
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.setAttribute('role', 'radio');
+        btn.setAttribute('aria-checked', isSel ? 'true' : 'false');
+        btn.setAttribute('tabindex', isFocusable ? '0' : '-1');
+        btn.setAttribute('data-panel-duration-months', String(dur.meses));
+        btn.className = 'panel-duracion-opcion relative w-full text-center rounded-lg border border-ground-border bg-ground hover:bg-ground-card p-2 sm:p-2.5 transition-colors flex flex-col items-center justify-center gap-0.5 cursor-pointer min-w-0 outline-none focus:outline-none';
+
+        if (isSel) {
+          btn.style.borderColor = session.accent || 'var(--color-brand)';
+          btn.style.boxShadow = 'inset 0 0 0 1px ' + (session.accent || 'var(--color-brand)');
+          btn.classList.add('bg-ground-card');
+        }
+
+        var labelSpan = document.createElement('span');
+        labelSpan.className = 'font-display font-semibold text-xs sm:text-sm text-ink leading-tight';
+        labelSpan.textContent = dur.etiqueta;
+        btn.appendChild(labelSpan);
+
+        if (showPricesPanel) {
+          var priceSpan = document.createElement('span');
+          priceSpan.className = 'panel-duracion-precio text-[10px] sm:text-[11px] text-ink-muted leading-tight whitespace-nowrap';
+          priceSpan.textContent = priceRes.formatted;
+          btn.appendChild(priceSpan);
+
+          if (priceRes.savingsAmount > 0) {
+            var badge = document.createElement('span');
+            badge.className = 'panel-duracion-badge text-[9px] font-semibold px-1.5 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-800/60 mt-0.5 leading-none';
+            badge.textContent = '-' + dur.descuento_pct + '%';
+            btn.appendChild(badge);
+          }
+        }
+
+        btn.addEventListener('click', function () {
+          updateSelectedDuration(dur.meses, false);
+        });
+
+        btn.addEventListener('keydown', function (e) {
+          if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+            e.preventDefault();
+            var dir = (e.key === 'ArrowDown' || e.key === 'ArrowRight') ? 1 : -1;
+            var nextIdx = (idx + dir + durations.length) % durations.length;
+            updateSelectedDuration(durations[nextIdx].meses, true);
+          }
+        });
+
+        duracionesListaEl.appendChild(btn);
+        if (focusSelected && isSel && typeof btn.focus === 'function') btn.focus();
+      });
+    }
+
+    function updateSelectedPayment(pmId, focusTarget) {
+      if (!session || !mediosListaEl) return;
+      session.selectedPaymentId = pmId;
+      var buttons = mediosListaEl.querySelectorAll('button[data-panel-payment-id]');
+      buttons.forEach(function (btn) {
+        var id = btn.getAttribute('data-panel-payment-id');
+        var isSel = id === session.selectedPaymentId;
+        btn.setAttribute('aria-checked', isSel ? 'true' : 'false');
+        btn.setAttribute('tabindex', isSel ? '0' : '-1');
+        var radioBox = btn.querySelector('.panel-medio-radio');
+        var dot = btn.querySelector('.panel-medio-dot');
+        if (isSel) {
+          btn.style.borderColor = session.accent || 'var(--color-brand)';
+          btn.style.boxShadow = 'inset 0 0 0 1px ' + (session.accent || 'var(--color-brand)');
+          btn.classList.add('bg-ground-card');
+          if (radioBox) radioBox.style.borderColor = session.accent || 'var(--color-brand)';
+          if (dot) {
+            dot.style.backgroundColor = session.accent || 'var(--color-brand)';
+            dot.classList.remove('opacity-0');
+            dot.classList.add('opacity-100');
+          }
+          if (focusTarget && typeof btn.focus === 'function') btn.focus();
+        } else {
+          btn.style.borderColor = '';
+          btn.style.boxShadow = '';
+          btn.classList.remove('bg-ground-card');
+          if (radioBox) radioBox.style.borderColor = '';
+          if (dot) {
+            dot.style.backgroundColor = '';
+            dot.classList.remove('opacity-100');
+            dot.classList.add('opacity-0');
+          }
+        }
+      });
+      syncCtaButton();
+    }
+
+    function renderPaymentOptions(focusSelected) {
+      var geo = window.__STREAMING_GEO__;
+      if (!mediosListaEl || !geo || !session) return;
+      var payments = geo.getState().payments;
+      mediosListaEl.textContent = '';
+
+      payments.forEach(function (pm, idx) {
+        var isSel = session.selectedPaymentId === pm.id;
+        var isFocusable = isSel || (!session.selectedPaymentId && idx === 0);
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.setAttribute('role', 'radio');
+        btn.setAttribute('aria-checked', isSel ? 'true' : 'false');
+        btn.setAttribute('tabindex', isFocusable ? '0' : '-1');
+        btn.setAttribute('data-panel-payment-id', pm.id);
+        btn.className = 'panel-medio-opcion w-full text-left rounded-lg border border-ground-border bg-ground hover:bg-ground-card px-3.5 py-3 transition-colors flex items-start gap-3';
+
+        var radioOuter = document.createElement('span');
+        radioOuter.className = 'panel-medio-radio mt-0.5 w-4 h-4 rounded-full border border-ink-muted flex items-center justify-center shrink-0';
+        radioOuter.setAttribute('aria-hidden', 'true');
+        var radioDot = document.createElement('span');
+        radioDot.className = 'panel-medio-dot w-2 h-2 rounded-full opacity-0 transition-opacity';
+        radioOuter.appendChild(radioDot);
+
+        var textWrap = document.createElement('span');
+        textWrap.className = 'block flex-1';
+        var nameSpan = document.createElement('span');
+        nameSpan.className = 'font-display font-semibold text-sm text-ink block leading-snug';
+        nameSpan.textContent = pm.name;
+        var noteSpan = document.createElement('span');
+        noteSpan.className = 'text-xs text-ink-muted block mt-0.5 leading-relaxed';
+        noteSpan.textContent = pm.note;
+        textWrap.appendChild(nameSpan);
+        textWrap.appendChild(noteSpan);
+
+        btn.appendChild(radioOuter);
+        btn.appendChild(textWrap);
+
+        if (isSel) {
+          btn.style.borderColor = session.accent || 'var(--color-brand)';
+          btn.style.boxShadow = 'inset 0 0 0 1px ' + (session.accent || 'var(--color-brand)');
+          btn.classList.add('bg-ground-card');
+          var radioBox = btn.querySelector('.panel-medio-radio');
+          var dot = btn.querySelector('.panel-medio-dot');
+          if (radioBox) radioBox.style.borderColor = session.accent || 'var(--color-brand)';
+          if (dot) {
+            dot.style.backgroundColor = session.accent || 'var(--color-brand)';
+            dot.classList.remove('opacity-0');
+            dot.classList.add('opacity-100');
+          }
+        }
+
+        btn.addEventListener('click', function () {
+          updateSelectedPayment(pm.id, false);
+        });
+
+        btn.addEventListener('keydown', function (e) {
+          if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+            e.preventDefault();
+            var dir = e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1 : -1;
+            var nextIdx = (idx + dir + payments.length) % payments.length;
+            updateSelectedPayment(payments[nextIdx].id, true);
+          }
+        });
+
+        mediosListaEl.appendChild(btn);
+        if (focusSelected && isSel && typeof btn.focus === 'function') btn.focus();
+      });
+    }
+
+    function openPanelFromCard(triggerBtn) {
+      if (!dialog) return;
+      lastTrigger = triggerBtn;
+      var prices = {};
+      var pricesDuration = {};
+      var planAllowed = [];
+      var svcAllowed = [];
+      var planDiscounts = {};
+      var svcDiscounts = {};
+      var includes = [];
+      try { prices = JSON.parse(triggerBtn.getAttribute('data-plan-prices') || '{}'); } catch (_) {}
+      try { pricesDuration = JSON.parse(triggerBtn.getAttribute('data-plan-prices-duration') || '{}'); } catch (_) {}
+      try { planAllowed = JSON.parse(triggerBtn.getAttribute('data-plan-allowed-durations') || '[]'); } catch (_) {}
+      try { svcAllowed = JSON.parse(triggerBtn.getAttribute('data-svc-allowed-durations') || '[]'); } catch (_) {}
+      try { planDiscounts = JSON.parse(triggerBtn.getAttribute('data-plan-discounts') || '{}'); } catch (_) {}
+      try { svcDiscounts = JSON.parse(triggerBtn.getAttribute('data-svc-discounts') || '{}'); } catch (_) {}
+      try { includes = JSON.parse(triggerBtn.getAttribute('data-plan-includes') || '[]'); } catch (_) {}
+
+      var allowedDurations = (Array.isArray(planAllowed) && planAllowed.length > 0)
+        ? planAllowed
+        : (Array.isArray(svcAllowed) && svcAllowed.length > 0 ? svcAllowed : null);
+
+      var baseList = globalDuraciones;
+      if (allowedDurations && allowedDurations.length > 0) {
+        var allowedSet = new Set(allowedDurations);
+        var filtered = globalDuraciones.filter(function (d) { return allowedSet.has(d.meses); });
+        if (filtered.length > 0) baseList = filtered;
+      }
+
+      var availableDurations = baseList.map(function (d) {
+        var mKey = String(d.meses);
+        var pct = d.descuento_pct;
+        if (planDiscounts && Object.prototype.hasOwnProperty.call(planDiscounts, mKey)) {
+          pct = Number(planDiscounts[mKey]);
+        } else if (svcDiscounts && Object.prototype.hasOwnProperty.call(svcDiscounts, mKey)) {
+          pct = Number(svcDiscounts[mKey]);
+        }
+        return {
+          meses: d.meses,
+          etiqueta: d.etiqueta,
+          descuento_pct: pct
+        };
+      });
+
+      var defaultMonths = 1;
+      var hasOne = availableDurations.some(function (d) { return d.meses === 1; });
+      if (!hasOne && availableDurations.length > 0) {
+        defaultMonths = availableDurations[0].meses;
+      }
+
+      session = {
+        planKey: triggerBtn.getAttribute('data-plan-key') || '',
+        serviceName: triggerBtn.getAttribute('data-service-name') || '',
+        accent: triggerBtn.getAttribute('data-service-accent') || '#F59E0B',
+        planName: triggerBtn.getAttribute('data-plan-name') || '',
+        planDuration: triggerBtn.getAttribute('data-plan-duration') || '',
+        planScreens: triggerBtn.getAttribute('data-plan-screens') || '',
+        prices: prices,
+        pricesDuration: pricesDuration,
+        allowedDurations: allowedDurations,
+        availableDurations: availableDurations,
+        selectedMonths: defaultMonths,
+        includes: includes,
+        hook: triggerBtn.getAttribute('data-plan-hook') || '',
+        panelNote: triggerBtn.getAttribute('data-plan-panel-note') || '',
+        msgPlanBuy: triggerBtn.getAttribute('data-plan-msg-buy') || '',
+        msgPlanAvail: triggerBtn.getAttribute('data-plan-msg-avail') || '',
+        msgSvcBuy: triggerBtn.getAttribute('data-svc-msg-buy') || '',
+        msgSvcAvail: triggerBtn.getAttribute('data-svc-msg-avail') || '',
+        selectedPaymentId: null,
+      };
+
+      dialog.style.setProperty('--acento', session.accent);
+      if (badgeEl) {
+        var inits = triggerBtn.getAttribute('data-service-initials') || '';
+        var logoProp = triggerBtn.getAttribute('data-service-logo') || '';
+        if (!inits) {
+          var sWords = session.serviceName.trim().split(/\s+/).filter(Boolean);
+          inits = sWords.length >= 2 ? (sWords[0][0] + sWords[1][0]).toUpperCase() : session.serviceName.slice(0, 2).toUpperCase();
+        }
+        var txtColor = getTextColorForHex(session.accent);
+        badgeEl.style.setProperty('--acento', session.accent);
+        badgeEl.style.setProperty('--texto-insignia', txtColor);
+        badgeEl.textContent = '';
+        if (logoProp) {
+          var imgEl = document.createElement('img');
+          imgEl.src = logoProp;
+          imgEl.alt = '';
+          imgEl.width = 24;
+          imgEl.height = 24;
+          imgEl.loading = 'lazy';
+          imgEl.decoding = 'async';
+          badgeEl.appendChild(imgEl);
+        } else {
+          badgeEl.setAttribute('data-len', String(inits.length));
+          var initSpan = document.createElement('span');
+          initSpan.id = 'panel-insignia-texto';
+          initSpan.textContent = inits;
+          badgeEl.appendChild(initSpan);
+        }
+      }
+      if (subtituloEl) subtituloEl.textContent = session.serviceName;
+      if (planNombreEl) planNombreEl.textContent = session.planName;
+      if (svcNombreEl) svcNombreEl.textContent = session.serviceName;
+
+      if (ganchoEl) {
+        if (session.hook) {
+          ganchoEl.textContent = session.hook;
+          ganchoEl.classList.remove('hidden');
+        } else {
+          ganchoEl.textContent = '';
+          ganchoEl.classList.add('hidden');
+        }
+      }
+
+      if (notaBoxEl && notaPanelEl) {
+        if (session.panelNote) {
+          notaPanelEl.textContent = session.panelNote;
+          notaBoxEl.classList.remove('hidden');
+        } else {
+          notaPanelEl.textContent = '';
+          notaBoxEl.classList.add('hidden');
+        }
+      }
+
+      var curDur = (session.availableDurations && session.availableDurations.find(function (d) { return d.meses === session.selectedMonths; })) || { meses: 1, etiqueta: '1 mes', descuento_pct: 0 };
+      renderIncludesForDuration(curDur.etiqueta, curDur.meses);
+      updateGarantiaForDuration(curDur.etiqueta, curDur.meses);
+
+      renderDurationOptions(false);
+      updateSummaryPrice();
+      renderPaymentOptions(false);
+      syncCtaButton();
+
+      var cartaEl = dialog.querySelector('.carta');
+      if (cartaEl) cartaEl.scrollTop = 0;
+      var derScrollEl = dialog.querySelector('.carta-der-scroll');
+      if (derScrollEl) derScrollEl.scrollTop = 0;
+      var izqScrollEl = dialog.querySelector('.carta-col-izq');
+      if (izqScrollEl) izqScrollEl.scrollTop = 0;
+
+      document.body.style.overflow = 'hidden';
+      if (typeof dialog.showModal === 'function') dialog.showModal();
+      else dialog.setAttribute('open', '');
+    }
+
+    document.addEventListener('click', function (e) {
+      var trigger = e.target && e.target.closest ? e.target.closest('[data-plan-trigger]') : null;
+      if (trigger) {
+        e.preventDefault();
+        openPanelFromCard(trigger);
+      }
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === ' ') {
+        var unavail = e.target && e.target.closest ? e.target.closest('.tarjeta-plan--no-disponible') : null;
+        if (unavail) {
+          e.preventDefault();
+          unavail.click();
+        }
+      }
+    });
+
+    if (closeBtn && dialog) {
+      closeBtn.addEventListener('click', function () { cerrarPanel(); });
+    }
+
+    // Cierre con animación inversa (inmediato si prefers-reduced-motion o data-anim="off")
+    function cerrarPanel() {
+      if (!dialog || !dialog.open || dialog.classList.contains('is-cerrando')) return;
+      var reducido = (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) || document.documentElement.getAttribute('data-anim') === 'off';
+      var dur = parseFloat(getComputedStyle(dialog).getPropertyValue('--carta-animacion')) || 0;
+      if (reducido || !dur) { dialog.close(); return; }
+      dialog.classList.add('is-cerrando');
+      setTimeout(function () {
+        dialog.classList.remove('is-cerrando');
+        if (dialog.open) dialog.close();
+      }, dur);
+    }
+
+    var lastPointerDownTarget = null;
+
+    if (dialog) {
+      dialog.addEventListener('pointerdown', function (e) {
+        lastPointerDownTarget = e.target;
+      });
+
+      dialog.addEventListener('cancel', function (e) {
+        e.preventDefault();
+        cerrarPanel();
+      });
+
+      dialog.addEventListener('click', function (e) {
+        var pDown = lastPointerDownTarget;
+        lastPointerDownTarget = null;
+
+        // 1. Descarta clics sintéticos generados por teclado o scripts
+        if (e.detail === 0) return;
+        if (e.clientX === 0 && e.clientY === 0 && (e.detail === undefined || e.detail <= 0)) return;
+
+        // 2. Si pointerdown o click ocurrieron dentro de la carta, jamás cerrar
+        if (caja && (caja === pDown || caja.contains(pDown))) return;
+        if (caja && (caja === e.target || caja.contains(e.target))) return;
+
+        // 3. Cerrar solo si ambos ocurrieron en el backdrop exterior
+        var backdropEl = document.getElementById('panel-compra-backdrop') || dialog;
+        var pDownOutside = pDown === dialog || pDown === backdropEl || (dialog.contains(pDown) && (!caja || !caja.contains(pDown)));
+        var clickOutside = e.target === dialog || e.target === backdropEl || (dialog.contains(e.target) && (!caja || !caja.contains(e.target)));
+
+        if (pDownOutside && clickOutside) {
+          cerrarPanel();
+        }
+      });
+
+      dialog.addEventListener('close', function () {
+        document.body.style.overflow = '';
+        session = null;
+        if (lastTrigger && typeof lastTrigger.focus === 'function') lastTrigger.focus();
+      });
+    }
+
+    if (ctaBtn && dialog) {
+      ctaBtn.addEventListener('click', function () {
+        if (ctaBtn.getAttribute('aria-disabled') !== 'true') {
+          setTimeout(function () { cerrarPanel(); }, 80);
+        }
+      });
+    }
+
+    window.addEventListener('countrychange', function () {
+      if (!dialog || !dialog.open || !session) return;
+      var geo = window.__STREAMING_GEO__;
+      var payments = geo ? geo.getState().payments : [];
+      if (session.selectedPaymentId && !payments.some(function (p) { return p.id === session.selectedPaymentId; })) {
+        session.selectedPaymentId = null;
+      }
+      renderDurationOptions(false);
+      updateSummaryPrice();
+      renderPaymentOptions(false);
+      syncCtaButton();
+    });
+  })();
+</script>
+

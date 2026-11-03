@@ -1,0 +1,39 @@
+{
+  "hero_insignia": {
+    "plantilla": "⚡ Activación en 5 a 15 min · Soporte y reposición inmediata en {pais}",
+    "overrides": {
+      "PE": "⚡ Activación en 5 a 15 min · Soporte y reposición inmediata en Perú",
+      "MX": "⚡ Activación en 5 a 15 min · Soporte y reposición inmediata por WhatsApp",
+      "AR": "⚡ Activación en 5 a 15 min · Soporte y reposición inmediata por WhatsApp",
+      "default": "⚡ Activación en 5 a 15 min · Soporte y reposición inmediata por WhatsApp"
+    }
+  },
+  "hero_titulo": {
+    "plantilla": "Tus plataformas favoritas con hasta 70% de ahorro en {pais}. Cuentas estables y sin tarjetas."
+  },
+  "hero_descripcion": {
+    "plantilla": "Disfruta perfiles 4K con PIN privado o cuentas familiares completas. Paga fácil con {metodos_pago} en tu moneda y recibe tus accesos verificados por WhatsApp en minutos con garantía total."
+  },
+  "catalogo_descripcion": {
+    "plantilla": "Elige tu plataforma de streaming favorita con precios económicos en {moneda}. Todos los planes incluyen activación rápida por WhatsApp y garantía completa de reposición."
+  },
+  "faq_pago_respuesta": {
+    "plantilla": "Al pulsar cualquier botón de pedido se abrirá tu WhatsApp con el nombre del servicio y plan elegido. Te confirmamos disponibilidad al instante, realizas el pago con {metodos_pago} en {moneda} y en menos de 15 minutos te enviamos los datos de acceso junto con una guía corta de ingreso."
+  },
+  "atencion_pie": {
+    "plantilla": "Horario de soporte para {pais}: Lunes a Domingo · 9:00 a.m. a 10:30 p.m. (GMT-5)",
+    "overrides": {
+      "PE": "Horario de soporte en Perú: Lunes a Domingo · 9:00 a.m. a 10:30 p.m. (GMT-5)",
+      "MX": "Horario de soporte por WhatsApp: Lunes a Domingo · 9:00 a.m. a 10:30 p.m. (GMT-5)",
+      "AR": "Horario de soporte por WhatsApp: Lunes a Domingo · 9:00 a.m. a 10:30 p.m. (GMT-5)",
+      "default": "Horario de soporte por WhatsApp: Lunes a Domingo · 9:00 a.m. a 10:30 p.m. (GMT-5)"
+    }
+  },
+  "pie_descripcion": {
+    "plantilla": "Cuentas y perfiles de streaming baratos para {pais} en {moneda}. Netflix 4K, Disney+, Max, Spotify y más plataformas con entrega inmediata por WhatsApp, pago con {metodos_pago} y garantía total.",
+    "overrides": {
+      "PE": "Cuentas y perfiles de streaming baratos en Perú en soles (S/). Netflix 4K, Disney+, Max, Spotify y más plataformas con entrega inmediata por WhatsApp, pago con Yape o Plin y garantía total."
+    }
+  }
+}
+

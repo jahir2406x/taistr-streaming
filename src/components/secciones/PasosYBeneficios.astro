@@ -1,0 +1,110 @@
+---
+import { MARCA, PAISES, PAGOS, TEXTOS_INICIO, TEXTOS_BOTONES } from '../../editar';
+import { getPaymentMethodsForCountry } from '../../core';
+
+const defaultPayments = getPaymentMethodsForCountry('PE', PAGOS, PAISES);
+const comoFunciona = TEXTOS_INICIO.comoFunciona;
+const beneficios = TEXTOS_INICIO.beneficios;
+const nav = TEXTOS_BOTONES.navegacion;
+---
+
+<!-- CÓMO FUNCIONA EN 3 PASOS -->
+<section id="como-funciona" class="section-rhythm section-below-fold bg-[var(--surface-2)] border-y border-[var(--border-subtle)] relative overflow-hidden">
+  <div class="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+    <div class="absolute top-1/2 left-1/3 -translate-y-1/2 w-96 h-64 bg-brand/5 blur-3xl rounded-full"></div>
+  </div>
+  <div class="relative max-w-[var(--container-max)] mx-auto px-[var(--container-px)] space-y-10">
+    <div class="max-w-2xl space-y-2" data-revelar>
+      <span class="section-kicker">{nav.comoFunciona}</span>
+      <h2 class="font-display font-bold text-[length:var(--text-h2)] text-ink">
+        {comoFunciona.titulo}
+      </h2>
+      <p class="text-sm sm:text-base text-ink-muted">
+        {comoFunciona.subtitulo}
+      </p>
+    </div>
+
+    <ol class="grid grid-cols-1 md:grid-cols-3 gap-6 relative">
+      <li data-revelar style="--i: 0;" class="surface-card card-hover p-6 space-y-3.5 relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <div class="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-brand/15 border border-brand/40 text-brand font-display font-extrabold text-base shadow-sm">
+            {comoFunciona.pasos[0].numero}
+          </div>
+          <span class="text-xs font-semibold text-ink-subtle tracking-widest uppercase" aria-hidden="true">01 / 03</span>
+        </div>
+        <h3 class="font-display font-bold text-[length:var(--text-h3)] text-ink">{comoFunciona.pasos[0].titulo}</h3>
+        <p class="text-sm text-ink-muted leading-relaxed">
+          {comoFunciona.pasos[0].descripcion}
+        </p>
+      </li>
+
+      <li data-revelar style="--i: 1;" class="surface-card card-hover p-6 space-y-3.5 relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <div class="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-brand/15 border border-brand/40 text-brand font-display font-extrabold text-base shadow-sm">
+            {comoFunciona.pasos[1].numero}
+          </div>
+          <span class="text-xs font-semibold text-ink-subtle tracking-widest uppercase" aria-hidden="true">02 / 03</span>
+        </div>
+        <h3 class="font-display font-bold text-[length:var(--text-h3)] text-ink">{comoFunciona.pasos[1].titulo}</h3>
+        <p class="text-sm text-ink-muted leading-relaxed">
+          {comoFunciona.pasos[1].descripcionAntes}<span data-geo-payments-summary class="text-ink font-medium">{defaultPayments.map((p) => p.name).join(' · ')}</span>{comoFunciona.pasos[1].descripcionDespues}
+        </p>
+      </li>
+
+      <li data-revelar style="--i: 2;" class="surface-card card-hover p-6 space-y-3.5 relative overflow-hidden">
+        <div class="flex items-center justify-between">
+          <div class="inline-flex items-center justify-center w-11 h-11 rounded-xl bg-brand/15 border border-brand/40 text-brand font-display font-extrabold text-base shadow-sm">
+            {comoFunciona.pasos[2].numero}
+          </div>
+          <span class="text-xs font-semibold text-ink-subtle tracking-widest uppercase" aria-hidden="true">03 / 03</span>
+        </div>
+        <h3 class="font-display font-bold text-[length:var(--text-h3)] text-ink">{comoFunciona.pasos[2].titulo}</h3>
+        <p class="text-sm text-ink-muted leading-relaxed">
+          {comoFunciona.pasos[2].descripcionAntes}<span class="text-ink font-medium">{MARCA.tiempoRespuesta}</span>{comoFunciona.pasos[2].descripcionDespues}
+        </p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- BENEFICIOS Y GARANTÍA -->
+<section class="section-rhythm section-below-fold">
+  <div class="max-w-[var(--container-max)] mx-auto px-[var(--container-px)]">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+      <div class="lg:col-span-5 space-y-4" data-revelar>
+        <span class="section-kicker">{nav.garantia}</span>
+        <h2 class="font-display font-bold text-[length:var(--text-h2)] text-ink">
+          {beneficios.titulo}
+        </h2>
+        <p class="text-sm sm:text-base text-ink-muted leading-relaxed">
+          {beneficios.descripcion}
+        </p>
+        <div class="pt-2">
+          <a
+            href="/garantia"
+            class="inline-flex items-center gap-2 text-sm font-semibold text-brand hover:underline"
+          >
+            <span>{beneficios.enlaceGarantia}</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-5">
+        {
+          beneficios.items.map((item, idx) => (
+            <div data-revelar style={`--i: ${idx};`} class="surface-card card-hover p-5 space-y-2.5">
+              <div class="flex items-center gap-2.5">
+                <span class="w-2 h-2 rounded-full bg-brand shrink-0" aria-hidden="true" />
+                <h3 class="font-display font-bold text-base text-ink">{item.titulo}</h3>
+              </div>
+              <p class="text-sm text-ink-muted leading-relaxed">
+                {item.descripcion}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+

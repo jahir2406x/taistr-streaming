@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LegalDocument from '../components/secciones/LegalDocument.astro';
+import { MARCA, SEO_TEXTOS } from '../editar';
+import { parseLegalMarkdown } from '../utils/markdown';
+import privacidadRaw from '../editar/textos/privacidad.md?raw';
+
+const parsed = parseLegalMarkdown(privacidadRaw, {
+  marca: MARCA.nombre,
+  NOMBRE_MARCA: MARCA.nombre,
+  AVISO_NO_AFILIACION: MARCA.legal.avisoNoAfiliacion,
+});
+---
+
+<BaseLayout
+  title={SEO_TEXTOS.privacidad.titulo}
+  description={SEO_TEXTOS.privacidad.descripcion}
+>
+  <section class="py-12 sm:py-16">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 space-y-8">
+      <div class="space-y-2 border-b border-ground-border pb-6">
+        <h1 class="font-display font-bold text-3xl sm:text-4xl text-ink tracking-tight">
+          {parsed.frontmatter.titulo}
+        </h1>
+        <p class="text-xs text-ink-muted">
+          {parsed.frontmatter.actualizacionLabel} {MARCA.legal.ultimaActualizacionLegal}
+        </p>
+      </div>
+
+      <LegalDocument sections={parsed.sections} spacingClass="space-y-6" headingClass="text-lg" />
+    </div>
+  </section>
+</BaseLayout>

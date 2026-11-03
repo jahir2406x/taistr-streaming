@@ -1,0 +1,39 @@
+[
+  {
+    "code": "PE",
+    "name": "Perú",
+    "nombre_texto": "Perú",
+    "currency": "PEN",
+    "moneda_nombre": "soles (PEN)",
+    "locale": "es-PE",
+    "enabled": true
+  },
+  {
+    "code": "MX",
+    "name": "México",
+    "nombre_texto": "México",
+    "currency": "MXN",
+    "moneda_nombre": "pesos mexicanos (MXN)",
+    "locale": "es-MX",
+    "enabled": true
+  },
+  {
+    "code": "AR",
+    "name": "Argentina",
+    "nombre_texto": "Argentina",
+    "currency": "ARS",
+    "moneda_nombre": "pesos argentinos (ARS)",
+    "locale": "es-AR",
+    "enabled": true
+  },
+  {
+    "code": "default",
+    "name": "Otros países",
+    "nombre_texto": "tu país",
+    "currency": "USD",
+    "moneda_nombre": "dólares (USD)",
+    "locale": "es-419",
+    "enabled": true
+  }
+]
+

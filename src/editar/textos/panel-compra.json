@@ -1,0 +1,25 @@
+{
+  "saludoPrefijo": "¡Perfecto! Elegiste:",
+  "conectorDe": "de",
+  "incluyeTitulo": "Qué incluye este plan",
+  "vigenciaPrefijo": "Vigencia:",
+  "garantiaTexto": "Garantía de soporte y reposición durante el periodo contratado.",
+  "tiempoEntregaTexto": "Entrega estimada en 5 a 15 minutos tras enviar tu comprobante en horario de atención.",
+  "pasosTitulo": "Pasos para activar tu cuenta",
+  "pasos": [
+    "1. Elige tu medio de pago",
+    "2. Continúas en WhatsApp",
+    "3. Envías tu comprobante y recibes tu servicio"
+  ],
+  "eligeDuracionTitulo": "Elige la duración",
+  "etiquetaMes": "mes",
+  "etiquetaMeses": "meses",
+  "ahorrasEtiqueta": "Ahorras",
+  "conectorPor": "por",
+  "eligeMedioPagoTitulo": "Elige tu medio de pago",
+  "eligeMedioPagoSubtitulo": "Medios habilitados en",
+  "botonSinMedio": "Elige un medio de pago",
+  "botonConMedio": "Continuar por WhatsApp →",
+  "cerrarPanelLabel": "Cerrar panel de compra",
+  "cerrarTexto": "Cerrar"
+}

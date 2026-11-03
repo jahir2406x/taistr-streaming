@@ -1,0 +1,78 @@
+{
+    "id":  "prime-video",
+    "nombre":  "Prime Video",
+    "slug":  "prime-video",
+    "iniciales":  "PV",
+    "categoria":  "video",
+    "eslogan":  "Amazon Prime Video barato en Perú. Series exclusivas, cine en 4K y entregas rápidas.",
+    "descripcion_corta":  "Perfiles económicos y cuentas completas de Prime Video en soles (S/) con activación rápida por Yape.",
+    "descripcion_larga":  "Accede a las series más comentadas de Amazon MGM Studios: The Boys, El Señor de los Anillos: Los Anillos de Poder, Fallout, Invincible y miles de películas taquilleras listas para reproducir en tu televisor o teléfono.",
+    "caracteristicas":  [
+                            "Catálogo completo de Amazon Originals y películas exclusivas",
+                            "Calidad Full HD y 4K UHD con soporte HDR10+",
+                            "Perfil propio protegido con código PIN",
+                            "Alta estabilidad en todo tipo de televisores Smart TV"
+                        ],
+    "planes":  [
+                   {
+                       "id":  "prime-perfil-1m",
+                       "nombre":  "Perfil Personal",
+                       "duracion":  "1 mes",
+                       "pantallas":  "1 pantalla a la vez",
+                       "prices":  {
+                                      "PEN":  5,
+                                      "USD":  1.5,
+                                      "MXN":  30,
+                                      "ARS":  2400
+                                  },
+                       "nota":  "El más económico para tu Smart TV",
+                       "mensaje_comprar":  "",
+                       "mensaje_disponibilidad":  "",
+                       "incluye":  [
+
+                                   ],
+                       "nota_panel":  "",
+                       "descuentos":  {
+                                          "2":  0,
+                                          "3":  5,
+                                          "6":  8
+                                      }
+                   },
+                   {
+                       "id":  "prime-completa-1m",
+                       "nombre":  "Cuenta Completa",
+                       "duracion":  "1 mes",
+                       "pantallas":  "6 perfiles · 3 pantallas en simultáneo",
+                       "prices":  {
+                                      "PEN":  18,
+                                      "USD":  5,
+                                      "MXN":  105,
+                                      "ARS":  8500
+                                  },
+                       "nota":  "Privada para tu hogar",
+                       "mensaje_comprar":  "",
+                       "mensaje_disponibilidad":  "",
+                       "incluye":  [
+
+                                   ],
+                       "nota_panel":  "",
+                       "descuentos":  {
+                                          "2":  0,
+                                          "3":  5,
+                                          "6":  8
+                                      }
+                   }
+               ],
+    "mensaje_whatsapp":  "Hola, quiero pedir Prime Video. ¿Está disponible?",
+    "color_acento":  "#00A8E1",
+    "disponible":  true,
+    "faq":  [
+                {
+                    "pregunta":  "¿Cómo activo Prime Video en mi Smart TV?",
+                    "respuesta":  "Puedes ingresar con correo y clave o simplemente pasarnos el código de 6 letras que aparece en tu televisor para vincularlo en segundos."
+                }
+            ],
+    "mensaje_comprar":  "",
+    "mensaje_disponibilidad":  "",
+    "resumen_seo":  "perfil propio o cuenta completa 4K"
+}

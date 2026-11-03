@@ -1,0 +1,77 @@
+---
+import type { StreamingService } from '../../types/service';
+import { AJUSTES, SERVICIOS, TEXTOS_BOTONES } from '../../editar';
+import { formatPrice, resolvePlanPrice } from '../../core';
+import InsigniaServicio from './InsigniaServicio.astro';
+
+interface Props {
+  service: StreamingService;
+}
+
+const { service } = Astro.props;
+const relatedServices = SERVICIOS.filter((s) => s.slug !== service.slug).slice(0, 3);
+
+function getMinPricesMap(svc: StreamingService): Record<string, number> {
+  const map: Record<string, number> = {};
+  for (const plan of svc.planes) {
+    for (const [curr, val] of Object.entries(plan.prices)) {
+      if (typeof val === 'number' && (map[curr] === undefined || val < map[curr])) {
+        map[curr] = val;
+      }
+    }
+  }
+  return map;
+}
+
+const acciones = TEXTOS_BOTONES.acciones;
+const textosFicha = TEXTOS_BOTONES.fichaServicio;
+---
+
+<!-- Otras plataformas del catálogo -->
+<div class="space-y-5 pt-6 border-t border-ground-border pb-20 sm:pb-0">
+  <div class="flex items-center justify-between" data-revelar>
+    <h2 class="font-display font-bold text-xl text-ink">{textosFicha.otrasPlataformasTitulo}</h2>
+    <a href="/#catalogo" class="text-xs sm:text-sm font-medium text-brand hover:underline">
+      {acciones.verCatalogoCompleto}
+    </a>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+    {
+      relatedServices.map((rel, idx) => {
+        const relMap = getMinPricesMap(rel);
+        const relMinPen = resolvePlanPrice(relMap, 'PEN').amount;
+        const relFormatted = formatPrice(relMinPen, 'PEN', 'es-PE');
+        return (
+          <a
+            href={`/servicios/${rel.slug}`}
+            title={`Ver planes y precios de ${rel.nombre}`}
+            aria-label={`Ver planes y precios de ${rel.nombre}`}
+            data-revelar
+            style={`--i: ${idx};`}
+            class="bg-ground-card hover:bg-ground-elevated border border-ground-border rounded-lg p-4 flex items-center justify-between gap-3 transition-colors card-hover"
+          >
+            <div class="flex items-center gap-3.5">
+              <InsigniaServicio servicio={rel} tamano="md" esDecorativa={true} />
+              <div>
+                <span class="font-display font-bold text-sm text-ink block">{rel.nombre}</span>
+                <span class="text-xs text-ink-muted">
+                  {AJUSTES.SHOW_PRICES ? (
+                    <>
+                      Desde{' '}
+                      <span data-price-map={JSON.stringify(relMap)} class="geo-price">
+                        {relFormatted}
+                      </span>
+                    </>
+                  ) : (
+                    acciones.verPlanes
+                  )}
+                </span>
+              </div>
+            </div>
+            <span class="text-xs font-medium text-brand">Ver</span>
+          </a>
+        );
+      })
+    }
+  </div>
+</div>

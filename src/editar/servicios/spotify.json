@@ -1,0 +1,59 @@
+{
+    "id":  "spotify",
+    "nombre":  "Spotify",
+    "slug":  "spotify",
+    "iniciales":  "S",
+    "categoria":  "musica",
+    "eslogan":  "Spotify Premium barato en Perú. Música y podcasts sin anuncios en tu cuenta personal.",
+    "descripcion_corta":  "Activación rápida de Spotify Premium en tu cuenta personal con Yape, descargas offline y audio 320 kbps.",
+    "descripcion_larga":  "Escucha tus playlists, álbumes y podcasts favoritos sin interrupciones publicitarias. Descarga tus canciones directamente en el celular para no consumir tus megas en la calle y reproduce en el orden que quieras con calidad de audio extrema (320 kbps).",
+    "caracteristicas":  [
+                            "Cero anuncios publicitarios entre canciones",
+                            "Descarga de música para escuchar sin internet ni gastar datos",
+                            "Saltos de canciones ilimitados y reproducción a la carta",
+                            "Opción de activar sobre tu cuenta actual conservando tus playlists",
+                            "Calidad de sonido muy alta (320 kbps)"
+                        ],
+    "planes":  [
+                   {
+                       "id":  "spotify-ind-1m",
+                       "nombre":  "Individual 1 Mes",
+                       "duracion":  "1 mes",
+                       "pantallas":  "1 cuenta personal",
+                       "prices":  {
+                                      "PEN":  8,
+                                      "USD":  2.3,
+                                      "MXN":  45,
+                                      "ARS":  3800
+                                  },
+                       "nota":  "Activación en tu cuenta actual o cuenta nueva",
+                       "mensaje_comprar":  "",
+                       "mensaje_disponibilidad":  "",
+                       "incluye":  [
+                                       "1 cuenta personal exclusiva",
+                                       "Música sin anuncios y saltos ilimitados",
+                                       "Descarga canciones para escuchar sin internet",
+                                       "Calidad de audio extrema (320 kbps)",
+                                       "Compatible con celular, PC y Smart TV"
+                                   ],
+                       "nota_panel":  "Conserva todas tus playlists y canciones favoritas.",
+                       "descuentos":  {
+                                          "2":  0,
+                                          "3":  10,
+                                          "6":  20
+                                      }
+                   }
+               ],
+    "mensaje_whatsapp":  "Hola, quiero activar Spotify Premium. ¿Está disponible?",
+    "color_acento":  "#1DB954",
+    "disponible":  true,
+    "faq":  [
+                {
+                    "pregunta":  "¿Pierdo mis listas de reproducción si ya tengo una cuenta?",
+                    "respuesta":  "No. Podemos ayudarte a migrar tus listas en 1 minuto para que conserves todas tus canciones guardadas."
+                }
+            ],
+    "mensaje_comprar":  "",
+    "mensaje_disponibilidad":  "",
+    "resumen_seo":  "plan Individual en tu cuenta con modo offline"
+}

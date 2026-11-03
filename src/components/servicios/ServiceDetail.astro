@@ -1,0 +1,156 @@
+---
+import type { StreamingService } from '../../types/service';
+import { MARCA, AJUSTES, TEXTOS_BOTONES } from '../../editar';
+import { formatPrice, resolvePlanPrice } from '../../core';
+import BotonWhatsApp from '../ui/BotonWhatsApp.astro';
+import ServiceHeader from './ServiceHeader.astro';
+import ServicePlanCard from './ServicePlanCard.astro';
+import ServiceInfoYFaq from './ServiceInfoYFaq.astro';
+import BloqueValoracion from './BloqueValoracion.astro';
+import OtrasPlataformas from './OtrasPlataformas.astro';
+
+interface Props {
+  service: StreamingService;
+}
+
+const { service } = Astro.props;
+
+const minPricesByCurrency: Record<string, number> = {};
+for (const plan of service.planes) {
+  for (const [curr, val] of Object.entries(plan.prices)) {
+    if (typeof val === 'number' && (minPricesByCurrency[curr] === undefined || val < minPricesByCurrency[curr])) {
+      minPricesByCurrency[curr] = val;
+    }
+  }
+}
+
+const minPen = resolvePlanPrice(minPricesByCurrency, 'PEN').amount;
+const formattedDefaultMin = formatPrice(minPen, 'PEN', 'es-PE');
+
+const acciones = TEXTOS_BOTONES.acciones;
+const textosFicha = TEXTOS_BOTONES.fichaServicio;
+const planesNormales = service.planes.filter((p) => !p.destacado);
+const planesDestacados = service.planes.filter((p) => Boolean(p.destacado));
+const stickyBtnClass = [
+  'inline-flex items-center justify-center font-semibold text-sm px-5 py-2.5 rounded transition-colors',
+  service.disponible
+    ? 'bg-brand-whatsapp hover:bg-brand-whatsappHover text-white'
+    : 'bg-amber-600 hover:bg-amber-500 text-white',
+].join(' ');
+---
+
+<ServiceHeader
+  service={service}
+  minPricesByCurrency={minPricesByCurrency}
+  formattedDefaultMin={formattedDefaultMin}
+/>
+
+<section class="py-10 sm:py-14">
+  <div class="max-w-[var(--container-max)] mx-auto px-[var(--container-px)] space-y-12 sm:space-y-14">
+    <!-- 2. Selección de Planes (directamente debajo de la cabecera) -->
+    <div id="planes" class="space-y-6">
+      <div
+        class:list={[
+          'flex flex-col md:flex-row md:items-end justify-between gap-4',
+          planesNormales.length === 1 && 'text-center md:flex-col md:items-center',
+        ]}
+      >
+        <div class="space-y-1.5" data-revelar>
+          <h2 class="font-display font-bold text-2xl text-ink">
+            {textosFicha.eligeTuPlanPrefijo} {service.nombre}
+          </h2>
+          <p class="text-sm text-ink-muted">
+            {textosFicha.instruccionPagoAntes} <span data-geo-country-label class="text-ink font-medium">{MARCA.paisPorDefecto}</span> {textosFicha.instruccionPagoDespues}
+            {AJUSTES.SHOW_PRICES && textosFicha.notaPreciosEjemplo}
+          </p>
+        </div>
+      </div>
+
+      <div
+        data-planes={planesNormales.length}
+        class:list={[
+          'cuadricula-planes pt-6',
+          planesNormales.length === 4
+            ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-5'
+            : planesNormales.length === 2
+              ? 'grid grid-cols-1 sm:grid-cols-2 gap-5'
+              : planesNormales.length === 1
+                ? 'max-w-2xl mx-auto'
+                : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5',
+        ]}
+      >
+        {
+          planesNormales.map((plan, idx) => (
+            <ServicePlanCard
+              service={service}
+              plan={plan}
+              isHighlighted={idx === 0}
+              isSinglePlan={planesNormales.length === 1}
+              index={idx}
+            />
+          ))
+        }
+      </div>
+
+      {
+        planesDestacados.length > 0 && (
+          <div class="space-y-5 pt-8">
+            {planesDestacados.map((plan, idx) => (
+              <ServicePlanCard
+                service={service}
+                plan={plan}
+                isHighlighted={false}
+                index={planesNormales.length + idx}
+              />
+            ))}
+          </div>
+        )
+      }
+    </div>
+
+    <!-- 3 y 4. Sobre el servicio, qué incluye y preguntas frecuentes -->
+    <ServiceInfoYFaq service={service} />
+
+    <!-- 5. Bloque de valoraciones y opiniones (lado a lado en escritorio, apilado en móvil) -->
+    <BloqueValoracion
+      servicioSlug={service.slug}
+      servicioNombre={service.nombre}
+      acento={service.color_acento}
+    />
+
+    <!-- 6. Otras plataformas del catálogo (al final, en una fila) -->
+    <OtrasPlataformas service={service} />
+  </div>
+</section>
+
+<!-- Barra fija inferior en móvil para conversión rápida en páginas de servicio -->
+<div class="sm:hidden fixed bottom-0 inset-x-0 z-40 bg-ground-elevated/95 border-t border-ground-border px-4 py-3 flex items-center justify-between gap-3">
+  <div>
+    <span class="text-xs text-ink-muted block">{service.nombre}</span>
+    <span class="font-display font-bold text-base text-ink">
+      {
+        AJUSTES.SHOW_PRICES ? (
+          <>
+            Desde{' '}
+            <span data-price-map={JSON.stringify(minPricesByCurrency)} class="geo-price">
+              {formattedDefaultMin}
+            </span>
+          </>
+        ) : (
+          'Planes disponibles'
+        )
+      }
+    </span>
+  </div>
+  <BotonWhatsApp
+    tipo={service.disponible ? 'barra_movil' : 'consultar_disponibilidad'}
+    servicio={service.nombre}
+    precioFormateado={formattedDefaultMin}
+    disponible={service.disponible}
+    preciosMap={minPricesByCurrency}
+    mensajeServicioComprar={service.mensaje_comprar}
+    mensajeServicioDisponibilidad={service.mensaje_disponibilidad}
+    texto={service.disponible ? acciones.pedirPorWhatsapp : acciones.consultarDisponibilidad}
+    class={stickyBtnClass}
+  />
+</div>

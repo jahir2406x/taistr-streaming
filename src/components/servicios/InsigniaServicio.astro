@@ -1,0 +1,67 @@
+---
+import type { StreamingService } from '../../types/service';
+import { derivarIniciales, calcularColorTextoInsignia } from '../../core';
+
+interface Props {
+  servicio?: StreamingService;
+  iniciales?: string;
+  color?: string;
+  logo_propio?: string;
+  nombre?: string;
+  tamano?: 'sm' | 'md' | 'lg';
+  esDecorativa?: boolean;
+  class?: string;
+  id?: string;
+}
+
+const {
+  servicio,
+  iniciales,
+  color,
+  logo_propio,
+  nombre,
+  tamano = 'md',
+  esDecorativa = true,
+  class: className = '',
+  id,
+} = Astro.props;
+
+const nombreFinal = nombre ?? servicio?.nombre ?? 'Servicio';
+const colorFinal = color ?? servicio?.color_acento ?? '#F59E0B';
+const logoPropioFinal = logo_propio ?? servicio?.logo_propio;
+const inicialesFinal = derivarIniciales(nombreFinal, iniciales ?? servicio?.iniciales);
+const colorTextoFinal = calcularColorTextoInsignia(colorFinal);
+
+const pixelSizes = {
+  sm: 24,
+  md: 44,
+  lg: 56,
+};
+const pixelSize = pixelSizes[tamano] ?? 44;
+---
+
+<div
+  id={id}
+  class:list={['insignia-servicio', `insignia-servicio--${tamano}`, className]}
+  data-len={String(inicialesFinal.length)}
+  style={`--acento: ${colorFinal}; --texto-insignia: ${colorTextoFinal};`}
+  {...(esDecorativa
+    ? { 'aria-hidden': 'true' }
+    : { role: 'img', 'aria-label': `Insignia de ${nombreFinal}` })}
+>
+  {
+    logoPropioFinal ? (
+      <img
+        src={logoPropioFinal}
+        alt=""
+        width={pixelSize}
+        height={pixelSize}
+        loading="lazy"
+        decoding="async"
+      />
+    ) : (
+      <span>{inicialesFinal}</span>
+    )
+  }
+</div>
+

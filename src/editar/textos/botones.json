@@ -1,0 +1,52 @@
+{
+  "navegacion": {
+    "catalogo": "Catálogo",
+    "comoFunciona": "Cómo funciona",
+    "garantia": "Garantía y condiciones",
+    "garantiaCorto": "Garantía",
+    "preguntas": "Preguntas frecuentes",
+    "atencionWhatsapp": "Atención WhatsApp",
+    "whatsappCorto": "WhatsApp",
+    "saltarContenido": "Saltar al contenido principal"
+  },
+  "acciones": {
+    "pedirPorWhatsapp": "Pedir por WhatsApp · Entrega en minutos",
+    "pedirAhora": "Pedir ahora",
+    "pedirEstePlan": "Pedir este plan por WhatsApp",
+    "elegirEstePlan": "Elegir este plan →",
+    "consultarDisponibilidad": "Consultar disponibilidad",
+    "consultarPrecio": "Consultar precio por WhatsApp",
+    "consultasWhatsappFlotante": "Consultas por WhatsApp",
+    "disponible": "Disponible",
+    "disponibleHoy": "Disponible hoy",
+    "bajoConsulta": "Bajo consulta",
+    "consultarStock": "Consultar stock",
+    "masPedido": "Más pedido",
+    "verPlanes": "Ver planes",
+    "verCatalogoCompleto": "Ver catálogo completo",
+    "volverCatalogoInicio": "Volver al catálogo de inicio",
+    "escribirPorWhatsapp": "Escribir por WhatsApp",
+    "consultarConSoporte": "Consultar con soporte"
+  },
+  "fichaServicio": {
+    "planesDesde": "Planes desde",
+    "porMesEjemplo": "/ mes",
+    "eligeTuPlanPrefijo": "Elige tu plan de",
+    "instruccionPagoAntes": "Haz clic en el plan que prefieras para ver los medios de pago en",
+    "instruccionPagoDespues": "y continuar por WhatsApp.",
+    "notaPreciosEjemplo": "",
+    "pagarConPrefijo": "Pagar con (",
+    "pagarConSufijo": "):",
+    "sobreElServicioPrefijo": "Sobre el servicio de",
+    "entregaYMediosPrefijo": "Entrega y medios de pago (",
+    "entregaYMediosSufijo": ")",
+    "queIncluyeTitulo": "Qué incluye tu suscripción",
+    "faqServicioPrefijo": "Preguntas frecuentes sobre",
+    "otrasPlataformasTitulo": "Otras plataformas disponibles"
+  },
+  "pagina404": {
+    "insignia": "Error 404",
+    "titulo": "No encontramos esta página en el catálogo",
+    "descripcion": "Es posible que el enlace esté mal escrito o que el servicio haya cambiado de dirección. Puedes volver al listado completo o consultarnos directamente por WhatsApp."
+  }
+}

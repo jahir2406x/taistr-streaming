@@ -1,0 +1,130 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ServiceDetail from '../../components/servicios/ServiceDetail.astro';
+import { MARCA, AJUSTES, SERVICIOS, PAISES, PAGOS, SEO_TEXTOS, FAQ_COMUNES, TEXTOS_GARANTIA } from '../../editar';
+import { crearMensajeWhatsApp } from '../../utils/whatsapp';
+import {
+  formatPrice,
+  resolvePlanPrice,
+  getPaymentMethodsForCountry,
+  mergeServiceFaq,
+  construirSeoServicio,
+  construirBreadcrumbSchema,
+} from '../../core';
+import type { StreamingService } from '../../types/service';
+
+export function getStaticPaths() {
+  return SERVICIOS.map((service) => ({
+    params: { slug: service.slug },
+    props: { service },
+  }));
+}
+
+interface Props {
+  service: StreamingService;
+}
+
+const { service } = Astro.props;
+const defaultPayments = getPaymentMethodsForCountry('PE', PAGOS, PAISES);
+const minPen = Math.min(...service.planes.map((p) => resolvePlanPrice(p.prices, 'PEN').amount));
+const formattedDefaultMin = formatPrice(minPen, 'PEN', 'es-PE');
+
+const defaultServiceMessage = crearMensajeWhatsApp({
+  tipo: service.disponible ? 'barra_movil' : 'consultar_disponibilidad',
+  servicio: service.nombre,
+  precio: formattedDefaultMin,
+  moneda: 'PEN',
+  codigoPais: 'PE',
+  pais: 'Perú',
+  medioPago: defaultPayments[0]?.name || PAGOS[0]?.name || '',
+  disponible: service.disponible,
+  mensajeServicioComprar: service.mensaje_comprar,
+  mensajeServicioDisponibilidad: service.mensaje_disponibilidad,
+});
+
+const mergedFaq = mergeServiceFaq(service.faq, FAQ_COMUNES);
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: mergedFaq.map((f) => ({
+    '@type': 'Question',
+    name: f.pregunta,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: f.respuesta,
+    },
+  })),
+};
+
+const breadcrumbSchema = construirBreadcrumbSchema({
+  siteUrl: AJUSTES.siteUrl,
+  servicioNombre: service.nombre,
+  servicioSlug: service.slug,
+});
+
+let productSchema: Record<string, unknown> | null = null;
+if (AJUSTES.VALORACIONES.schema_activo) {
+  try {
+    const snapshotPath = path.resolve(process.cwd(), 'src/editar/valoraciones-snapshot.json');
+    if (fs.existsSync(snapshotPath)) {
+      const snapData = JSON.parse(fs.readFileSync(snapshotPath, 'utf-8'));
+      const svcVal = snapData[service.slug];
+      if (svcVal && typeof svcVal.n === 'number' && svcVal.n >= AJUSTES.VALORACIONES.schema_desde) {
+        const base = AJUSTES.siteUrl.replace(/\/+$/, '');
+        productSchema = {
+          '@context': 'https://schema.org',
+          '@type': 'Product',
+          name: service.nombre,
+          description: service.descripcion_corta,
+          url: `${base}/servicios/${service.slug}`,
+          image: `${base}/og/${service.slug}.png`,
+          brand: {
+            '@type': 'Brand',
+            name: MARCA.nombre,
+          },
+          provider: {
+            '@type': 'Organization',
+            name: MARCA.nombre,
+            url: base,
+          },
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: svcVal.promedio,
+            reviewCount: svcVal.n,
+            bestRating: 5,
+            worstRating: 1,
+          },
+        };
+      }
+    }
+  } catch (e) {}
+}
+
+const serviceSchemas = productSchema
+  ? [breadcrumbSchema, faqSchema, productSchema]
+  : [breadcrumbSchema, faqSchema];
+
+const seoServicio = construirSeoServicio({
+  service,
+  marcaNombre: MARCA.nombre,
+  paisNombre: MARCA.paisPorDefecto,
+  pagos: PAGOS,
+  garantiaTexto: TEXTOS_GARANTIA.garantia_corta,
+  plantillaTitulo: SEO_TEXTOS.servicioPlantilla.plantillaTitulo,
+  plantillaDescripcion: SEO_TEXTOS.servicioPlantilla.plantillaDescripcion,
+});
+---
+
+<BaseLayout
+  title={seoServicio.titulo}
+  description={seoServicio.descripcion}
+  ogImage={`/og/${service.slug}.png`}
+  keywords={`${service.nombre.toLowerCase()} barato peru, comprar ${service.nombre.toLowerCase()} yape, cuenta ${service.nombre.toLowerCase()} barata, perfil compartido ${service.nombre.toLowerCase()}, streaming barato peru`}
+  customWhatsappMessage={defaultServiceMessage}
+  structuredData={serviceSchemas}
+>
+  <ServiceDetail service={service} />
+</BaseLayout>

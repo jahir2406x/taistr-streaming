@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LegalDocument from '../components/secciones/LegalDocument.astro';
+import BotonWhatsApp from '../components/ui/BotonWhatsApp.astro';
+import { MARCA, AJUSTES, SEO_TEXTOS } from '../editar';
+import { crearMensajeWhatsApp } from '../utils/whatsapp';
+import { parseLegalMarkdown } from '../utils/markdown';
+import garantiaRaw from '../editar/textos/garantia.md?raw';
+
+const parsed = parseLegalMarkdown(garantiaRaw, {
+  marca: MARCA.nombre,
+  HORARIO_SOPORTE: MARCA.horarioSoporte,
+  MEDIOS_PAGO: `<span data-geo-payments-summary>${MARCA.mediosPagoResumen.join(', ')}</span>`,
+});
+
+const supportMessage = crearMensajeWhatsApp({ tipo: 'soporte' });
+---
+
+<BaseLayout
+  title={SEO_TEXTOS.garantia.titulo}
+  description={SEO_TEXTOS.garantia.descripcion}
+  customWhatsappMessage={supportMessage}
+>
+  <section class="py-12 sm:py-16">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 space-y-10">
+      <div class="space-y-3 border-b border-ground-border pb-6">
+        <h1 class="font-display font-bold text-3xl sm:text-4xl text-ink tracking-tight">
+          {parsed.frontmatter.titulo}
+        </h1>
+        <p class="text-sm sm:text-base text-ink-muted leading-relaxed">
+          {parsed.frontmatter.subtitulo}
+          <span class="text-brand font-medium">{parsed.frontmatter.notaEditable}</span>
+        </p>
+        <p class="text-xs text-ink-subtle">
+          {parsed.frontmatter.tarifasLabel} <time datetime={AJUSTES.prices_updated_at}>{AJUSTES.prices_updated_at}</time>
+        </p>
+      </div>
+
+      <LegalDocument sections={parsed.sections} spacingClass="space-y-8" headingClass="text-xl" />
+
+      <div class="bg-ground-elevated border border-ground-border rounded-lg p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="font-display font-bold text-lg text-ink">{parsed.frontmatter.ctaTitulo}</h2>
+          <p class="text-xs sm:text-sm text-ink-muted">
+            {parsed.frontmatter.ctaSubtitulo}
+          </p>
+        </div>
+        <BotonWhatsApp
+          tipo="soporte"
+          texto={parsed.frontmatter.ctaBoton}
+          class="inline-flex items-center justify-center bg-brand-whatsapp hover:bg-brand-whatsappHover text-white font-semibold text-sm px-5 py-3 rounded shrink-0 transition-colors"
+        />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

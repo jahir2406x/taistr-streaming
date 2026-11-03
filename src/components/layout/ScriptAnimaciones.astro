@@ -1,0 +1,129 @@
+---
+import { AJUSTES } from '../../editar';
+---
+
+{
+  AJUSTES.ANIMACIONES && (
+    <script is:inline>
+      (function () {
+        if (document.documentElement.getAttribute('data-anim') === 'off') return;
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        var header = document.getElementById('site-header');
+        var sentinel = document.getElementById('header-sentinel');
+        var heroSec = document.getElementById('hero-section');
+
+        if ('IntersectionObserver' in window) {
+          if (header && sentinel) {
+            new IntersectionObserver(function (entries) {
+              if (entries[0]) header.classList.toggle('header-scrolled', !entries[0].isIntersecting);
+            }, { threshold: 0 }).observe(sentinel);
+          }
+
+          if (heroSec) {
+            new IntersectionObserver(function (entries) {
+              if (entries[0]) heroSec.setAttribute('data-offscreen', entries[0].isIntersecting ? 'false' : 'true');
+            }, { threshold: 0 }).observe(heroSec);
+          }
+
+          var navEl = document.getElementById('site-nav');
+          if (navEl || document.getElementById('mobile-nav-drawer')) {
+            var setNavActive = function (key) {
+              var links = document.querySelectorAll('[data-nav-target]');
+              var activeLink = null;
+              for (var k = 0; k < links.length; k++) {
+                var isMatch = links[k].getAttribute('data-nav-target') === key;
+                links[k].setAttribute('data-active', isMatch ? 'true' : 'false');
+                if (isMatch && links[k].classList.contains('nav-link')) activeLink = links[k];
+              }
+              if (activeLink && navEl) {
+                navEl.style.setProperty('--nav-x', activeLink.offsetLeft + 'px');
+                navEl.style.setProperty('--nav-w', String(activeLink.offsetWidth));
+                navEl.setAttribute('data-has-active', 'true');
+              } else if (navEl) {
+                navEl.setAttribute('data-has-active', 'false');
+              }
+            };
+
+            if (location.pathname.indexOf('/garantia') === 0) {
+              setNavActive('legal');
+            } else {
+              var secIds = ['catalogo', 'como-funciona', 'preguntas'];
+              var secObs = new IntersectionObserver(function (entries) {
+                for (var s = 0; s < entries.length; s++) {
+                  if (entries[s].isIntersecting) {
+                    setNavActive(entries[s].target.id);
+                  }
+                }
+              }, { rootMargin: '-30% 0px -55% 0px', threshold: 0 });
+              for (var idx = 0; idx < secIds.length; idx++) {
+                var secNode = document.getElementById(secIds[idx]);
+                if (secNode) secObs.observe(secNode);
+              }
+            }
+          }
+
+          var revealEls = document.querySelectorAll('[data-revelar]');
+          if (revealEls.length > 0) {
+            var vh = window.innerHeight || document.documentElement.clientHeight || 800;
+            var revealObserver = new IntersectionObserver(
+              function (entries) {
+                for (var i = 0; i < entries.length; i++) {
+                  var entry = entries[i];
+                  if (entry.isIntersecting) {
+                    entry.target.classList.add('revelado');
+                  } else if (entry.boundingClientRect.top > (window.innerHeight || document.documentElement.clientHeight || 800)) {
+                    // Solo reiniciar si el elemento sale por la parte inferior al volver arriba
+                    // Nunca cuando ya se scrolleó hacia abajo, para evitar parpadeos y entrecortes
+                    entry.target.classList.remove('revelado');
+                  }
+                }
+              },
+              { rootMargin: '0px 0px -30px 0px', threshold: 0.05 }
+            );
+            for (var j = 0; j < revealEls.length; j++) {
+              revealObserver.observe(revealEls[j]);
+            }
+          }
+        }
+
+        if (window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+          var rafPending = false;
+          var lastEv = null;
+          var activeMag = null;
+
+          document.addEventListener('pointermove', function (e) {
+            lastEv = e;
+            if (rafPending) return;
+            rafPending = true;
+            requestAnimationFrame(function () {
+              rafPending = false;
+              if (!lastEv) return;
+              var t = lastEv.target;
+              var card = t && t.closest ? t.closest('.service-card, .tarjeta-plan') : null;
+              if (card) {
+                var r = card.getBoundingClientRect();
+                card.style.setProperty('--x', Math.round(lastEv.clientX - r.left) + 'px');
+                card.style.setProperty('--y', Math.round(lastEv.clientY - r.top) + 'px');
+              }
+              var mag = t && t.closest ? t.closest('.btn-magnetic') : null;
+              if (mag) {
+                activeMag = mag;
+                var mr = mag.getBoundingClientRect();
+                var dx = ((lastEv.clientX - (mr.left + mr.width / 2)) / (mr.width / 2)) * 5;
+                var dy = ((lastEv.clientY - (mr.top + mr.height / 2)) / (mr.height / 2)) * 5;
+                mag.style.setProperty('--mag-x', Math.max(-6, Math.min(6, dx)).toFixed(1) + 'px');
+                mag.style.setProperty('--mag-y', Math.max(-6, Math.min(6, dy)).toFixed(1) + 'px');
+              } else if (activeMag) {
+                activeMag.style.setProperty('--mag-x', '0px');
+                activeMag.style.setProperty('--mag-y', '0px');
+                activeMag = null;
+              }
+            });
+          }, { passive: true });
+        }
+      })();
+    </script>
+  )
+}
+

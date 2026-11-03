@@ -1,0 +1,90 @@
+---
+import type { StreamingService } from '../../types/service';
+import { MARCA, PAGOS, PAISES, TEXTOS_BOTONES, FAQ_COMUNES } from '../../editar';
+import { getPaymentMethodsForCountry, mergeServiceFaq } from '../../core';
+
+interface Props {
+  service: StreamingService;
+}
+
+const { service } = Astro.props;
+const defaultPayments = getPaymentMethodsForCountry('PE', PAGOS, PAISES);
+const faqCompleto = mergeServiceFaq(service.faq, FAQ_COMUNES);
+
+const textosFicha = TEXTOS_BOTONES.fichaServicio;
+---
+
+<!-- Descripción detallada y qué incluye -->
+<div id="que-incluye" class="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-6 border-t border-ground-border scroll-mt-24">
+  <div class="lg:col-span-6 space-y-4" data-revelar style="--i: 0;">
+    <h2 class="font-display font-bold text-xl sm:text-2xl text-ink">
+      {textosFicha.sobreElServicioPrefijo} {service.nombre}
+    </h2>
+    <p class="text-sm sm:text-base text-ink-muted leading-relaxed">
+      {service.descripcion_larga}
+    </p>
+    <div class="bg-ground-elevated/80 border border-ground-border/70 rounded-lg p-4 space-y-1.5">
+      <h3 class="text-sm font-semibold text-ink">
+        {textosFicha.entregaYMediosPrefijo}<span data-geo-country-label>{MARCA.paisPorDefecto}</span>{textosFicha.entregaYMediosSufijo}
+      </h3>
+      <p class="text-xs text-ink-muted leading-relaxed">
+        Medios habilitados: <strong class="text-ink font-medium" data-geo-payments-summary>{defaultPayments.map((p) => p.name).join(' · ')}</strong>. Tiempo estimado de entrega: {MARCA.tiempoRespuesta}. Revisar todas las reglas de uso en <a href="/garantia" class="text-brand underline">{TEXTOS_BOTONES.navegacion.garantia}</a>.
+      </p>
+    </div>
+  </div>
+
+  <div class="lg:col-span-6 space-y-4" data-revelar style="--i: 1;">
+    <h2 class="font-display font-bold text-xl sm:text-2xl text-ink">
+      {textosFicha.queIncluyeTitulo}
+    </h2>
+    <ul class="space-y-3 bg-ground-card/80 border border-ground-border/70 rounded-lg p-5">
+      {
+        service.caracteristicas.map((feat) => (
+          <li class="flex items-start gap-3 text-sm text-ink">
+            <span
+              class="w-2 h-2 rounded-full mt-1.5 shrink-0"
+              style={`background-color: ${service.color_acento};`}
+              aria-hidden="true"
+            />
+            <span>{feat}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</div>
+
+<!-- Preguntas frecuentes del servicio y condiciones -->
+{
+  faqCompleto.length > 0 && (
+    <div id="faq-servicio" class="space-y-5 pt-6 border-t border-ground-border scroll-mt-24">
+      <h2 class="font-display font-bold text-xl sm:text-2xl text-ink" data-revelar>
+        {textosFicha.faqServicioPrefijo} {service.nombre}
+      </h2>
+      <div class="space-y-3">
+        {faqCompleto.map((item, idx) => (
+          <details
+            data-revelar
+            style={`--i: ${idx};`}
+            class="group bg-ground-card/90 border border-ground-border rounded-lg overflow-hidden transition-colors"
+            open={idx === 0}
+          >
+            <summary class="cursor-pointer list-none px-5 py-4 font-display font-semibold text-base text-ink flex items-center justify-between gap-4 select-none hover:text-brand transition-colors">
+              <span>{item.pregunta}</span>
+              <span
+                class="text-brand font-bold text-lg transition-transform group-open:rotate-45 shrink-0"
+                aria-hidden="true"
+              >
+                +
+              </span>
+            </summary>
+            <div class="px-5 pb-5 pt-1 text-sm text-ink-muted leading-relaxed border-t border-ground-border/60">
+              {item.respuesta}
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  )
+}
+

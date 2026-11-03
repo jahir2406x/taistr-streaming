@@ -1,0 +1,97 @@
+---
+import { TEXTOS_INICIO } from '../../editar';
+
+const test = TEXTOS_INICIO.testimonios;
+const countriesEntries = Object.entries(test.porPais);
+---
+
+<section id="testimonios" class="section-rhythm section-below-fold border-t border-[var(--border-subtle)] relative overflow-hidden">
+  <div class="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+    <div class="absolute top-1/2 left-1/4 w-96 h-64 bg-emerald-500/5 blur-3xl rounded-full"></div>
+  </div>
+
+  <div class="relative max-w-[var(--container-max)] mx-auto px-[var(--container-px)] space-y-10">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-5" data-revelar>
+      <div class="max-w-2xl space-y-2">
+        <span class="section-kicker">{test.kicker}</span>
+        <h2 class="font-display font-bold text-[length:var(--text-h2)] text-ink">
+          {test.titulo}
+        </h2>
+        <p class="text-sm sm:text-base text-ink-muted leading-relaxed">
+          {test.subtitulo}
+        </p>
+      </div>
+
+      <!-- Insignia resumen de calificación -->
+      <div class="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-[var(--surface-2)] border border-[var(--border-subtle)] text-xs font-semibold text-ink shrink-0 self-start md:self-auto shadow-sm">
+        <div class="flex items-center text-amber-400 gap-0.5" aria-hidden="true">
+          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+        </div>
+        <span>{test.badgeTexto}</span>
+      </div>
+    </div>
+
+    <!-- Muro de opiniones multi-país (se activa según el país seleccionado o detectado) -->
+    {
+      countriesEntries.map(([code, items]) => (
+        <div
+          data-geo-country={code}
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5"
+        >
+          {
+            items.map((item, idx) => (
+              <div
+                data-revelar
+                style={`--i: ${idx};`}
+                class="surface-card card-hover p-5 sm:p-6 rounded-[var(--radius-card)] border border-[var(--border-subtle)] flex flex-col justify-between gap-4 relative overflow-hidden group"
+              >
+                <div class="space-y-3">
+                  <!-- Cabecera con avatar, ubicación e insignia verificada -->
+                  <div class="flex items-start justify-between gap-2">
+                    <div class="flex items-center gap-2.5">
+                      <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-brand/30 to-brand/10 border border-brand/40 flex items-center justify-center font-display font-bold text-xs text-brand shrink-0">
+                        {item.nombre.charAt(0)}
+                      </div>
+                      <div class="min-w-0">
+                        <h3 class="font-display font-bold text-sm text-ink leading-tight truncate">{item.nombre}</h3>
+                        <span class="text-[11px] text-ink-muted flex items-center gap-1">
+                          <span aria-hidden="true">{item.bandera}</span>
+                          <span>{item.ciudad}</span>
+                        </span>
+                      </div>
+                    </div>
+
+                    <span class="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-400 px-2 py-0.5 rounded-full bg-emerald-950/60 border border-emerald-800/60 shrink-0">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
+                      Verificado
+                    </span>
+                  </div>
+
+                  <!-- Estrellas doradas -->
+                  <div class="flex items-center text-amber-400 text-xs gap-0.5" aria-label={`${item.estrellas} de 5 estrellas`}>
+                    {Array.from({ length: item.estrellas }).map(() => (
+                      <span aria-hidden="true">★</span>
+                    ))}
+                  </div>
+
+                  <!-- Comentario del cliente -->
+                  <p class="text-xs sm:text-sm text-ink-muted leading-relaxed">
+                    "{item.comentario}"
+                  </p>
+                </div>
+
+                <!-- Pie de tarjeta con servicio, medio y antigüedad -->
+                <div class="pt-3 border-t border-[var(--border-subtle)] flex items-center justify-between text-[11px] text-ink-subtle">
+                  <span class="font-medium text-ink-muted">{item.servicio}</span>
+                  <span class="px-1.5 py-0.5 rounded bg-[var(--surface-3)] text-[10px] font-medium border border-[var(--border-subtle)]">
+                    {item.metodo}
+                  </span>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      ))
+    }
+  </div>
+</section>

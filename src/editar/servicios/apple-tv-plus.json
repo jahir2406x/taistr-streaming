@@ -1,0 +1,79 @@
+{
+    "id":  "apple-tv-plus",
+    "nombre":  "Apple TV+",
+    "slug":  "apple-tv-plus",
+    "iniciales":  "A+",
+    "categoria":  "video",
+    "eslogan":  "Apple TV+ barato en Perú. Series multipremiadas como Severance y Ted Lasso en 4K.",
+    "descripcion_corta":  "Acceso a Apple TV+ económico en soles (S/) con pago por Yape, sin necesidad de tener un dispositivo Apple.",
+    "descripcion_larga":  "Apple TV+ destaca por su calidad cinematográfica y el bitrate 4K más alto del streaming. Disfruta de Severance, Ted Lasso, Silo, The Morning Show, Fundación, Slow Horses y películas originales de Apple Studios sin anuncios.",
+    "caracteristicas":  [
+                            "Calidad 4K Dolby Vision con la mayor tasa de bits del mercado",
+                            "Funciona en Smart TV (Samsung, LG, Sony, Google TV), Windows y Android vía web/app",
+                            "Cero anuncios y estrenos semanales exclusivos",
+                            "Acceso mediante perfil o cuenta según disponibilidad",
+                            "Garantía completa durante todo el mes"
+                        ],
+    "planes":  [
+                   {
+                       "id":  "appletv-ind-1m",
+                       "nombre":  "Acceso Individual",
+                       "duracion":  "1 mes",
+                       "pantallas":  "1 dispositivo a la vez",
+                       "prices":  {
+                                      "PEN":  8,
+                                      "USD":  2.3,
+                                      "MXN":  45,
+                                      "ARS":  3800
+                                  },
+                       "nota":  "Compatible con Smart TV y dispositivos Apple/Android",
+                       "mensaje_comprar":  "",
+                       "mensaje_disponibilidad":  "",
+                       "incluye":  [
+
+                                   ],
+                       "nota_panel":  "",
+                       "descuentos":  {
+                                          "2":  0,
+                                          "3":  5,
+                                          "6":  8
+                                      }
+                   },
+                   {
+                       "id":  "appletv-completa-1m",
+                       "nombre":  "Cuenta Completa",
+                       "duracion":  "1 mes",
+                       "pantallas":  "Hasta 5 pantallas en simultáneo",
+                       "prices":  {
+                                      "PEN":  25,
+                                      "USD":  7.3,
+                                      "MXN":  150,
+                                      "ARS":  12000
+                                  },
+                       "nota":  "Sujeto a stock del día",
+                       "mensaje_comprar":  "",
+                       "mensaje_disponibilidad":  "",
+                       "incluye":  [
+
+                                   ],
+                       "nota_panel":  "",
+                       "descuentos":  {
+                                          "2":  0,
+                                          "3":  5,
+                                          "6":  8
+                                      }
+                   }
+               ],
+    "mensaje_whatsapp":  "Hola, quiero consultar por Apple TV+. ¿Tienen disponibilidad?",
+    "color_acento":  "#A1A1AA",
+    "disponible":  true,
+    "faq":  [
+                {
+                    "pregunta":  "¿Necesito tener un iPhone o Mac para ver Apple TV+?",
+                    "respuesta":  "No. La aplicación oficial de Apple TV está disponible en casi todos los Smart TV (Samsung, LG, Android TV), consolas PlayStation/Xbox, Fire Stick y navegadores en PC o Android."
+                }
+            ],
+    "mensaje_comprar":  "",
+    "mensaje_disponibilidad":  "",
+    "resumen_seo":  "series 4K en Smart TV, móvil o PC"
+}

@@ -1,0 +1,165 @@
+---
+import {
+  MARCA,
+  AJUSTES,
+  SERVICIOS,
+  PAISES,
+  PAGOS,
+  TEXTOS_INICIO,
+  TEXTOS_BOTONES,
+} from '../../editar';
+import { formatPrice, resolvePlanPrice, getPaymentMethodsForCountry } from '../../core';
+import BotonWhatsApp from '../ui/BotonWhatsApp.astro';
+
+const services = SERVICIOS;
+const defaultPayments = getPaymentMethodsForCountry('PE', PAGOS, PAISES);
+const firstService = services[0];
+const firstPlan = firstService.planes[0];
+const baseDurationLabel = (AJUSTES.duraciones[0] || { etiqueta: '1 mes' }).etiqueta;
+const firstPlanPen = resolvePlanPrice(firstPlan.prices, 'PEN');
+const firstPlanFormatted = formatPrice(firstPlanPen.amount, firstPlanPen.currency, 'es-PE');
+
+const armador = TEXTOS_INICIO.hero.armador;
+const acciones = TEXTOS_BOTONES.acciones;
+---
+
+<div class="lg:col-span-5 min-w-0 hero-stagger" style="--i: 4;">
+  <div class="hero-glass-card rounded-[var(--radius-card-lg)] p-5 sm:p-6 space-y-5">
+    <div class="flex items-center justify-between border-b border-[var(--border-subtle)] pb-4">
+      <div>
+        <h2 class="font-display font-bold text-lg text-ink">{armador.titulo}</h2>
+        <p class="text-xs text-ink-muted mt-0.5">
+          {armador.subtitulo}
+        </p>
+      </div>
+      <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-brand/10 border border-brand/30 text-brand">
+        {armador.insignia}
+      </span>
+    </div>
+
+    <div class="space-y-4">
+      <div>
+        <label for="quick-service" class="block text-xs font-medium text-ink-muted mb-1.5">
+          {armador.paso1Label}
+        </label>
+        <select
+          id="quick-service"
+          class="w-full bg-ground text-ink text-sm rounded border border-ground-border px-3.5 py-2.5 focus:border-brand"
+        >
+          {
+            services.map((s) => (
+              <option value={s.slug}>
+                {s.nombre} {!s.disponible ? `(${acciones.consultarDisponibilidad})` : ''}
+              </option>
+            ))
+          }
+        </select>
+      </div>
+
+      <div>
+        <label for="quick-plan" class="block text-xs font-medium text-ink-muted mb-1.5">
+          {armador.paso2Label}
+        </label>
+        <select
+          id="quick-plan"
+          class="w-full bg-ground text-ink text-sm rounded border border-ground-border px-3.5 py-2.5 focus:border-brand"
+        >
+          {
+            firstService.planes.map((plan, idx) => {
+              const pPen = resolvePlanPrice(plan.prices, 'PEN');
+              const pFormatted = formatPrice(pPen.amount, pPen.currency, 'es-PE');
+              return (
+                <option value={idx}>
+                  {plan.nombre} · {baseDurationLabel}
+                  {AJUSTES.SHOW_PRICES ? ` — ${pFormatted}` : ''}
+                </option>
+              );
+            })
+          }
+        </select>
+      </div>
+
+      <!-- 3. Chips de medio de pago filtrados por país -->
+      <div class="space-y-1.5">
+        <span class="block text-xs font-medium text-ink-muted">
+          {armador.paso3Label} <span data-geo-country-label class="text-ink">{MARCA.paisPorDefecto}</span>
+        </span>
+        <div
+          data-payment-chips
+          role="group"
+          aria-label="Seleccionar medio de pago"
+          class="flex flex-wrap gap-1.5 min-h-[32px]"
+        >
+          {
+            defaultPayments.map((pm, idx) => (
+              <button
+                type="button"
+                aria-pressed={idx === 0 ? 'true' : 'false'}
+                class={
+                  idx === 0
+                    ? 'chip-transition text-xs font-semibold px-2.5 py-1.5 rounded border border-brand bg-brand/15 text-brand'
+                    : 'chip-transition text-xs font-medium px-2.5 py-1.5 rounded border border-ground-border bg-ground hover:bg-ground-elevated text-ink-muted hover:text-ink'
+                }
+              >
+                {pm.name}
+              </button>
+            ))
+          }
+        </div>
+        <p data-payment-note class="text-[11px] text-ink-subtle leading-snug pt-0.5">
+          {defaultPayments[0]?.note}
+        </p>
+      </div>
+
+      <!-- Resumen estilo boleto de cine con muescas laterales y acento dinámico -->
+      <div
+        id="quick-ticket-stub"
+        style={`--ticket-accent: ${firstService.color_acento};`}
+        class="ticket-stub rounded-xl p-4 space-y-2.5"
+      >
+        <div class="flex items-center justify-between text-xs text-ink-muted">
+          <span class="inline-flex items-center gap-1.5 font-medium text-ink">
+            <span
+              id="ticket-accent-dot"
+              class="w-2 h-2 rounded-full shrink-0 transition-colors"
+              style={`background-color: ${firstService.color_acento}; box-shadow: 0 0 8px ${firstService.color_acento};`}
+              aria-hidden="true"
+            />
+            <span id="ticket-screens">{firstPlan.pantallas}</span>
+          </span>
+          <span id="ticket-duration" class="px-2 py-0.5 rounded bg-[var(--surface-3)] border border-[var(--border-subtle)] text-[11px] font-medium">
+            {baseDurationLabel}
+          </span>
+        </div>
+        <div class="flex items-baseline justify-between pt-2 border-t border-dashed border-ground-border min-h-[36px]">
+          <span class="text-xs font-medium text-ink-muted">{armador.totalLabel}</span>
+          <span id="ticket-price" class="geo-price precio-fade-cambio font-display font-extrabold text-xl sm:text-2xl text-brand inline-block min-w-[6rem] text-right">
+            {AJUSTES.SHOW_PRICES ? firstPlanFormatted : acciones.consultarPrecio}
+          </span>
+        </div>
+        <p id="ticket-note" class="text-xs text-ink-muted pt-1.5 border-t border-ground-border/70">
+          {firstPlan.nota}
+        </p>
+      </div>
+
+      <BotonWhatsApp
+        id="quick-wa-btn"
+        tipo={firstService.disponible ? 'armador_pedido' : 'consultar_disponibilidad'}
+        servicio={firstService.nombre}
+        plan={firstPlan.nombre}
+        duracion={baseDurationLabel}
+        pantallas={firstPlan.pantallas}
+        precioFormateado={firstPlanFormatted}
+        disponible={firstService.disponible}
+        mensajePlanComprar={firstPlan.mensaje_comprar}
+        mensajePlanDisponibilidad={firstPlan.mensaje_disponibilidad}
+        mensajeServicioComprar={firstService.mensaje_comprar}
+        mensajeServicioDisponibilidad={firstService.mensaje_disponibilidad}
+        class="wa-btn-shine w-full inline-flex items-center justify-center gap-2 bg-brand-whatsapp hover:bg-brand-whatsappHover text-white font-semibold text-sm px-4 py-3.5 rounded-[var(--radius-button)] min-h-[44px]"
+      >
+        <span id="quick-wa-label">{acciones.pedirEstePlan}</span>
+      </BotonWhatsApp>
+    </div>
+  </div>
+</div>
+

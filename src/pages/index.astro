@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HomeContent from '../components/secciones/HomeContent.astro';
+import { SEO_TEXTOS, TEXTOS_INICIO } from '../editar';
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: TEXTOS_INICIO.faqGeneral.preguntas.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
+---
+
+<BaseLayout
+  title={SEO_TEXTOS.inicio.titulo}
+  description={SEO_TEXTOS.inicio.descripcion}
+  structuredData={faqSchema}
+>
+  <HomeContent />
+</BaseLayout>

@@ -1,0 +1,99 @@
+---
+import { MARCA, TEXTOS_INICIO } from '../../editar';
+import BotonWhatsApp from '../ui/BotonWhatsApp.astro';
+
+const comp = TEXTOS_INICIO.comparativaAhorro;
+const countriesEntries = Object.entries(comp.porPais);
+---
+
+<section id="comparativa-ahorro" class="section-rhythm section-below-fold border-t border-[var(--border-subtle)] relative overflow-hidden">
+  <div class="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+    <div class="absolute top-1/3 right-1/4 w-80 h-56 bg-brand/5 blur-3xl rounded-full"></div>
+  </div>
+
+  <div class="relative max-w-[var(--container-max)] mx-auto px-[var(--container-px)] space-y-10">
+    <div class="max-w-2xl space-y-2" data-revelar>
+      <span class="section-kicker">{comp.kicker}</span>
+      <h2 class="font-display font-bold text-[length:var(--text-h2)] text-ink">
+        {comp.titulo}
+      </h2>
+      <p class="text-sm sm:text-base text-ink-muted leading-relaxed">
+        {comp.subtitulo}
+      </p>
+    </div>
+
+    <!-- Contenedores multi-país (se activa dinámicamente según el país detectado o seleccionado) -->
+    {
+      countriesEntries.map(([code, data]) => (
+        <div
+          data-geo-country={code}
+          data-revelar
+          style="--i: 1;"
+          class="surface-card rounded-[var(--radius-card-lg)] border border-[var(--border-subtle)] overflow-hidden shadow-lg"
+        >
+          <div class="overflow-x-auto">
+            <table class="comparativa-table w-full text-left border-collapse min-w-[580px]">
+              <thead>
+                <tr class="border-b border-[var(--border-subtle)] bg-[var(--surface-2)] text-xs font-semibold text-ink-muted uppercase tracking-wider">
+                  <th scope="col" class="py-4 px-5">{comp.columnaPlataforma}</th>
+                  <th scope="col" class="py-4 px-5">{comp.columnaOficial}</th>
+                  <th scope="col" class="py-4 px-5 text-brand">{comp.columnaTaistr}</th>
+                  <th scope="col" class="py-4 px-5 text-emerald-400">{comp.columnaAhorro}</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-[var(--border-subtle)] text-sm">
+                {
+                  data.filas.map((fila) => (
+                    <tr class="hover:bg-ground-elevated transition-colors group">
+                      <td class="py-4 px-5 flex items-center gap-3">
+                        <span
+                          class="inline-flex items-center justify-center w-8 h-8 rounded-lg font-display font-extrabold text-xs text-white shadow-sm shrink-0 group-hover:scale-105 transition-transform"
+                          style={`background-color: ${fila.color};`}
+                        >
+                          {fila.iniciales}
+                        </span>
+                        <span class="font-semibold text-ink">{fila.servicio}</span>
+                      </td>
+                      <td class="py-4 px-5 text-ink-muted line-through opacity-75">
+                        {fila.precioOficial}
+                      </td>
+                      <td class="py-4 px-5 font-bold text-ink">
+                        <span class="text-brand">{fila.precioTaistr}</span>
+                      </td>
+                      <td class="py-4 px-5 font-semibold text-emerald-400">
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-950/60 border border-emerald-800/60 text-xs group-hover:scale-[1.03] transition-transform">
+                          {fila.ahorro}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Puntos de valor y CTA inferior por país -->
+          <div class="p-5 sm:p-7 border-t border-[var(--border-subtle)] bg-[var(--surface-2)] flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <ul class="space-y-2 text-xs sm:text-sm text-ink-muted flex-1">
+              {
+                data.puntosClave.map((punto) => (
+                  <li class="flex items-center gap-2.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" aria-hidden="true" />
+                    <span>{punto}</span>
+                  </li>
+                ))
+              }
+            </ul>
+
+            <BotonWhatsApp
+              tipo="consulta_general"
+              class="wa-btn-shine btn-magnetic inline-flex items-center justify-center gap-2.5 bg-brand-whatsapp hover:bg-brand-whatsappHover text-white font-semibold text-sm px-6 py-3.5 rounded-[var(--radius-button)] shadow-md shrink-0 transition-colors min-h-[44px]"
+            >
+              <span>{data.cta}</span>
+            </BotonWhatsApp>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+</section>

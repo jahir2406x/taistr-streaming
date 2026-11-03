@@ -1,0 +1,85 @@
+---
+import { AJUSTES, SERVICIOS, TEXTOS_INICIO, TEXTOS_POR_PAIS, PAISES, PAGOS } from '../../editar';
+import { resolverTextoPais } from '../../core';
+import ServiceCard from '../servicios/ServiceCard.astro';
+
+const services = SERVICIOS;
+const catalogo = TEXTOS_INICIO.catalogo;
+const defaultCatalogoDescripcion = resolverTextoPais('catalogo_descripcion', 'PE', {
+  porPais: TEXTOS_POR_PAIS,
+  paises: PAISES,
+  pagos: PAGOS,
+});
+---
+
+<section id="catalogo" class="section-rhythm relative">
+  <div class="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden="true">
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-64 bg-brand/5 blur-3xl rounded-full"></div>
+  </div>
+  <div class="relative max-w-[var(--container-max)] mx-auto px-[var(--container-px)] space-y-8">
+    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-5" data-revelar>
+      <div class="space-y-2 min-w-0 flex-1">
+        <span class="section-kicker">{catalogo.filtros.todos} · {services.length}</span>
+        <h2 class="font-display font-bold text-[length:var(--text-h2)] text-ink">
+          {catalogo.titulo}
+        </h2>
+        <p data-texto-pais="catalogo_descripcion" class="text-sm sm:text-base text-ink-muted max-w-xl">
+          {defaultCatalogoDescripcion}
+          {AJUSTES.SHOW_PRICES && catalogo.notaPreciosEjemplo}
+        </p>
+      </div>
+
+      <!-- Control segmentado de una sola línea con indicador deslizante -->
+      <div
+        id="catalogo-tablist"
+        role="tablist"
+        aria-label="Filtrar servicios por categoría"
+        class="segmented-filter relative inline-flex items-center gap-1 bg-[var(--surface-2)] p-1.5 rounded-xl border border-[var(--border-subtle)] overflow-x-auto max-w-full shrink-0 self-start lg:self-auto"
+      >
+        <span id="filter-indicator" class="filter-sliding-indicator" aria-hidden="true"></span>
+        <button
+          type="button"
+          role="tab"
+          aria-selected="true"
+          data-filter="todos"
+          class="filter-btn relative z-10 whitespace-nowrap shrink-0 snap-start text-xs sm:text-sm font-semibold px-3.5 py-2 rounded-lg bg-brand text-ground transition-colors"
+        >
+          {catalogo.filtros.todos} ({services.length})
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected="false"
+          data-filter="video"
+          class="filter-btn relative z-10 whitespace-nowrap shrink-0 snap-start text-xs sm:text-sm font-medium px-3.5 py-2 rounded-lg text-ink-muted hover:text-ink transition-colors"
+        >
+          {catalogo.filtros.video} ({services.filter((s) => s.categoria === 'video').length})
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected="false"
+          data-filter="musica"
+          class="filter-btn relative z-10 whitespace-nowrap shrink-0 snap-start text-xs sm:text-sm font-medium px-3.5 py-2 rounded-lg text-ink-muted hover:text-ink transition-colors"
+        >
+          {catalogo.filtros.musica} ({services.filter((s) => s.categoria === 'musica').length})
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected="false"
+          data-filter="anime"
+          class="filter-btn relative z-10 whitespace-nowrap shrink-0 snap-start text-xs sm:text-sm font-medium px-3.5 py-2 rounded-lg text-ink-muted hover:text-ink transition-colors"
+        >
+          {catalogo.filtros.anime} ({services.filter((s) => s.categoria === 'anime').length})
+        </button>
+      </div>
+    </div>
+
+    <!-- Cuadrícula de servicios -->
+    <div id="services-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+      {services.map((service, idx) => <ServiceCard service={service} index={idx} />)}
+    </div>
+  </div>
+</section>
+

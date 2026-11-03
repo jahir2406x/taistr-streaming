@@ -1,0 +1,144 @@
+{
+    "id":  "disney-plus",
+    "nombre":  "Disney+",
+    "slug":  "disney-plus",
+    "iniciales":  "D+",
+    "categoria":  "video",
+    "eslogan":  "Disney+ y ESPN baratos en Perú. Películas, series y todos los deportes en vivo en 4K.",
+    "descripcion_corta":  "Perfiles y cuentas completas de Disney+ con o sin ESPN en soles (S/) con Yape.",
+    "descripcion_larga":  "Todo el entretenimiento de Disney+ unificado en una sola plataforma: películas de Disney, Pixar, el universo Marvel, Star Wars, series de Star y transmisiones deportivas en vivo de ESPN (Copa Libertadores, Champions League, ligas europeas y más).",
+    "caracteristicas":  [
+                            "Incluye canales y eventos deportivos de ESPN en vivo",
+                            "Resolución hasta 4K UHD y audio Dolby Atmos según plan",
+                            "Catálogo completo de Disney, Pixar, Marvel, Star Wars y Star",
+                            "Perfil independiente con PIN de seguridad",
+                            "Garantía total por todo el periodo contratado"
+                        ],
+    "planes":  [
+                   {
+                       "id":  "disney-estandar-1m",
+                       "nombre":  "Disney Premium sin ESPN",
+                       "duracion":  "1 mes",
+                       "pantallas":  "1 pantalla a la vez",
+                       "prices":  {
+                                      "PEN":  7,
+                                      "USD":  2,
+                                      "MXN":  40,
+                                      "ARS":  3400
+                                  },
+                       "nota":  "No incluye canales ni eventos de ESPN",
+                       "mensaje_comprar":  "",
+                       "mensaje_disponibilidad":  "",
+                       "incluye":  [
+
+                                   ],
+                       "nota_panel":  "",
+                       "nota_interna":  "",
+                       "descuentos":  {
+                                          "2":  0,
+                                          "3":  5,
+                                          "6":  8
+                                      }
+                   },
+                   {
+                       "id":  "disney-premium-1m",
+                       "nombre":  "Perfil Premium 4K + Todo ESPN",
+                       "duracion":  "1 mes",
+                       "pantallas":  "1 pantalla en 4K UHD",
+                       "prices":  {
+                                      "PEN":  8,
+                                      "USD":  2.3,
+                                      "MXN":  45,
+                                      "ARS":  3800
+                                  },
+                       "nota":  "Todos los canales y eventos exclusivos de ESPN",
+                       "mensaje_comprar":  "",
+                       "mensaje_disponibilidad":  "",
+                       "incluye":  [
+
+                                   ],
+                       "nota_panel":  "",
+                       "descuentos":  {
+                                          "2":  0,
+                                          "3":  5,
+                                          "6":  8
+                                      }
+                   },
+                   {
+                       "id":  "disney-completa-1m",
+                       "nombre":  "Cuenta Completa Premium sin ESPN",
+                       "duracion":  "1 mes",
+                       "pantallas":  "7 perfiles · 4 pantallas en simultáneo",
+                       "prices":  {
+                                      "PEN":  20,
+                                      "USD":  6,
+                                      "MXN":  120,
+                                      "ARS":  9500
+                                  },
+                       "nota":  "Acceso privado para toda la familia",
+                       "mensaje_comprar":  "",
+                       "mensaje_disponibilidad":  "",
+                       "incluye":  [
+                                       "7 perfiles · 4 pantallas en simultáneo",
+                                       "Vigencia: {duracion}",
+                                       "Acceso privado para toda la familia",
+                                       "No incluye canales ni eventos de ESPN"
+                                   ],
+                       "nota_panel":  "",
+                       "nota_interna":  "",
+                       "descuentos":  {
+                                          "2":  0,
+                                          "3":  5,
+                                          "6":  8
+                                      }
+                   },
+                   {
+                       "id":  "disney-completa-espn-1m",
+                       "nombre":  "Cuenta Completa Premium con ESPN",
+                       "duracion":  "1 mes",
+                       "pantallas":  "7 perfiles · 4 pantallas en simultáneo",
+                       "prices":  {
+                                      "PEN":  30,
+                                      "USD":  8.5,
+                                      "MXN":  175,
+                                      "ARS":  14500
+                                  },
+                       "nota":  "Acceso privado para toda la familia",
+                       "mensaje_comprar":  "",
+                       "mensaje_disponibilidad":  "",
+                       "incluye":  [
+                                       "7 perfiles · 4 pantallas en simultáneo",
+                                       "Vigencia: {duracion}",
+                                       "Acceso privado para toda la familia",
+                                       "Incluye canales y eventos de ESPN"
+                                   ],
+                       "nota_panel":  "",
+                       "nota_interna":  "",
+                       "descuentos":  {
+                                          "2":  0,
+                                          "3":  5,
+                                          "6":  8
+                                      }
+                   }
+               ],
+    "mensaje_whatsapp":  "Hola, quiero pedir un plan de Disney+. ¿Está disponible?",
+    "color_acento":  "#0072D2",
+    "disponible":  true,
+    "faq":  [
+                {
+                    "pregunta":  "¿Los planes incluyen los partidos en vivo de ESPN?",
+                    "respuesta":  "Los planes que indican \u0027con ESPN\u0027 (tanto en Perfil como en Cuenta Completa) incluyen todas las transmisiones en directo de ESPN. También contamos con opciones \u0027sin ESPN\u0027 si buscas solo películas y series a menor precio."
+                },
+                {
+                    "pregunta":  "¿Puedo ponerle PIN a mi perfil?",
+                    "respuesta":  "Por supuesto, cada perfil de Disney+ permite configurar un código de 4 dígitos y control parental."
+                },
+                {
+                    "pregunta":  "¿Cómo obtengo el código de verificación si Disney+ me pide actualizar Hogar o \u0027Estoy fuera de casa\u0027?",
+                    "respuesta":  "Si tu Smart TV o dispositivo solicita un código de acceso único por ubicación (\u0027Estoy de viaje\u0027), podrás consultarlo y recibirlo automáticamente las 24 horas desde nuestra página web de códigos que te facilitamos junto con tu cuenta."
+                }
+            ],
+    "mensaje_comprar":  "",
+    "mensaje_disponibilidad":  "",
+    "resumen_seo":  "perfil personal o cuenta completa con ESPN"
+}

@@ -1,0 +1,55 @@
+---
+import type { LegalSection } from '../../utils/markdown';
+
+interface Props {
+  sections: LegalSection[];
+  spacingClass?: string;
+  headingClass?: string;
+}
+
+const {
+  sections,
+  spacingClass = 'space-y-8',
+  headingClass = 'text-xl',
+} = Astro.props;
+---
+
+<div class={`${spacingClass} text-sm sm:text-base text-ink-muted leading-relaxed`}>
+  {
+    sections.map((sec) => (
+      <article class="bg-ground-card border border-ground-border rounded-lg p-6 space-y-3">
+        <h2 class={`font-display font-bold ${headingClass} text-ink`}>
+          {sec.title}
+        </h2>
+        {sec.blocks.map((block) => {
+          if (block.type === 'p') {
+            return <p set:html={block.html} />;
+          }
+          if (block.type === 'ul') {
+            return (
+              <ul class="list-disc pl-5 space-y-2">
+                {block.items.map((item) => (
+                  <li set:html={item} />
+                ))}
+              </ul>
+            );
+          }
+          if (block.type === 'ol') {
+            return (
+              <ol class="list-decimal pl-5 space-y-2">
+                {block.items.map((item) => (
+                  <li set:html={item} />
+                ))}
+              </ol>
+            );
+          }
+          if (block.type === 'note') {
+            return <p class="text-xs text-ink-subtle pt-1">{block.text}</p>;
+          }
+          return null;
+        })}
+      </article>
+    ))
+  }
+</div>
+

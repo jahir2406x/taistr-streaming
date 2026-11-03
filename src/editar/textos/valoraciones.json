@@ -1,0 +1,15 @@
+{
+  "titulo": "¿Cómo fue tu experiencia con {servicio}?",
+  "subtitulo": "Selecciona de 1 a 5 estrellas para calificar la rapidez y atención de este servicio.",
+  "primerosEnValorar": "Sé de los primeros en valorar",
+  "gracias": "¡Gracias por tu valoración!",
+  "yaValoraste": "Ya registraste tu valoración de hoy para este servicio. Se permite 1 valoración diaria por plataforma.",
+  "botonEnviar": "Enviar valoración",
+  "botonEnviando": "Enviando...",
+  "seleccionaEstrellas": "Selecciona las estrellas antes de enviar",
+  "errorGenerico": "No se pudo registrar tu valoración en este momento. Inténtalo más tarde.",
+  "ariaLabelEstrella": "{n} de 5 estrellas",
+  "sufijoSingular": "valoración de visitantes",
+  "sufijoPlural": "valoraciones de visitantes"
+}
+

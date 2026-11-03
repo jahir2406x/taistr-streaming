@@ -1,0 +1,79 @@
+{
+    "id":  "vix",
+    "nombre":  "ViX Premium",
+    "slug":  "vix",
+    "iniciales":  "ViX",
+    "categoria":  "video",
+    "eslogan":  "ViX Premium barato en Perú. Liga MX, fútbol en vivo, series y novelas sin comerciales.",
+    "descripcion_corta":  "Perfil personal o cuenta completa de ViX Premium en soles (S/) con pago por Yape.",
+    "descripcion_larga":  "ViX Premium reúne el mayor catálogo de habla hispana: novelas clásicas y de estreno de Televisa, series originales hechas en Latinoamérica, cámaras 24/7 de realities, comedias y transmisiones deportivas seleccionadas sin publicidad.",
+    "caracteristicas":  [
+                            "Catálogo completo de ViX Premium sin cortes comerciales",
+                            "Canales de televisión en vivo las 24 horas",
+                            "Novelas completas, series exclusivas y cine latinoamericano",
+                            "Reproducción fluida en Smart TV, celulares y tablets",
+                            "Atención rápida y soporte garantizado"
+                        ],
+    "planes":  [
+                   {
+                       "id":  "vix-perfil-1m",
+                       "nombre":  "Perfil Personal ViX+",
+                       "duracion":  "1 mes",
+                       "pantallas":  "1 pantalla a la vez",
+                       "prices":  {
+                                      "PEN":  4,
+                                      "USD":  1.2,
+                                      "MXN":  25,
+                                      "ARS":  1900
+                                  },
+                       "nota":  "Todo el contenido Premium desbloqueado",
+                       "mensaje_comprar":  "",
+                       "mensaje_disponibilidad":  "",
+                       "incluye":  [
+
+                                   ],
+                       "nota_panel":  "",
+                       "descuentos":  {
+                                          "2":  0,
+                                          "3":  5,
+                                          "6":  8
+                                      }
+                   },
+                   {
+                       "id":  "vix-completa-1m",
+                       "nombre":  "Cuenta Completa ViX+",
+                       "duracion":  "1 mes",
+                       "pantallas":  "4 perfiles · 3 pantallas en simultáneo",
+                       "prices":  {
+                                      "PEN":  15,
+                                      "USD":  4.5,
+                                      "MXN":  90,
+                                      "ARS":  7200
+                                  },
+                       "nota":  "Ideal para compartir en casa",
+                       "mensaje_comprar":  "",
+                       "mensaje_disponibilidad":  "",
+                       "incluye":  [
+
+                                   ],
+                       "nota_panel":  "",
+                       "descuentos":  {
+                                          "2":  0,
+                                          "3":  5,
+                                          "6":  8
+                                      }
+                   }
+               ],
+    "mensaje_whatsapp":  "Hola, quiero información sobre ViX Premium. ¿Está disponible?",
+    "color_acento":  "#FF5A00",
+    "disponible":  true,
+    "faq":  [
+                {
+                    "pregunta":  "¿Es la versión gratuita con anuncios o la versión Premium?",
+                    "respuesta":  "Entregamos únicamente la suscripción ViX Premium (antes ViX+), que desbloquea todas las series exclusivas, estrenos y elimina los anuncios de las novelas."
+                }
+            ],
+    "mensaje_comprar":  "",
+    "mensaje_disponibilidad":  "",
+    "resumen_seo":  "perfil o cuenta con novelas y fútbol"
+}

@@ -1,0 +1,351 @@
+---
+import type { StreamingService, ServicePlan } from '../../types/service';
+import { AJUSTES, TEXTOS_BOTONES, TEXTOS_PANEL_COMPRA, TEXTOS_GARANTIA } from '../../editar';
+import {
+  formatPrice,
+  resolvePlanPrice,
+  resolvePlanIncludes,
+  resolveDurationIncludes,
+  isPlanAvailable,
+} from '../../core';
+import BotonWhatsApp from '../ui/BotonWhatsApp.astro';
+
+interface Props {
+  service: StreamingService;
+  plan: ServicePlan;
+  isHighlighted?: boolean;
+  isSinglePlan?: boolean;
+  index?: number;
+}
+
+const { service, plan, isHighlighted = false, isSinglePlan, index = 0 } = Astro.props;
+const disponible = isPlanAvailable(service.disponible, plan.disponible);
+const acento = service.color_acento || '#F59E0B';
+const esUnicoPlan = isSinglePlan ?? (service.planes.filter((p) => !p.destacado).length === 1);
+
+const pPen = resolvePlanPrice(plan.prices, 'PEN');
+const formattedPlanPrice = formatPrice(pPen.amount, pPen.currency, 'es-PE');
+const rawIncludes = resolvePlanIncludes(plan, TEXTOS_PANEL_COMPRA.vigenciaPrefijo);
+const baseDuration = AJUSTES.duraciones[0] || { meses: 1, etiqueta: '1 mes' };
+const duracionTarjeta = baseDuration.etiqueta;
+const sufijoPrecioDuracion = baseDuration.meses === 1 ? 'mes' : baseDuration.etiqueta;
+const listaIncluye = resolveDurationIncludes(
+  rawIncludes,
+  baseDuration.etiqueta,
+  baseDuration.meses,
+  TEXTOS_PANEL_COMPRA.vigenciaPrefijo
+);
+
+const acciones = TEXTOS_BOTONES.acciones;
+const planKey = `${service.slug}::${plan.id || plan.nombre}`;
+const esDestacado = Boolean(plan.destacado);
+const tieneEtiqueta = Boolean(plan.etiqueta && plan.etiqueta.trim());
+const tieneGancho = Boolean(plan.gancho && plan.gancho.trim());
+---
+
+{
+  disponible ? (
+    <button
+      type="button"
+      data-plan-trigger
+      data-plan-key={planKey}
+      data-service-name={service.nombre}
+      data-service-accent={acento}
+      data-service-initials={service.iniciales || ''}
+      data-service-logo={service.logo_propio || ''}
+      data-plan-name={plan.nombre}
+      data-plan-duration={duracionTarjeta}
+      data-plan-screens={plan.pantallas}
+      data-plan-hook={plan.gancho || ''}
+      data-plan-panel-note={plan.nota_panel || ''}
+      data-plan-prices={JSON.stringify(plan.prices)}
+      data-plan-prices-duration={JSON.stringify(plan.precios_por_duracion || {})}
+      data-plan-allowed-durations={JSON.stringify(plan.duraciones_permitidas || [])}
+      data-svc-allowed-durations={JSON.stringify(service.duraciones_permitidas || [])}
+      data-plan-discounts={JSON.stringify(plan.descuentos || {})}
+      data-svc-discounts={JSON.stringify(service.descuentos || {})}
+      data-plan-includes={JSON.stringify(rawIncludes)}
+      data-plan-msg-buy={plan.mensaje_comprar || ''}
+      data-plan-msg-avail={plan.mensaje_disponibilidad || ''}
+      data-svc-msg-buy={service.mensaje_comprar || ''}
+      data-svc-msg-avail={service.mensaje_disponibilidad || ''}
+      aria-haspopup="dialog"
+      aria-controls="panel-compra"
+      style={`--acento: ${acento}; --i: ${index};`}
+      data-revelar
+      class:list={[
+        'tarjeta-plan group w-full text-left bg-ground-card rounded-lg p-6 border relative cursor-pointer',
+        esDestacado
+          ? 'tarjeta-plan--destacada'
+          : isHighlighted
+            ? 'border-brand/60'
+            : 'border-ground-border',
+      ]}
+    >
+      {esDestacado ? (
+        <>
+          {tieneEtiqueta && (
+            <span class="tarjeta-plan-etiqueta">
+              {plan.etiqueta}
+            </span>
+          )}
+          <div class="tarjeta-destacada-grid w-full">
+            <div class="tarjeta-destacada-area-header space-y-1.5 min-w-0">
+              {tieneGancho && (
+                <p
+                  class="text-xs sm:text-sm font-medium leading-normal"
+                  style={`color: color-mix(in srgb, ${acento} 75%, white);`}
+                >
+                  {plan.gancho}
+                </p>
+              )}
+              <h3 class="font-display font-bold text-xl sm:text-2xl text-ink leading-snug [text-wrap:balance]">
+                {plan.nombre}
+              </h3>
+            </div>
+
+            <div class="tarjeta-destacada-area-incluye">
+              <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5 text-sm text-ink-muted">
+                {listaIncluye.map((item) => (
+                  <li class="flex items-center gap-2">
+                    <span
+                      class="w-1.5 h-1.5 rounded-full shrink-0"
+                      style={`background-color: ${acento};`}
+                      aria-hidden="true"
+                    />
+                    <span class="leading-snug">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div class="tarjeta-destacada-area-precio">
+              {AJUSTES.SHOW_PRICES ? (
+                <div class="flex items-baseline gap-1.5 whitespace-nowrap lg:justify-end">
+                  <span
+                    data-price-map={JSON.stringify(plan.prices)}
+                    class="geo-price font-display font-bold text-3xl text-ink inline-block"
+                  >
+                    {formattedPlanPrice}
+                  </span>
+                  <span class="text-xs text-ink-muted whitespace-nowrap">/ {sufijoPrecioDuracion}</span>
+                </div>
+              ) : (
+                <div class="text-sm font-semibold text-brand whitespace-nowrap">
+                  Duración: {duracionTarjeta} · {acciones.consultarPrecio}
+                </div>
+              )}
+            </div>
+
+            <div class="tarjeta-destacada-area-cta pt-3 lg:pt-0 border-t border-ground-border lg:border-t-0 text-sm font-semibold tarjeta-plan-cta">
+              <span class="inline-flex items-center gap-1.5">
+                <span>{acciones.elegirEstePlan.replace('→', '').trim()}</span>
+                <span class="tarjeta-plan-flecha" aria-hidden="true">→</span>
+              </span>
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          {isHighlighted && (
+            <span class="tarjeta-plan-popular">
+              {acciones.masPedido}
+            </span>
+          )}
+
+          <div class:list={['w-full', esUnicoPlan ? 'flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3' : 'space-y-1.5']}>
+            <h3 class="tarjeta-plan-titulo font-display font-bold text-lg sm:text-xl text-ink leading-snug [text-wrap:balance]">
+              {plan.nombre}
+            </h3>
+
+            {AJUSTES.SHOW_PRICES ? (
+              <div class="tarjeta-plan-precio flex items-baseline gap-1.5 whitespace-nowrap">
+                <span
+                  data-price-map={JSON.stringify(plan.prices)}
+                  class="geo-price font-display font-bold text-3xl text-ink inline-block"
+                >
+                  {formattedPlanPrice}
+                </span>
+                <span class="text-xs text-ink-muted whitespace-nowrap">/ {sufijoPrecioDuracion}</span>
+              </div>
+            ) : (
+              <div class="tarjeta-plan-precio text-sm font-semibold text-brand flex items-center">
+                Duración: {duracionTarjeta} · {acciones.consultarPrecio}
+              </div>
+            )}
+          </div>
+
+          <ul
+            class:list={[
+              'tarjeta-plan-incluye text-sm text-ink-muted pt-4 border-t border-ground-border',
+              esUnicoPlan ? 'grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5' : 'space-y-2',
+            ]}
+          >
+            {listaIncluye.map((item) => (
+              <li class="flex items-center gap-2">
+                <span
+                  class="w-1.5 h-1.5 rounded-full shrink-0"
+                  style={`background-color: ${acento};`}
+                  aria-hidden="true"
+                />
+                <span class="leading-snug">{item}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div class="tarjeta-plan-cta w-full pt-4 border-t border-ground-border flex items-center justify-between text-sm font-semibold mt-auto">
+            <span class="inline-flex items-center gap-1.5">
+              <span>{acciones.elegirEstePlan.replace('→', '').trim()}</span>
+              <span class="tarjeta-plan-flecha" aria-hidden="true">→</span>
+            </span>
+          </div>
+        </>
+      )}
+    </button>
+  ) : (
+    <BotonWhatsApp
+      tipo="consultar_disponibilidad"
+      servicio={service.nombre}
+      plan={plan.nombre}
+      duracion={duracionTarjeta}
+      pantallas={plan.pantallas}
+      precioFormateado={formattedPlanPrice}
+      disponible={false}
+      preciosMap={plan.prices}
+      mensajePlanComprar={plan.mensaje_comprar}
+      mensajePlanDisponibilidad={plan.mensaje_disponibilidad}
+      mensajeServicioComprar={service.mensaje_comprar}
+      mensajeServicioDisponibilidad={service.mensaje_disponibilidad}
+      style={`--acento: ${acento}; --i: ${index};`}
+      data-revelar
+      class:list={[
+        'tarjeta-plan tarjeta-plan--no-disponible group w-full text-left bg-ground-card rounded-lg p-6 border relative cursor-pointer',
+        esDestacado
+          ? 'tarjeta-plan--destacada'
+          : 'border-ground-border',
+      ]}
+    >
+      {esDestacado ? (
+        <>
+          {tieneEtiqueta && (
+            <span class="tarjeta-plan-etiqueta">
+              {plan.etiqueta}
+            </span>
+          )}
+          <div class="tarjeta-destacada-grid w-full" style={`--acento: ${acento};`}>
+            <div class="tarjeta-destacada-area-header space-y-1.5 min-w-0">
+              {tieneGancho && (
+                <p
+                  class="text-xs sm:text-sm font-medium leading-normal"
+                  style={`color: color-mix(in srgb, ${acento} 75%, white);`}
+                >
+                  {plan.gancho}
+                </p>
+              )}
+              <h3 class="font-display font-bold text-xl sm:text-2xl text-ink leading-snug [text-wrap:balance]">
+                {plan.nombre}
+              </h3>
+              <span class="inline-block text-xs font-medium px-2 py-0.5 rounded bg-amber-950/70 text-amber-300 border border-amber-800/60 w-fit">
+                {acciones.bajoConsulta}
+              </span>
+            </div>
+
+            <div class="tarjeta-destacada-area-incluye">
+              <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5 text-sm text-ink-muted">
+                {listaIncluye.map((item) => (
+                  <li class="flex items-center gap-2">
+                    <span
+                      class="w-1.5 h-1.5 rounded-full shrink-0"
+                      style={`background-color: ${acento};`}
+                      aria-hidden="true"
+                    />
+                    <span class="leading-snug">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div class="tarjeta-destacada-area-precio">
+              {AJUSTES.SHOW_PRICES ? (
+                <div class="flex items-baseline gap-1.5 whitespace-nowrap lg:justify-end">
+                  <span
+                    data-price-map={JSON.stringify(plan.prices)}
+                    class="geo-price font-display font-bold text-3xl text-ink inline-block"
+                  >
+                    {formattedPlanPrice}
+                  </span>
+                  <span class="text-xs text-ink-muted whitespace-nowrap">/ {sufijoPrecioDuracion}</span>
+                </div>
+              ) : (
+                <div class="text-sm font-semibold text-brand whitespace-nowrap">
+                  Duración: {duracionTarjeta} · {acciones.consultarPrecio}
+                </div>
+              )}
+            </div>
+
+            <div class="tarjeta-destacada-area-cta pt-3 lg:pt-0 border-t border-ground-border lg:border-t-0 text-sm font-semibold text-amber-400 group-hover:text-amber-300 tarjeta-plan-cta">
+              <span class="inline-flex items-center gap-1.5">
+                <span>{acciones.consultarDisponibilidad.replace('→', '').trim()}</span>
+                <span class="tarjeta-plan-flecha" aria-hidden="true">→</span>
+              </span>
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <span class="tarjeta-plan-popular tarjeta-plan-popular--consulta">
+            {acciones.bajoConsulta}
+          </span>
+
+          <div class:list={['w-full', esUnicoPlan ? 'flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-3' : 'space-y-1.5']}>
+            <h3 class="tarjeta-plan-titulo font-display font-bold text-lg sm:text-xl text-ink leading-snug [text-wrap:balance]">
+              {plan.nombre}
+            </h3>
+
+            {AJUSTES.SHOW_PRICES ? (
+              <div class="tarjeta-plan-precio flex items-baseline gap-1.5 whitespace-nowrap">
+                <span
+                  data-price-map={JSON.stringify(plan.prices)}
+                  class="geo-price font-display font-bold text-3xl text-ink inline-block"
+                >
+                  {formattedPlanPrice}
+                </span>
+                <span class="text-xs text-ink-muted whitespace-nowrap">/ {sufijoPrecioDuracion}</span>
+              </div>
+            ) : (
+              <div class="tarjeta-plan-precio text-sm font-semibold text-brand flex items-center">
+                Duración: {duracionTarjeta} · {acciones.consultarPrecio}
+              </div>
+            )}
+          </div>
+
+          <ul
+            class:list={[
+              'tarjeta-plan-incluye text-sm text-ink-muted pt-4 border-t border-ground-border',
+              esUnicoPlan ? 'grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5' : 'space-y-2',
+            ]}
+          >
+            {listaIncluye.map((item) => (
+              <li class="flex items-center gap-2">
+                <span
+                  class="w-1.5 h-1.5 rounded-full shrink-0"
+                  style={`background-color: ${acento};`}
+                  aria-hidden="true"
+                />
+                <span class="leading-snug">{item}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div class="tarjeta-plan-cta w-full pt-4 border-t border-ground-border flex items-center justify-between text-sm font-semibold text-amber-400 group-hover:text-amber-300 mt-auto">
+            <span class="inline-flex items-center gap-1.5">
+              <span>{acciones.consultarDisponibilidad.replace('→', '').trim()}</span>
+              <span class="tarjeta-plan-flecha" aria-hidden="true">→</span>
+            </span>
+          </div>
+        </>
+      )}
+    </BotonWhatsApp>
+  )
+}
+

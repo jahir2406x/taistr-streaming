@@ -1,0 +1,414 @@
+---
+import { AJUSTES, TEXTOS_BOTONES, TEXTOS_PANEL_COMPRA, TEXTOS_GARANTIA } from '../../editar';
+import SelectorMedioPago from './SelectorMedioPago.astro';
+import ScriptPanelCompra from './ScriptPanelCompra.astro';
+import BotonWhatsApp from '../ui/BotonWhatsApp.astro';
+
+const t = TEXTOS_PANEL_COMPRA;
+const tGarantia = TEXTOS_GARANTIA;
+const acciones = TEXTOS_BOTONES.acciones;
+---
+
+<dialog
+  id="panel-compra"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="panel-compra-titulo"
+  style="--acento: #F59E0B;"
+  class="panel-compra-dialog bg-transparent p-0 m-0 border-0 max-w-none max-h-none w-screen h-[100dvh] fixed inset-0 overflow-hidden"
+>
+  <div id="panel-compra-backdrop" class="carta-envoltura">
+    <div id="panel-compra-caja" class="panel-compra-caja carta bg-ground-elevated">
+      <!-- Asa visual de la hoja inferior (solo celular) -->
+      <span class="carta-asa" aria-hidden="true"></span>
+      <!-- Barra superior con botón X para cerrar -->
+      <div class="carta-cabecera px-5 py-3.5 border-b border-ground-border flex items-center justify-between gap-3 bg-ground-elevated">
+        <span
+          id="panel-servicio-chip"
+          class="inline-flex items-center gap-2 text-xs font-semibold text-ink"
+        >
+          <div
+            id="panel-insignia-badge"
+            class="insignia-servicio insignia-servicio--sm"
+            style="--acento: var(--acento); --texto-insignia: #FFFFFF;"
+            aria-hidden="true"
+            data-len="1"
+          >
+            <span id="panel-insignia-texto">S</span>
+          </div>
+          <span id="panel-servicio-subtitulo">Resumen de tu plan</span>
+        </span>
+
+        <button
+          type="button"
+          id="panel-compra-cerrar"
+          aria-label={t.cerrarPanelLabel}
+          class="inline-flex items-center gap-1.5 text-xs font-medium text-ink-muted hover:text-ink bg-ground-card hover:bg-ground px-2.5 py-1.5 rounded border border-ground-border transition-colors"
+        >
+          <span>{t.cerrarTexto}</span>
+          <span aria-hidden="true" class="text-sm leading-none">✕</span>
+        </button>
+      </div>
+
+      <!-- Cuerpo en dos columnas (una sola en celular) -->
+      <div class="carta-cuerpo">
+      <!-- Columna izquierda: resumen, qué incluye, garantía y pasos -->
+      <div class="carta-col-izq p-5 md:p-6 space-y-5">
+        <!-- a) Confirmación cálida con resumen y borde de acento del servicio -->
+        <div
+          id="panel-resumen-box"
+          class="bg-ground-card rounded-lg p-4 border-l-4 border border-ground-border space-y-2"
+          style="border-left-color: var(--acento);"
+        >
+          <p class="text-xs font-medium text-ink-muted">{t.saludoPrefijo}</p>
+          <h2
+            id="panel-compra-titulo"
+            class="font-display font-bold text-lg sm:text-xl text-ink leading-snug"
+          >
+            <span id="panel-plan-nombre"></span>{' '}
+            <span class="text-ink-muted font-normal">{t.conectorDe}</span>{' '}
+            <span id="panel-servicio-nombre"></span>
+          </h2>
+          <p
+            id="panel-plan-gancho"
+            class="hidden text-xs font-semibold leading-relaxed"
+            style="color: var(--acento);"
+          ></p>
+          <div class="pt-1 flex flex-wrap items-baseline gap-2">
+            {
+              AJUSTES.SHOW_PRICES ? (
+                <>
+                  <span
+                    id="panel-plan-precio"
+                    class="precio-fade-cambio font-display font-bold text-2xl text-ink inline-block"
+                  />
+                  <span class="text-xs text-ink-muted">
+                    / <span id="panel-plan-duracion" />
+                  </span>
+                  <span
+                    id="panel-plan-ahorro"
+                    class="precio-fade-cambio hidden text-[11px] font-semibold px-2 py-0.5 rounded-full bg-emerald-950/80 text-emerald-300 border border-emerald-800/70"
+                  />
+                </>
+              ) : (
+                <span class="text-sm font-semibold text-brand">
+                  <span id="panel-plan-duracion" /> · {acciones.consultarPrecio}
+                </span>
+              )
+            }
+          </div>
+        </div>
+
+        <!-- b) Información extra corta: qué incluye, garantía y 3 pasos -->
+        <div class="space-y-3.5">
+          <div class="space-y-2">
+            <h3 class="font-display font-semibold text-xs sm:text-sm text-ink">
+              {t.incluyeTitulo}
+            </h3>
+            <ul id="panel-plan-incluye" class="space-y-1.5 text-xs sm:text-sm text-ink-muted"></ul>
+          </div>
+
+          <div
+            id="panel-plan-nota-box"
+            class="hidden text-xs text-ink-muted bg-ground border border-ground-border rounded px-3.5 py-2.5 leading-relaxed space-y-1"
+          >
+            <p class="font-semibold text-ink text-[11px] uppercase tracking-wide">
+              Ten en cuenta:
+            </p>
+            <p id="panel-plan-nota-panel" class="text-xs text-ink-muted leading-relaxed"></p>
+          </div>
+
+          <p id="panel-plan-garantia" class="text-xs text-ink-muted bg-ground border border-ground-border rounded px-3.5 py-2.5 leading-relaxed">
+            {tGarantia.garantia_panel.replace('{duracion}', AJUSTES.duraciones[0]?.etiqueta || '1 mes')}
+          </p>
+
+          <div class="text-xs text-ink-muted bg-ground border border-ground-border rounded px-3.5 py-2.5 leading-relaxed space-y-1">
+            <p id="panel-plan-renovacion" class="font-medium text-ink">
+              {tGarantia.renovacion_frase}
+            </p>
+            {tGarantia.renovacion_nota && (
+              <p class="text-[11px] text-ink-subtle">
+                {tGarantia.renovacion_nota}
+              </p>
+            )}
+          </div>
+
+          <div class="bg-ground-card border border-ground-border rounded-lg p-3.5 space-y-2">
+            <h3 class="font-display font-semibold text-xs text-ink">
+              {t.pasosTitulo}
+            </h3>
+            <ol class="space-y-1 text-xs text-ink-muted">
+              {t.pasos.map((paso) => <li>{paso}</li>)}
+            </ol>
+            <p class="text-[11px] text-ink-subtle pt-1 border-t border-ground-border/70">
+              {t.tiempoEntregaTexto}
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Columna derecha: duración, medios de pago y botón fijo abajo -->
+      <div class="carta-col-der">
+        <div class="carta-der-scroll flex-1 min-h-0 overflow-y-auto p-5 md:p-6 space-y-5">
+          <!-- c) Selector de duración -->
+          <div class="space-y-2.5">
+            <h3 id="panel-duraciones-titulo" class="font-display font-bold text-sm sm:text-base text-ink">
+              {t.eligeDuracionTitulo}
+            </h3>
+            <div
+              id="panel-duraciones-lista"
+              role="radiogroup"
+              aria-labelledby="panel-duraciones-titulo"
+              class="grid grid-cols-2 sm:grid-cols-4 gap-2"
+            >
+              <!-- Las opciones de duración se renderizan dinámicamente con teclado y accesibilidad -->
+            </div>
+          </div>
+
+          <!-- d) Selector de medio de pago -->
+          <SelectorMedioPago />
+        </div>
+
+        <!-- e) Botón principal fijo en la parte inferior de la columna -->
+        <div class="carta-pie p-4 md:px-6 border-t border-ground-border bg-ground-elevated">
+          <span id="panel-wa-status" class="sr-only" aria-live="polite"></span>
+          <!-- Línea de apoyo y confianza previa al pago -->
+          <p class="text-[11px] text-ink-subtle text-center pb-2">No guardamos tarjetas ni hacemos cobros automáticos</p>
+          <BotonWhatsApp
+            id="panel-wa-cta"
+            tipo="comprar_plan"
+            texto={t.botonSinMedio}
+            class="panel-cta-btn w-full inline-flex items-center justify-center text-center font-semibold text-sm px-5 py-3.5 rounded transition-colors bg-ground-card text-ink-subtle border border-ground-border cursor-not-allowed opacity-75 min-h-[44px]"
+          />
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</dialog>
+<ScriptPanelCompra />
+
+<style is:global>
+  /* Valores visuales de la carta del panel de compra, agrupados aquí */
+  .panel-compra-dialog {
+    --carta-ancho-max: 920px; /* Ancho máximo de la carta en escritorio */
+    --carta-margen: 24px; /* Margen mínimo a los lados de la pantalla */
+    --carta-alto-max: 90dvh; /* Altura máxima de la carta en escritorio */
+    --carta-alto-hoja: 92dvh; /* Altura máxima de la hoja en celular */
+    --carta-radio: 1rem; /* Radio de las esquinas de la carta */
+    --carta-borde: #262630; /* Color del borde fino de la carta */
+    --carta-sombra: 0 24px 60px -20px rgba(0, 0, 0, 0.7); /* Sombra suave */
+    --carta-resplandor: 0 0 48px -18px var(--acento, #F59E0B); /* Resplandor con el acento del servicio */
+    --carta-fondo: rgba(0, 0, 0, 0.72); /* Oscurecido del fondo */
+    --carta-desenfoque: 4px; /* Desenfoque del fondo */
+    --carta-escala-inicial: 0.96; /* Escala inicial de la animación */
+    --carta-animacion: 250ms; /* Duración de entrada y salida */
+    --carta-curva: var(--ease-spring, cubic-bezier(0.22, 1, 0.36, 1)); /* Curva con rebote contenido */
+    --carta-corte: 768px; /* Referencia: debajo de este ancho es hoja inferior (ver @media) */
+  }
+
+  .panel-compra-dialog::backdrop {
+    background-color: var(--carta-fondo, rgba(0, 0, 0, 0.72));
+    backdrop-filter: blur(var(--carta-desenfoque, 4px));
+    -webkit-backdrop-filter: blur(var(--carta-desenfoque, 4px));
+  }
+
+  /* Celular: hoja inferior de una sola columna */
+  .carta-envoltura {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+  }
+
+  .carta {
+    position: relative;
+    width: 100%;
+    max-height: var(--carta-alto-hoja);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background-color: var(--color-ground-elevated, #121216);
+    border: 1px solid var(--carta-borde);
+    border-bottom: 0;
+    border-radius: var(--carta-radio) var(--carta-radio) 0 0;
+    box-shadow: var(--carta-sombra), var(--carta-resplandor);
+  }
+
+  .carta-asa {
+    display: block;
+    width: 40px;
+    height: 4px;
+    margin: 8px auto 0;
+    border-radius: 999px;
+    background-color: #3F3F46;
+    flex-shrink: 0;
+  }
+
+  .carta-cabecera {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    flex-shrink: 0;
+  }
+
+  /* En celular las columnas se aplanan para que el botón quede fijo abajo */
+  .carta-cuerpo,
+  .carta-col-der,
+  .carta-der-scroll {
+    display: contents;
+  }
+
+  .carta-pie {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    margin-top: auto;
+    flex-shrink: 0;
+  }
+
+  .carta-col-izq,
+  .carta-medios {
+    flex-shrink: 0;
+  }
+
+  .carta-col-izq + .carta-col-der .carta-medios {
+    padding-top: 0;
+  }
+
+  /* Escritorio: carta centrada horizontal de dos columnas */
+  @media (min-width: 768px) {
+    .carta-envoltura {
+      align-items: center;
+      padding: var(--carta-margen);
+    }
+
+    .carta {
+      max-width: var(--carta-ancho-max);
+      max-height: min(var(--carta-alto-max), calc(100dvh - 2 * var(--carta-margen)));
+      overflow: hidden;
+      border-bottom: 1px solid var(--carta-borde);
+      border-radius: var(--carta-radio);
+    }
+
+    .carta-asa {
+      display: none;
+    }
+
+    .carta-cuerpo {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+      grid-template-rows: minmax(0, 1fr);
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+
+    .carta-col-izq {
+      min-height: 0;
+      overflow-y: auto;
+      scrollbar-width: thin;
+    }
+
+    .carta-col-der {
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+      border-left: 1px solid var(--carta-borde);
+      background-color: rgba(9, 9, 11, 0.35);
+    }
+
+    .carta-der-scroll {
+      display: block;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
+      scrollbar-width: thin;
+    }
+
+    .carta-pie {
+      position: static;
+      margin-top: auto;
+      flex-shrink: 0;
+    }
+  }
+
+  /* Animación de entrada y salida (solo transform y opacity, con @starting-style progresivo) */
+  @keyframes cartaEntradaEscala {
+    from { opacity: 0; transform: translate3d(0, 10px, 0) scale(var(--carta-escala-inicial)); }
+    to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+  }
+
+  @keyframes cartaEntradaHoja {
+    from { opacity: 0; transform: translate3d(0, 100%, 0); }
+    to { opacity: 1; transform: translate3d(0, 0, 0); }
+  }
+
+  @keyframes cartaFondoEntrada {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes cartaBloqueStagger {
+    from { opacity: 0; transform: translate3d(0, 8px, 0); }
+    to { opacity: 1; transform: translate3d(0, 0, 0); }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html:not([data-anim="off"]) .panel-compra-dialog {
+      transition: display var(--carta-animacion) allow-discrete,
+                  overlay var(--carta-animacion) allow-discrete;
+    }
+
+    html:not([data-anim="off"]) .panel-compra-dialog[open] .carta {
+      animation: cartaEntradaHoja var(--carta-animacion) var(--carta-curva) both;
+      transition: transform var(--carta-animacion) var(--carta-curva),
+                  opacity var(--carta-animacion) var(--ease-out, ease);
+    }
+
+    html:not([data-anim="off"]) .panel-compra-dialog[open]::backdrop {
+      animation: cartaFondoEntrada var(--carta-animacion, 250ms) ease both;
+      transition: opacity var(--carta-animacion, 250ms) ease,
+                  display var(--carta-animacion, 250ms) allow-discrete,
+                  overlay var(--carta-animacion, 250ms) allow-discrete;
+    }
+
+    @starting-style {
+      html:not([data-anim="off"]) .panel-compra-dialog[open] .carta {
+        opacity: 0;
+        transform: translate3d(0, 100%, 0);
+      }
+      html:not([data-anim="off"]) .panel-compra-dialog[open]::backdrop {
+        opacity: 0;
+      }
+    }
+
+    html:not([data-anim="off"]) .panel-compra-dialog[open] :is(.carta-cabecera, .carta-col-izq, .carta-der-scroll, .carta-pie) {
+      animation: cartaBloqueStagger 230ms var(--ease-out, ease) 45ms both;
+    }
+
+    html:not([data-anim="off"]) .panel-compra-dialog.is-cerrando .carta {
+      animation: cartaEntradaHoja var(--carta-animacion) var(--carta-curva) reverse both;
+    }
+    html:not([data-anim="off"]) .panel-compra-dialog.is-cerrando::backdrop {
+      animation: cartaFondoEntrada var(--carta-animacion, 250ms) ease reverse both;
+    }
+
+    @media (min-width: 768px) {
+      html:not([data-anim="off"]) .panel-compra-dialog[open] .carta {
+        animation-name: cartaEntradaEscala;
+      }
+      @starting-style {
+        html:not([data-anim="off"]) .panel-compra-dialog[open] .carta {
+          opacity: 0;
+          transform: translate3d(0, 10px, 0) scale(var(--carta-escala-inicial));
+        }
+      }
+      html:not([data-anim="off"]) .panel-compra-dialog.is-cerrando .carta {
+        animation: cartaEntradaEscala var(--carta-animacion) var(--carta-curva) reverse both;
+      }
+    }
+  }
+</style>

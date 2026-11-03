@@ -1,0 +1,173 @@
+---
+import '../styles/global.css';
+import { SITE_CONFIG } from '../config/site';
+import { MARCA, AJUSTES, TEXTOS_BOTONES } from '../editar';
+import { construirOrganizationSchema } from '../core';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import FloatingWhatsApp from '../components/ui/FloatingWhatsApp.astro';
+import PanelCompra from '../components/servicios/PanelCompra.astro';
+import GestorPaisCliente from '../components/layout/GestorPaisCliente.astro';
+import ScriptAnimaciones from '../components/layout/ScriptAnimaciones.astro';
+
+interface Props {
+  title: string;
+  description?: string;
+  keywords?: string;
+  canonicalPath?: string;
+  ogImage?: string;
+  noindex?: boolean;
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
+  customWhatsappMessage?: string;
+}
+
+const defaultKeywords = 'streaming barato peru, netflix barato peru, comprar netflix yape, cuentas de streaming baratas, netflix compartido 4k, hbo max barato, disney plus barato peru, spotify barato yape, prime video barato, cuentas streaming peru';
+
+const {
+  title,
+  description = SITE_CONFIG.description,
+  keywords = defaultKeywords,
+  canonicalPath = Astro.url.pathname,
+  ogImage = '/og/default.png',
+  noindex = false,
+  structuredData,
+  customWhatsappMessage,
+} = Astro.props;
+
+const cleanCanonicalPath = canonicalPath.split('?')[0].split('#')[0] || '/';
+const canonicalUrl = new URL(cleanCanonicalPath, AJUSTES.siteUrl).toString();
+const ogImageUrl = new URL(ogImage, AJUSTES.siteUrl).toString();
+const cfBeaconToken = AJUSTES.cfBeaconToken;
+const googleSiteVerification = AJUSTES.googleSiteVerification;
+
+const organizationSchema = construirOrganizationSchema({
+  brandName: MARCA.nombre,
+  siteUrl: AJUSTES.siteUrl,
+  description: SITE_CONFIG.description,
+  redesSociales: MARCA.redesSociales as Record<string, string | undefined>,
+});
+
+const schemas = Array.isArray(structuredData)
+  ? [organizationSchema, ...structuredData]
+  : structuredData
+    ? [organizationSchema, structuredData]
+    : [organizationSchema];
+---
+
+<!doctype html>
+<html lang="es" data-geo-ready="true" data-anim={AJUSTES.ANIMACIONES ? 'on' : 'off'}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=4" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=4" />
+    <link rel="icon" type="image/png" sizes="64x64" href="/favicon.png?v=4" />
+    <link rel="shortcut icon" href="/favicon.ico?v=4" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=4" />
+    <meta name="theme-color" content={SITE_CONFIG.colors.background} />
+    <meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
+    {googleSiteVerification && <meta name="google-site-verification" content={googleSiteVerification} />}
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_LA" />
+    <meta property="og:site_name" content={SITE_CONFIG.brandName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <!-- Datos estructurados JSON-LD (sin precios fijos para evitar discrepancias por país) -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(schemas)}
+    />
+
+    <!-- Script inline mínimo en head: activa clase de animaciones si están habilitadas y sin reducción de movimiento -->
+    <script is:inline>
+      (function () {
+        try {
+          var isAnimOff = document.documentElement.getAttribute('data-anim') === 'off';
+          var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          if (!isAnimOff && !prefersReduced) {
+            document.documentElement.classList.add('js-anim');
+          }
+        } catch (_) {}
+      })();
+    </script>
+
+    <!-- Script inline mínimo en head: aplica ?pais=PE|MX|AR (lista blanca) o país guardado en localStorage -->
+    <script is:inline>
+      (function () {
+        try {
+          var q = window.location.search;
+          var fromQuery = null;
+          if (q) {
+            var p = new URLSearchParams(q).get('pais');
+            if (p) {
+              var u = p.trim().toUpperCase();
+              if (u === 'PE' || u === 'MX' || u === 'AR') {
+                fromQuery = u;
+                localStorage.setItem('user_country', u);
+              }
+            }
+          }
+          var saved = fromQuery || localStorage.getItem('user_country');
+          if (saved) {
+            document.documentElement.setAttribute('data-country', saved);
+            document.documentElement.setAttribute('data-geo-ready', 'true');
+          } else {
+            document.documentElement.setAttribute('data-geo-ready', 'false');
+          }
+        } catch (_) {}
+      })();
+    </script>
+
+    <!-- Analítica opcional sin cookies (Cloudflare Web Analytics) activada por variable de entorno -->
+    {
+      cfBeaconToken && (
+        <script
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={JSON.stringify({ token: cfBeaconToken })}
+        />
+      )
+    }
+  </head>
+  <body class="bg-ground text-ink antialiased selection:bg-brand selection:text-ground">
+    <!-- Centinela para detectar scroll y activar sombra/borde en header fijo -->
+    <div id="header-sentinel" class="absolute top-0 left-0 w-full h-1 pointer-events-none opacity-0" aria-hidden="true"></div>
+
+    <!-- Enlace de salto para accesibilidad por teclado -->
+    <a
+      href="#contenido-principal"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:bg-brand focus:text-ground focus:font-semibold focus:px-4 focus:py-2 focus:rounded"
+    >
+      {TEXTOS_BOTONES.navegacion.saltarContenido}
+    </a>
+
+    <Header />
+
+    <main id="contenido-principal" class="flex-1">
+      <slot />
+    </main>
+
+    <Footer />
+    <FloatingWhatsApp customMessage={customWhatsappMessage} />
+    <PanelCompra />
+    <GestorPaisCliente />
+    <ScriptAnimaciones />
+  </body>
+</html>

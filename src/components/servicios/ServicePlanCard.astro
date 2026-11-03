@@ -1,0 +1,16 @@
+---
+import type { StreamingService, ServicePlan } from '../../types/service';
+import TarjetaPlan from './TarjetaPlan.astro';
+
+interface Props {
+  service: StreamingService;
+  plan: ServicePlan;
+  isHighlighted: boolean;
+  isSinglePlan?: boolean;
+  index?: number;
+}
+
+const props = Astro.props;
+---
+
+<TarjetaPlan {...props} />

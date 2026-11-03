@@ -1,0 +1,85 @@
+/**
+ * QUÉ ES ESTE ARCHIVO: Colores, tipografías, radios, sombras y duraciones de animación globales de toda la web.
+ * QUÉ PUEDES CAMBIAR: Los códigos de color hexadecimales, fuentes, radios, sombras y duraciones (--anim-*).
+ * QUÉ NO TOCAR: Los nombres de las variables `--color-*` ni las llaves `{ }`. Los colores de cada servicio se editan en `src/editar/servicios/`.
+ */
+
+:root {
+  /* Tipografía del sistema moderna y limpia */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--font-sans);
+
+  /* Paleta cromática oscura premium */
+  --color-ground: #09090B;
+  --color-ground-elevated: #121216;
+  --color-ground-card: #16161C;
+  --color-ground-border: #262630;
+
+  --color-ink: #F4F4F5;
+  --color-ink-muted: #A1A1AA;
+  --color-ink-subtle: #9CA3AF;
+
+  --color-brand: #F59E0B;
+  --color-brand-hover: #D97706;
+  --color-whatsapp: #16A34A;
+  --color-whatsapp-hover: #15803D;
+
+  /* Superficies y bordes translúcidos (3 niveles) */
+  --surface-1: #09090B;
+  --surface-2: #111116;
+  --surface-3: #17171F;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-highlight: rgba(255, 255, 255, 0.15);
+
+  /* Ritmo, contenedor (~1200px) y escala tipográfica fluida */
+  --container-max: 75rem;
+  --container-px: clamp(1rem, 4vw, 2rem);
+  --section-py: clamp(3rem, 5vw, 4.75rem);
+  --section-space: clamp(2.5rem, 4.5vw, 4rem);
+  --section-inner-gap: clamp(1.25rem, 2vw, 2rem);
+  --text-h1: clamp(2.05rem, 3.6vw + 1rem, 3.25rem);
+  --text-h2: clamp(1.5rem, 2.2vw + 0.8rem, 2.25rem);
+  --text-h3: clamp(1.05rem, 0.8vw + 0.85rem, 1.25rem);
+
+  /* Radios de borde modernos (14-20px) */
+  --radius-card: 1rem;
+  --radius-card-lg: 1.25rem;
+  --radius-button: 0.625rem;
+
+  /* Tamaños de insignia y monograma de servicios */
+  --insignia-sm: 1.5rem;
+  --insignia-md: 2.75rem;
+  --insignia-lg: 3.5rem;
+
+  /* Sombras suaves, bisel superior luminoso y profundidad física */
+  --shadow-card: 0 10px 30px -8px rgba(0, 0, 0, 0.6), 0 1px 0 0 rgba(255, 255, 255, 0.07) inset;
+  --shadow-card-hover: 0 20px 42px -10px rgba(0, 0, 0, 0.78), 0 1px 0 0 rgba(255, 255, 255, 0.15) inset;
+  --shadow-glow: 0 0 38px -6px;
+
+  /* Tokens de animación y curvas físicas (Emil Kowalski & Apple Fluid Design) */
+  --anim-rapida: 160ms;
+  --anim-media: 260ms;
+  --anim-lenta: 420ms;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-spring: cubic-bezier(0.22, 1.25, 0.36, 1);
+  --ease: var(--ease-out);
+
+  /* Resplandores radiales tipo aurora */
+  --glow-brand: rgba(245, 158, 11, 0.18);
+  --glow-brand-subtle: rgba(234, 88, 12, 0.11);
+  --glow-secondary: rgba(56, 189, 248, 0.11);
+}
+
+@supports (transition-timing-function: linear(0, 1)) {
+  :root {
+    --ease-out: linear(0, 0.58 18%, 0.88 42%, 0.98 70%, 1);
+    --ease-spring: linear(0, 0.45 12%, 0.82 26%, 1.01 42%, 1.04 56%, 1.01 76%, 1);
+  }
+}
+
+/* Transiciones entre páginas nativas del navegador (mejora progresiva sin JS) */
+@view-transition {
+  navigation: auto;
+}

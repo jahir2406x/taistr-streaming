@@ -1,0 +1,51 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Depurar en Firefox (Astro + Auto-inicio)",
+      "type": "firefox",
+      "request": "launch",
+      "reAttach": true,
+      "url": "http://localhost:4321/",
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "Iniciar servidor Astro (dev)"
+    },
+    {
+      "name": "Abrir Firefox (Servidor ya iniciado en :4321)",
+      "type": "firefox",
+      "request": "launch",
+      "reAttach": true,
+      "url": "http://localhost:4321/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "Depurar en Chrome / Edge (:4321)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4321/",
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": "Iniciar servidor Astro (dev)"
+    },
+    {
+      "name": "Iniciar servidor Astro en terminal",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev",
+      "cwd": "${workspaceFolder}",
+      "serverReadyAction": {
+        "pattern": "Local\\s+(https?://localhost:[0-9]+)",
+        "uriFormat": "%s",
+        "action": "openExternally"
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Full Stack: Astro Dev + Firefox",
+      "configurations": [
+        "Iniciar servidor Astro en terminal",
+        "Abrir Firefox (Servidor ya iniciado en :4321)"
+      ]
+    }
+  ]
+}

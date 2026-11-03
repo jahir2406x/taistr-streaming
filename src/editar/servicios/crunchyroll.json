@@ -1,0 +1,83 @@
+{
+    "id":  "crunchyroll",
+    "nombre":  "Crunchyroll",
+    "slug":  "crunchyroll",
+    "iniciales":  "CR",
+    "categoria":  "anime",
+    "eslogan":  "Crunchyroll Mega Fan barato en Perú. Todo el anime en simultáneo con Japón sin anuncios.",
+    "descripcion_corta":  "Suscripción Crunchyroll Mega Fan económica con descargas offline, doblaje latino y pago con Yape.",
+    "descripcion_larga":  "La biblioteca oficial de anime más grande del mundo. Mira One Piece, Jujutsu Kaisen, Demon Slayer, Solo Leveling, Dragon Ball y todos los estrenos de temporada en simultáneo con Japón, tanto subtitulados como con doblaje al español latino.",
+    "caracteristicas":  [
+                            "Plan nivel Mega Fan sin ningún anuncio publicitario",
+                            "Episodios nuevos (Simulcast) el mismo día de su emisión en Japón",
+                            "Amplio catálogo con doblaje al español latino y subtítulos oficiales",
+                            "Modo sin conexión (Offline Viewing) en celulares y tablets",
+                            "Compatible con Smart TV, PlayStation, Nintendo Switch, PC y móvil"
+                        ],
+    "planes":  [
+                   {
+                       "id":  "crunchyroll-megafan-1m",
+                       "nombre":  "Perfil Mega Fan 1 Mes",
+                       "duracion":  "1 mes",
+                       "pantallas":  "1 pantalla + Descargas offline",
+                       "prices":  {
+                                      "PEN":  5,
+                                      "USD":  1.5,
+                                      "MXN":  30,
+                                      "ARS":  2400
+                                  },
+                       "nota":  "Plan Mega Fan activo al instante",
+                       "mensaje_comprar":  "",
+                       "mensaje_disponibilidad":  "",
+                       "incluye":  [
+
+                                   ],
+                       "nota_panel":  "",
+                       "descuentos":  {
+                                          "2":  0,
+                                          "3":  20,
+                                          "6":  27
+                                      }
+                   },
+                   {
+                       "id":  "crunchyroll-completa-1m",
+                       "nombre":  "Cuenta Completa Mega Fan",
+                       "duracion":  "1 mes",
+                       "pantallas":  "4 pantallas en simultáneo",
+                       "prices":  {
+                                      "PEN":  18,
+                                      "USD":  5,
+                                      "MXN":  105,
+                                      "ARS":  8500
+                                  },
+                       "nota":  "5 perfiles personalizables",
+                       "mensaje_comprar":  "",
+                       "mensaje_disponibilidad":  "",
+                       "incluye":  [
+
+                                   ],
+                       "nota_panel":  "",
+                       "descuentos":  {
+                                          "2":  0,
+                                          "3":  5,
+                                          "6":  8
+                                      }
+                   }
+               ],
+    "mensaje_whatsapp":  "Hola, quiero el servicio de Crunchyroll Mega Fan. ¿Está disponible?",
+    "color_acento":  "#F47521",
+    "disponible":  true,
+    "faq":  [
+                {
+                    "pregunta":  "¿Puedo crear mi propio perfil con avatar de anime?",
+                    "respuesta":  "Sí, Crunchyroll permite elegir tu avatar, idioma preferido de audio/subtítulos y llevar tu propia Crunchylista sin mezclarse con otros usuarios."
+                },
+                {
+                    "pregunta":  "¿Se pueden descargar capítulos en el celular?",
+                    "respuesta":  "Sí, todos nuestros planes corresponden al nivel Mega Fan, que habilita la sincronización de episodios sin conexión en la app móvil."
+                }
+            ],
+    "mensaje_comprar":  "",
+    "mensaje_disponibilidad":  "",
+    "resumen_seo":  "perfil Mega Fan con anime sin anuncios"
+}

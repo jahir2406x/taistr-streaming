@@ -1,0 +1,55 @@
+---
+import { MARCA, PAISES, PAGOS, TEXTOS_PANEL_COMPRA } from '../../editar';
+import { getPaymentMethodsForCountry } from '../../core';
+
+const defaultPayments = getPaymentMethodsForCountry('PE', PAGOS, PAISES);
+const t = TEXTOS_PANEL_COMPRA;
+---
+
+<div class="space-y-2.5">
+  <div class="flex items-baseline justify-between gap-2">
+    <h3 id="panel-medios-titulo" class="font-display font-bold text-sm sm:text-base text-ink">
+      {t.eligeMedioPagoTitulo}
+    </h3>
+    <span class="text-xs text-ink-muted">
+      {t.eligeMedioPagoSubtitulo} <strong data-geo-country-label class="text-ink font-medium">{MARCA.paisPorDefecto}</strong>
+    </span>
+  </div>
+
+  <div
+    id="panel-medios-lista"
+    role="radiogroup"
+    aria-labelledby="panel-medios-titulo"
+    class="space-y-2"
+  >
+    {
+      defaultPayments.map((pm, idx) => (
+        <button
+          type="button"
+          role="radio"
+          aria-checked="false"
+          tabindex={idx === 0 ? 0 : -1}
+          data-panel-payment-id={pm.id}
+          data-panel-payment-name={pm.name}
+          class="panel-medio-opcion w-full text-left rounded-lg border border-ground-border bg-ground hover:bg-ground-card px-3.5 py-3 transition-colors flex items-start gap-3"
+        >
+          <span
+            class="panel-medio-radio mt-0.5 w-4 h-4 rounded-full border border-ink-muted flex items-center justify-center shrink-0"
+            aria-hidden="true"
+          >
+            <span class="panel-medio-dot w-2 h-2 rounded-full opacity-0 transition-opacity" />
+          </span>
+          <span class="block flex-1">
+            <span class="font-display font-semibold text-sm text-ink block leading-snug">
+              {pm.name}
+            </span>
+            <span class="text-xs text-ink-muted block mt-0.5 leading-relaxed">
+              {pm.note}
+            </span>
+          </span>
+        </button>
+      ))
+    }
+  </div>
+</div>
+

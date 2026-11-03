@@ -1,0 +1,90 @@
+[
+  {
+    "id": "yape",
+    "name": "Yape",
+    "type": "local",
+    "countries": ["PE"],
+    "currencies": ["PEN"],
+    "enabled": true,
+    "order": 1,
+    "note": "El número o QR se envía por WhatsApp al confirmar.",
+    "logo": ""
+  },
+  {
+    "id": "plin",
+    "name": "Plin",
+    "type": "local",
+    "countries": ["PE"],
+    "currencies": ["PEN"],
+    "enabled": true,
+    "order": 2,
+    "note": "El número o QR se envía por WhatsApp al confirmar.",
+    "logo": ""
+  },
+  {
+    "id": "transferencia-pe",
+    "name": "Transferencia bancaria",
+    "type": "local",
+    "countries": ["PE"],
+    "currencies": ["PEN"],
+    "enabled": true,
+    "order": 3,
+    "note": "BCP, Interbank o BBVA. Los datos se envían por WhatsApp al confirmar.",
+    "logo": ""
+  },
+  {
+    "id": "spei",
+    "name": "SPEI",
+    "type": "local",
+    "countries": ["MX"],
+    "currencies": ["MXN"],
+    "enabled": true,
+    "order": 1,
+    "note": "Transferencia interbancaria SPEI. Datos enviados por WhatsApp al confirmar.",
+    "logo": ""
+  },
+  {
+    "id": "oxxo",
+    "name": "OXXO",
+    "type": "local",
+    "countries": ["MX"],
+    "currencies": ["MXN"],
+    "enabled": true,
+    "order": 2,
+    "note": "Depósito en efectivo en tiendas OXXO. Datos por WhatsApp al confirmar.",
+    "logo": ""
+  },
+  {
+    "id": "mercadopago",
+    "name": "Mercado Pago",
+    "type": "local",
+    "countries": ["AR"],
+    "currencies": ["ARS"],
+    "enabled": true,
+    "order": 1,
+    "note": "Envío rápido desde Mercado Pago. Datos enviados por WhatsApp al confirmar.",
+    "logo": ""
+  },
+  {
+    "id": "transferencia-ar",
+    "name": "Transferencia",
+    "type": "local",
+    "countries": ["AR"],
+    "currencies": ["ARS"],
+    "enabled": true,
+    "order": 2,
+    "note": "Transferencia CBU/CVU inmediata. Datos enviados por WhatsApp al confirmar.",
+    "logo": ""
+  },
+  {
+    "id": "binance",
+    "name": "Binance (Binance ID / USDT)",
+    "type": "crypto",
+    "countries": ["*"],
+    "currencies": ["USD", "PEN", "MXN", "ARS"],
+    "enabled": true,
+    "order": 99,
+    "note": "Tu Binance ID y la red de USDT se envían por WhatsApp.",
+    "logo": ""
+  }
+]

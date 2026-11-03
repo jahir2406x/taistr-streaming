@@ -1,0 +1,127 @@
+---
+import type { StreamingService } from '../../types/service';
+import { AJUSTES, TEXTOS_INICIO, TEXTOS_BOTONES } from '../../editar';
+import InsigniaServicio from './InsigniaServicio.astro';
+
+interface Props {
+  service: StreamingService;
+  minPricesByCurrency: Record<string, number>;
+  formattedDefaultMin: string;
+}
+
+const { service, minPricesByCurrency, formattedDefaultMin } = Astro.props;
+const categoryLabels = TEXTOS_INICIO.catalogo.etiquetasCategoria;
+const acciones = TEXTOS_BOTONES.acciones;
+const textosFicha = TEXTOS_BOTONES.fichaServicio;
+---
+
+<section
+  class="relative border-b border-ground-border py-10 sm:py-14 overflow-hidden"
+  style={`--service-accent: ${service.color_acento};`}
+>
+  <!-- Aura ambiental propia del color de la plataforma -->
+  <div
+    class="absolute inset-0 pointer-events-none"
+    style={`background: radial-gradient(65% 110% at 15% 0%, color-mix(in srgb, ${service.color_acento} 18%, transparent) 0%, transparent 70%);`}
+    aria-hidden="true"
+  ></div>
+  <div class="hero-grid-pattern absolute inset-0 pointer-events-none opacity-60" aria-hidden="true"></div>
+
+  <div class="relative max-w-[var(--container-max)] mx-auto px-[var(--container-px)] space-y-4 sm:space-y-6">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+      <nav aria-label="Ruta de navegación" class="text-xs text-ink-muted flex items-center gap-2">
+        <a href="/" class="hover:text-ink transition-colors">Inicio</a>
+        <span aria-hidden="true">/</span>
+        <a href="/#catalogo" class="hover:text-ink transition-colors">Servicios</a>
+        <span aria-hidden="true">/</span>
+        <span class="text-ink font-medium">{service.nombre}</span>
+      </nav>
+
+      <!-- Fila de navegación interna rápida en páginas de servicio -->
+      <nav aria-label="Secciones del servicio" class="flex flex-wrap items-center gap-1.5 text-[11px] sm:text-xs font-medium text-ink-muted">
+        <a href="#planes" class="nav-anchor-pill hover:text-ink hover:border-ground-border px-2.5 py-1 rounded-md bg-ground-elevated/80 border border-ground-border/60">Planes</a>
+        <span class="text-ink-subtle" aria-hidden="true">·</span>
+        <a href="#que-incluye" class="nav-anchor-pill hover:text-ink hover:border-ground-border px-2.5 py-1 rounded-md bg-ground-elevated/80 border border-ground-border/60">Qué incluye</a>
+        <span class="text-ink-subtle" aria-hidden="true">·</span>
+        <a href="#faq-servicio" class="nav-anchor-pill hover:text-ink hover:border-ground-border px-2.5 py-1 rounded-md bg-ground-elevated/80 border border-ground-border/60">Preguntas</a>
+        <span class="text-ink-subtle" aria-hidden="true">·</span>
+        <a href="#opiniones" class="nav-anchor-pill hover:text-ink hover:border-ground-border px-2.5 py-1 rounded-md bg-ground-elevated/80 border border-ground-border/60">Opiniones</a>
+      </nav>
+    </div>
+
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div class="flex items-start gap-4">
+        <InsigniaServicio servicio={service} tamano="lg" esDecorativa={true} />
+
+        <div class="space-y-2">
+          <div class="flex flex-wrap items-center gap-2.5">
+            <h1
+              class="font-display font-bold text-3xl sm:text-4xl text-ink tracking-tight"
+              style={`view-transition-name: svc-title-${service.slug};`}
+            >
+              {service.nombre}
+            </h1>
+            <span class="text-xs font-medium px-2.5 py-1 rounded bg-ground-elevated border border-ground-border text-ink-muted">
+              {categoryLabels[service.categoria]}
+            </span>
+            {
+              service.disponible ? (
+                <span class="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded bg-emerald-950/70 text-emerald-300 border border-emerald-800/60">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-400" aria-hidden="true" />
+                  {acciones.disponibleHoy}
+                </span>
+              ) : (
+                <span class="inline-flex items-center gap-1.5 text-xs font-medium px-2.5 py-1 rounded bg-amber-950/70 text-amber-300 border border-amber-800/60">
+                  <span class="w-1.5 h-1.5 rounded-full bg-amber-400" aria-hidden="true" />
+                  {acciones.consultarStock}
+                </span>
+              )
+            }
+          </div>
+
+          <p class="text-base sm:text-lg text-ink-muted max-w-2xl">
+            {service.eslogan}
+          </p>
+
+          <!-- Resumen de estrellas visible en cabecera con ancla directa a reseñas -->
+          <a
+            href="#opiniones"
+            class="header-rating-badge btn-press group inline-flex items-center gap-2 pt-1 text-sm font-medium hover:opacity-90 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 rounded-lg p-0.5"
+            data-header-servicio={service.slug}
+            title="Ver opiniones y calificaciones de clientes"
+          >
+            <div class="flex items-center text-amber-400 text-base tracking-tight group-hover:scale-105 transition-transform" aria-hidden="true">
+              ★★★★★
+            </div>
+            <span class="header-rating-text text-ink-light font-semibold group-hover:text-amber-300 transition-colors">
+              <span class="text-ink-muted font-normal">Sin calificaciones aún</span>
+            </span>
+          </a>
+        </div>
+      </div>
+
+      {
+        AJUSTES.SHOW_PRICES ? (
+          <div
+            class="surface-card rounded-xl px-5 py-3.5 shrink-0 self-start md:self-center min-h-[72px] border-t-2"
+            style={`border-top-color: ${service.color_acento};`}
+          >
+            <span class="text-xs text-ink-muted block">{textosFicha.planesDesde}</span>
+            <span
+              data-price-map={JSON.stringify(minPricesByCurrency)}
+              class="geo-price font-display font-extrabold text-2xl text-ink inline-block min-w-[6.5rem]"
+            >
+              {formattedDefaultMin}
+            </span>
+            <span class="text-xs text-ink-muted"> {textosFicha.porMesEjemplo}</span>
+          </div>
+        ) : (
+          <div class="surface-card rounded-xl px-5 py-3.5 shrink-0 self-start md:self-center">
+            <span class="text-xs font-medium text-brand">{acciones.consultarPrecio}</span>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</section>
+

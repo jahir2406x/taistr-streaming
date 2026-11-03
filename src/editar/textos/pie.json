@@ -1,0 +1,26 @@
+{
+  "horarioLabel": "Horario de soporte:",
+  "enlacesTitulo": "Enlaces directos",
+  "enlaces": [
+    { "texto": "Catálogo de plataformas", "href": "/#catalogo" },
+    { "texto": "Cómo pedir paso a paso", "href": "/#como-funciona" },
+    { "texto": "Garantía y condiciones", "href": "/garantia" },
+    { "texto": "Aviso legal y privacidad", "href": "/privacidad" }
+  ],
+  "enlacesConfianza": {
+    "quienesSomos": { "texto": "Quiénes somos", "href": "/quienes-somos" },
+    "terminos": { "texto": "Términos del servicio", "href": "/terminos" }
+  },
+  "canalesOficiales": {
+    "titulo": "Canales oficiales",
+    "whatsappLabel": "WhatsApp único:",
+    "avisoSeguridad": "{marca} nunca te pedirá contraseñas ni datos bancarios. Verifica que escribes a este número."
+  },
+  "pagosTituloPrefijo": "Pagos y contacto (",
+  "pagosTituloSufijo": ")",
+  "mediosAceptadosLabel": "Medios aceptados:",
+  "notaBinance": "Para pagos con Binance (USDT / Binance Pay): La red y la dirección se te envían por WhatsApp.",
+  "botonSoporte": "Escribir a soporte por WhatsApp",
+  "derechosReservados": "Todos los derechos reservados.",
+  "tarifasActualizadasLabel": "Tarifas de referencia actualizadas el"
+}

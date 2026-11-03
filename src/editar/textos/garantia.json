@@ -1,0 +1,7 @@
+{
+  "garantia_corta": "Garantía por todo el tiempo contratado",
+  "garantia_panel": "Garantía de soporte y reposición durante los {duracion} contratados.",
+  "renovacion_frase": "Todos nuestros servicios son renovables: cuando se acerque el vencimiento, escríbenos por WhatsApp y lo renovamos.",
+  "renovacion_nota": "Puedes solicitar la renovación con anticipación para conservar tu mismo perfil y configuraciones.",
+  "vigencia_etiqueta": "Vigencia: {duracion}"
+}

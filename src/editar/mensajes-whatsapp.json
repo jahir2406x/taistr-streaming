@@ -1,0 +1,11 @@
+{
+  "comprar_plan": "Hola {marca}, quiero el plan {plan} de {servicio} por {duracion} ({precio}). Estoy en {pais} y pagaría con {medio_pago}. ¿Está disponible?",
+  "consultar_disponibilidad": "Hola {marca}, quisiera consultar disponibilidad para {plan} ({duracion}) de {servicio}. Estoy en {pais} y pagaría con {medio_pago}.",
+  "consulta_general": "Hola, vengo de la web de {marca} y quiero consultar por los planes de streaming disponibles.",
+  "soporte": "Hola, vengo de la página de Garantía de {marca} y tengo una consulta sobre las condiciones del servicio.",
+  "boton_flotante": "Hola, vengo de la web de {marca} y quiero consultar por los planes de streaming disponibles.",
+  "barra_movil": "Hola {marca}, quiero pedir {servicio} (desde {precio}). Estoy en {pais} y pagaría con {medio_pago}. ¿Está disponible?",
+  "armador_pedido": "Hola {marca}, quiero el plan {plan} de {servicio} ({precio} · {duracion}). Estoy en {pais} y pagaría con {medio_pago}. ¿Está disponible?",
+  "renovar": "Hola {marca}, quiero renovar mi plan {plan} de {servicio} ({duracion}) desde {pais} con {medio_pago}."
+}
+

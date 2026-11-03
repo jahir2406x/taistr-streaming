@@ -1,0 +1,527 @@
+{
+  "hero": {
+    "etiquetaEntrega": "Entrega en",
+    "etiquetaAtencion": "Atención en",
+    "titulo": "Streaming barato en Perú: perfiles 4K y cuentas completas con entrega rápida.",
+    "descripcionAntesPagos": "Ahorra hasta 70% en tus plataformas favoritas con perfiles compartidos con PIN privado o cuentas familiares sin tarjetas de crédito. Paga fácil con",
+    "descripcionDespuesPagos": "y recibe tu acceso con entrega rápida por WhatsApp y garantía total.",
+    "metricas": {
+      "preciosLabel": "Precios desde",
+      "garantiaLabel": "Garantía total",
+      "garantiaValor": "Todo tu periodo",
+      "activacionLabel": "Activación promedio",
+      "activacionValor": "5 – 15 min"
+    },
+    "microTextoCta": "Consulta disponibilidad sin compromiso · Atención directa por WhatsApp",
+    "armador": {
+      "titulo": "Armar pedido rápido",
+      "subtitulo": "Selecciona servicio, plan y medio de pago para generar tu mensaje",
+      "insignia": "Paso directo",
+      "paso1Label": "1. Plataforma de streaming",
+      "paso2Label": "2. Plan y duración",
+      "paso3Label": "3. Medio de pago en",
+      "totalLabel": "Total referencial:"
+    }
+  },
+  "catalogo": {
+    "titulo": "Catálogo de cuentas y perfiles de streaming al mejor precio",
+    "descripcion": "Elige tu plataforma de streaming favorita con precios económicos en soles (S/). Todos los planes incluyen activación rápida por WhatsApp y garantía completa.",
+    "notaPreciosEjemplo": "",
+    "filtros": {
+      "todos": "Todos",
+      "video": "Video",
+      "musica": "Música",
+      "anime": "Anime"
+    },
+    "etiquetasCategoria": {
+      "video": "Video y Series",
+      "musica": "Música",
+      "anime": "Anime"
+    }
+  },
+  "comoFunciona": {
+    "titulo": "Cómo activar tu cuenta en 3 pasos",
+    "subtitulo": "Sin registros ni formularios en la web. Todo el trato es directo con una persona real por WhatsApp.",
+    "pasos": [
+      {
+        "numero": "1",
+        "titulo": "Eliges tu plataforma y plan",
+        "descripcion": "Revisa en el catálogo si prefieres un perfil personal (para 1 dispositivo) o una cuenta completa familiar. Pulsa el botón de pedido del plan elegido."
+      },
+      {
+        "numero": "2",
+        "titulo": "Nos escribes por WhatsApp",
+        "descripcionAntes": "Tu WhatsApp se abrirá con el mensaje ya escrito indicando el servicio, plan, país y medio de pago (",
+        "descripcionDespues": ")."
+      },
+      {
+        "numero": "3",
+        "titulo": "Recibes tu acceso al instante",
+        "descripcionAntes": "Verificado el comprobante, te enviamos los datos de ingreso o activamos tu perfil en ",
+        "descripcionDespues": ", con soporte garantizado todo el periodo contratado."
+      }
+    ]
+  },
+  "beneficios": {
+    "titulo": "Condiciones claras antes de comprar",
+    "descripcion": "Explicamos con total transparencia qué incluye cada modalidad para que elijas lo que realmente necesitas en casa.",
+    "enlaceGarantia": "Leer política completa de garantía y reemplazos",
+    "items": [
+      {
+        "titulo": "Garantía por todo el periodo",
+        "descripcion": "Cada suscripción cuenta con cobertura por todo el periodo contratado. Si ocurre algún inconveniente técnico, damos soporte o reposición sin costo extra."
+      },
+      {
+        "titulo": "Pagos locales y Binance",
+        "descripcion": "Paga en tu moneda local en Perú (PEN), México (MXN) y Argentina (ARS), o desde cualquier otro país en USD mediante Binance (USDT / Binance Pay)."
+      },
+      {
+        "titulo": "Privacidad en tu perfil",
+        "descripcion": "En las plataformas compatibles configuramos tu perfil con nombre propio y PIN de seguridad para que tus recomendaciones se mantengan separadas."
+      },
+      {
+        "titulo": "Renovación opcional sin ataduras",
+        "descripcion": "No guardamos tarjetas ni hacemos cobros automáticos. Al terminar tu periodo contratado, tú decides si deseas renovar el servicio por WhatsApp."
+      }
+    ]
+  },
+  "faqGeneral": {
+    "titulo": "Preguntas frecuentes",
+    "subtitulo": "Respuestas directas a las dudas más comunes antes de realizar tu primer pedido.",
+    "preguntas": [
+      {
+        "question": "¿Cómo recibo mi servicio después de escribir por WhatsApp?",
+        "answer": "Al pulsar cualquier botón de pedido se abrirá tu WhatsApp con el nombre del servicio y plan elegido. Te confirmamos disponibilidad al instante, realizas el pago por Yape, Plin o transferencia bancaria en soles (S/) y en menos de 15 minutos te enviamos los datos de acceso junto con una guía corta de ingreso."
+      },
+      {
+        "question": "¿Cuál es la diferencia entre Perfil Personal y Cuenta Completa?",
+        "answer": "Un Perfil Personal te asigna un espacio propio (con tu nombre y PIN privado cuando la plataforma lo permite) dentro de una suscripción compartida para ver en 1 dispositivo a la vez. Una Cuenta Completa te entrega todos los perfiles de la suscripción para que los administres libremente en casa."
+      },
+      {
+        "question": "¿Qué pasa si la cuenta presenta algún inconveniente antes de vencer?",
+        "answer": "Todos los planes incluyen garantía durante todo el tiempo contratado. Si surge algún bloqueo o caída, nos escribes a nuestro WhatsApp de soporte y restablecemos el acceso o asignamos un reemplazo sin costo adicional."
+      },
+      {
+        "question": "¿Puedo renovar mi servicio?",
+        "answer": "Todos nuestros servicios son renovables: cuando se acerque el vencimiento, escríbenos por WhatsApp y lo renovamos sin perder tu cuenta ni tu perfil."
+      },
+      {
+        "question": "¿Cómo funcionan los códigos de viaje o de \"Hogar\" en Netflix, Disney+, HBO Max y otras apps?",
+        "answer": "Plataformas como Netflix (\"Estoy de viaje\" / \"Ver temporalmente\"), Disney+ o HBO Max (Max) a veces solicitan un código de acceso temporal cuando detectan un televisor o red distinta al hogar principal. Para que no tengas que esperar a que un asesor te responda, te brindaremos acceso a nuestra página web de consulta automática donde podrás recibir tu código de verificación al instante las 24 horas (también válido para cualquier otra plataforma que implemente este sistema en el futuro)."
+      },
+      {
+        "question": "¿Necesito tarjeta de crédito o firmar algún contrato?",
+        "answer": "No. Los planes son prepago por el tiempo que elijas (1, 2, 3 o 6 meses). No hay cargos automáticos ni penalidades si decides no renovar al finalizar."
+      },
+      {
+        "question": "¿En qué dispositivos puedo usar los servicios?",
+        "answer": "Funcionan en Smart TV (Samsung, LG, Android TV, Google TV), celulares Android y iPhone, tablets, computadoras, Fire TV Stick, Chromecast y consolas compatibles con cada aplicación oficial."
+      }
+    ]
+  },
+  "ctaFinal": {
+    "titulo": "¿Buscas combinar 2 o más servicios?",
+    "descripcion": "Escríbenos qué plataformas quieres ver este mes y te cotizamos al instante por WhatsApp. Atención todos los días en horario extendido.",
+    "boton": "Hablar por WhatsApp ahora"
+  },
+  "opiniones": {
+    "kicker": "Opiniones reales",
+    "tituloGlobal": "Lo que dicen nuestros clientes",
+    "tituloServicioPrefijo": "Opiniones sobre",
+    "subtitulo": "Experiencias publicadas con autorización de clientes atendidos por WhatsApp.",
+    "compraVerificada": "Compra verificada",
+    "deCincoSegun": "de 5 según",
+    "opinionesPalabra": "opiniones",
+    "opinionPalabra": "opinión"
+  },
+  "comparativaAhorro": {
+    "kicker": "Ahorro inteligente",
+    "titulo": "Compara cuánto ahorras frente al precio oficial",
+    "subtitulo": "Misma calidad Ultra HD y el catálogo completo de tus plataformas, pagando en tu moneda local y sin tarjeta de crédito.",
+    "columnaPlataforma": "Plataforma",
+    "columnaOficial": "Precio Oficial con Tarjeta",
+    "columnaTaistr": "En TaiSTR con Pago Local",
+    "columnaAhorro": "Tu Ahorro Anual",
+    "porPais": {
+      "PE": {
+        "filas": [
+          {
+            "servicio": "Netflix Ultra HD 4K",
+            "slug": "netflix",
+            "iniciales": "N",
+            "color": "#E50914",
+            "precioOficial": "S/ 44.90 / mes",
+            "precioTaistr": "S/ 11.00 / mes",
+            "ahorro": "Ahorras más de S/ 400 al año"
+          },
+          {
+            "servicio": "Disney+ Premium",
+            "slug": "disney-plus",
+            "iniciales": "D+",
+            "color": "#113CCF",
+            "precioOficial": "S/ 38.90 / mes",
+            "precioTaistr": "S/ 8.00 / mes",
+            "ahorro": "Ahorras más de S/ 370 al año"
+          },
+          {
+            "servicio": "Max (HBO Max)",
+            "slug": "hbo-max",
+            "iniciales": "HBO",
+            "color": "#7E22CE",
+            "precioOficial": "S/ 39.90 / mes",
+            "precioTaistr": "S/ 5.00 / mes",
+            "ahorro": "Ahorras más de S/ 410 al año"
+          },
+          {
+            "servicio": "Spotify Premium",
+            "slug": "spotify",
+            "iniciales": "S",
+            "color": "#10B981",
+            "precioOficial": "S/ 20.90 / mes",
+            "precioTaistr": "S/ 8.00 / mes",
+            "ahorro": "Ahorras más de S/ 150 al año"
+          }
+        ],
+        "puntosClave": [
+          "Sin cargos automáticos en tu tarjeta ni cobros sorpresa",
+          "Pagas fácil en soles mediante Yape, Plin o transferencia bancaria",
+          "Soporte técnico inmediato y garantía completa durante todo tu periodo"
+        ],
+        "cta": "Pedir por WhatsApp en Perú"
+      },
+      "MX": {
+        "filas": [
+          {
+            "servicio": "Netflix Ultra HD 4K",
+            "slug": "netflix",
+            "iniciales": "N",
+            "color": "#E50914",
+            "precioOficial": "$219 MXN / mes",
+            "precioTaistr": "$65 MXN / mes",
+            "ahorro": "Ahorras más de $1,800 MXN al año"
+          },
+          {
+            "servicio": "Disney+ Premium",
+            "slug": "disney-plus",
+            "iniciales": "D+",
+            "color": "#113CCF",
+            "precioOficial": "$179 MXN / mes",
+            "precioTaistr": "$45 MXN / mes",
+            "ahorro": "Ahorras más de $1,600 MXN al año"
+          },
+          {
+            "servicio": "Max (HBO Max)",
+            "slug": "hbo-max",
+            "iniciales": "HBO",
+            "color": "#7E22CE",
+            "precioOficial": "$199 MXN / mes",
+            "precioTaistr": "$30 MXN / mes",
+            "ahorro": "Ahorras más de $2,000 MXN al año"
+          },
+          {
+            "servicio": "Spotify Premium",
+            "slug": "spotify",
+            "iniciales": "S",
+            "color": "#10B981",
+            "precioOficial": "$129 MXN / mes",
+            "precioTaistr": "$45 MXN / mes",
+            "ahorro": "Ahorras más de $1,000 MXN al año"
+          }
+        ],
+        "puntosClave": [
+          "Sin cobros automáticos ni tarjetas de crédito forzosas",
+          "Pagas fácil mediante transferencia SPEI, OXXO o Mercado Pago",
+          "Soporte técnico inmediato y reposición activa todo el mes"
+        ],
+        "cta": "Pedir por WhatsApp en México"
+      },
+      "AR": {
+        "filas": [
+          {
+            "servicio": "Netflix Ultra HD 4K",
+            "slug": "netflix",
+            "iniciales": "N",
+            "color": "#E50914",
+            "precioOficial": "$15,500 ARS / mes",
+            "precioTaistr": "$5,300 ARS / mes",
+            "ahorro": "Ahorras más de $120,000 ARS al año"
+          },
+          {
+            "servicio": "Disney+ Premium",
+            "slug": "disney-plus",
+            "iniciales": "D+",
+            "color": "#113CCF",
+            "precioOficial": "$12,500 ARS / mes",
+            "precioTaistr": "$3,800 ARS / mes",
+            "ahorro": "Ahorras más de $100,000 ARS al año"
+          },
+          {
+            "servicio": "Max (HBO Max)",
+            "slug": "hbo-max",
+            "iniciales": "HBO",
+            "color": "#7E22CE",
+            "precioOficial": "$13,000 ARS / mes",
+            "precioTaistr": "$2,400 ARS / mes",
+            "ahorro": "Ahorras más de $125,000 ARS al año"
+          },
+          {
+            "servicio": "Spotify Premium",
+            "slug": "spotify",
+            "iniciales": "S",
+            "color": "#10B981",
+            "precioOficial": "$8,500 ARS / mes",
+            "precioTaistr": "$3,800 ARS / mes",
+            "ahorro": "Ahorras más de $56,000 ARS al año"
+          }
+        ],
+        "puntosClave": [
+          "Sin sorpresas por impuestos país ni percepciones extra de tarjeta",
+          "Pagas directo en pesos mediante Mercado Pago o Transferencia CBU/CVU",
+          "Atención personalizada por WhatsApp y garantía total de soporte"
+        ],
+        "cta": "Pedir por WhatsApp en Argentina"
+      },
+      "default": {
+        "filas": [
+          {
+            "servicio": "Netflix Ultra HD 4K",
+            "slug": "netflix",
+            "iniciales": "N",
+            "color": "#E50914",
+            "precioOficial": "$15.49 USD / mes",
+            "precioTaistr": "$3.20 USD / mes",
+            "ahorro": "Ahorras más de $145 USD al año"
+          },
+          {
+            "servicio": "Disney+ Premium",
+            "slug": "disney-plus",
+            "iniciales": "D+",
+            "color": "#113CCF",
+            "precioOficial": "$13.99 USD / mes",
+            "precioTaistr": "$2.30 USD / mes",
+            "ahorro": "Ahorras más de $140 USD al año"
+          },
+          {
+            "servicio": "Max (HBO Max)",
+            "slug": "hbo-max",
+            "iniciales": "HBO",
+            "color": "#7E22CE",
+            "precioOficial": "$14.99 USD / mes",
+            "precioTaistr": "$1.50 USD / mes",
+            "ahorro": "Ahorras más de $160 USD al año"
+          },
+          {
+            "servicio": "Spotify Premium",
+            "slug": "spotify",
+            "iniciales": "S",
+            "color": "#10B981",
+            "precioOficial": "$10.99 USD / mes",
+            "precioTaistr": "$2.30 USD / mes",
+            "ahorro": "Ahorras más de $100 USD al año"
+          }
+        ],
+        "puntosClave": [
+          "Sin ataduras de renovación forzosa en tu tarjeta",
+          "Pagas fácil desde cualquier país con Binance (USDT / Binance ID)",
+          "Activación rápida en 5-15 min con garantía en todo el periodo"
+        ],
+        "cta": "Pedir por WhatsApp Internacional"
+      }
+    }
+  },
+  "testimonios": {
+    "kicker": "Opiniones verificadas",
+    "titulo": "Lo que dicen quienes ya disfrutan de su suscripción",
+    "subtitulo": "Experiencias reales de clientes que activaron y renovaron su servicio directamente por WhatsApp.",
+    "promedioRating": "4.9",
+    "totalClientes": "+500",
+    "badgeTexto": "Calificación 4.9/5 · Más de 500 clientes activos",
+    "porPais": {
+      "PE": [
+        {
+          "nombre": "Carlos M.",
+          "ciudad": "Lima",
+          "paisLabel": "Perú",
+          "bandera": "🇵🇪",
+          "servicio": "Netflix 4K",
+          "estrellas": 5,
+          "comentario": "Tenía dudas de pagar por Yape a un número nuevo, pero en 7 minutos me enviaron el perfil con mi nombre y PIN. Ya funciona perfecto en mi Smart TV.",
+          "metodo": "Yape",
+          "tiempo": "Hace 2 días"
+        },
+        {
+          "nombre": "Andrea P.",
+          "ciudad": "Arequipa",
+          "paisLabel": "Perú",
+          "bandera": "🇵🇪",
+          "servicio": "Disney+ Premium",
+          "estrellas": 5,
+          "comentario": "Es mi cuarto mes renovando Disney+ y Spotify. Cero caídas y cuando cambié de celular me ayudaron al instante a configurar todo.",
+          "metodo": "Plin",
+          "tiempo": "Hace 5 días"
+        },
+        {
+          "nombre": "Jorge S.",
+          "ciudad": "Trujillo",
+          "paisLabel": "Perú",
+          "bandera": "🇵🇪",
+          "servicio": "Netflix + Max",
+          "estrellas": 5,
+          "comentario": "Me ahorré más de 60 soles al mes combinando las dos cuentas. La atención por WhatsApp es súper rápida y educada.",
+          "metodo": "Transferencia BCP",
+          "tiempo": "Hace 1 semana"
+        },
+        {
+          "nombre": "Valeria R.",
+          "ciudad": "Cusco",
+          "paisLabel": "Perú",
+          "bandera": "🇵🇪",
+          "servicio": "Prime Video",
+          "estrellas": 5,
+          "comentario": "Súper rápido y confiable. Me explicaron paso a paso cómo ingresar en mi televisor. Sin ataduras ni cobros extra.",
+          "metodo": "Yape",
+          "tiempo": "Hace 2 semanas"
+        }
+      ],
+      "MX": [
+        {
+          "nombre": "Fernando R.",
+          "ciudad": "CDMX",
+          "paisLabel": "México",
+          "bandera": "🇲🇽",
+          "servicio": "Netflix 4K",
+          "estrellas": 5,
+          "comentario": "Pagué por transferencia SPEI y en menos de 10 minutos ya tenía mi perfil con PIN en mi Roku. Excelente servicio y muy confiable.",
+          "metodo": "SPEI",
+          "tiempo": "Hace 1 día"
+        },
+        {
+          "nombre": "Mariana G.",
+          "ciudad": "Guadalajara",
+          "paisLabel": "México",
+          "bandera": "🇲🇽",
+          "servicio": "Disney+ Premium",
+          "estrellas": 5,
+          "comentario": "Llevo 3 meses usando la cuenta y nunca se ha caído. El pago con Mercado Pago es súper cómodo y seguro.",
+          "metodo": "Mercado Pago",
+          "tiempo": "Hace 3 días"
+        },
+        {
+          "nombre": "Rodrigo L.",
+          "ciudad": "Monterrey",
+          "paisLabel": "México",
+          "bandera": "🇲🇽",
+          "servicio": "Combo Max + Spotify",
+          "estrellas": 5,
+          "comentario": "Ahorro muchísimo comparado con los precios oficiales. Me mandaron las credenciales de inmediato por WhatsApp.",
+          "metodo": "OXXO / SPEI",
+          "tiempo": "Hace 6 días"
+        },
+        {
+          "nombre": "Sofía V.",
+          "ciudad": "Puebla",
+          "paisLabel": "México",
+          "bandera": "🇲🇽",
+          "servicio": "Prime Video",
+          "estrellas": 5,
+          "comentario": "Tenía miedo de que fuera estafa pero la atención es impecable. Me ayudaron a configurar mi pantalla paso a paso.",
+          "metodo": "SPEI",
+          "tiempo": "Hace 2 semanas"
+        }
+      ],
+      "AR": [
+        {
+          "nombre": "Mateo B.",
+          "ciudad": "Buenos Aires",
+          "paisLabel": "Argentina",
+          "bandera": "🇦🇷",
+          "servicio": "Netflix 4K",
+          "estrellas": 5,
+          "comentario": "Increíble ahorro sin tener que pagar los impuestos desmedidos de las tarjetas. Transferí por CBU y me pasaron el acceso al toque.",
+          "metodo": "Transferencia CBU",
+          "tiempo": "Ayer"
+        },
+        {
+          "nombre": "Camila S.",
+          "ciudad": "Córdoba",
+          "paisLabel": "Argentina",
+          "bandera": "🇦🇷",
+          "servicio": "Disney+ Premium",
+          "estrellas": 5,
+          "comentario": "Segunda vez que renuevo. Funciona perfecto en mi Smart TV y el soporte por WhatsApp te responde rapidísimo.",
+          "metodo": "Mercado Pago",
+          "tiempo": "Hace 4 días"
+        },
+        {
+          "nombre": "Lucas M.",
+          "ciudad": "Rosario",
+          "paisLabel": "Argentina",
+          "bandera": "🇦🇷",
+          "servicio": "Spotify Premium",
+          "estrellas": 5,
+          "comentario": "Pagué en pesos por transferencia y activaron mi cuenta personal en 5 minutos. Muy recomendable.",
+          "metodo": "Transferencia",
+          "tiempo": "Hace 1 semana"
+        },
+        {
+          "nombre": "Julieta N.",
+          "ciudad": "Mendoza",
+          "paisLabel": "Argentina",
+          "bandera": "🇦🇷",
+          "servicio": "Max + Netflix",
+          "estrellas": 5,
+          "comentario": "Cero problemas con los códigos de hogar. Te asisten al momento cualquier día de la semana.",
+          "metodo": "Mercado Pago",
+          "tiempo": "Hace 10 días"
+        }
+      ],
+      "default": [
+        {
+          "nombre": "David K.",
+          "ciudad": "Santiago",
+          "paisLabel": "Internacional",
+          "bandera": "🌐",
+          "servicio": "Netflix 4K",
+          "estrellas": 5,
+          "comentario": "Pagué con Binance USDT y la entrega fue casi instantánea. El perfil con PIN privado funciona de maravilla en mi TV.",
+          "metodo": "Binance Pay",
+          "tiempo": "Hace 2 días"
+        },
+        {
+          "nombre": "Elena M.",
+          "ciudad": "Bogotá",
+          "paisLabel": "Internacional",
+          "bandera": "🌐",
+          "servicio": "Disney+ Premium",
+          "estrellas": 5,
+          "comentario": "Excelente alternativa para no usar tarjeta de crédito internacional. Soporte muy amable por WhatsApp.",
+          "metodo": "USDT",
+          "tiempo": "Hace 5 días"
+        },
+        {
+          "nombre": "Carlos T.",
+          "ciudad": "Quito",
+          "paisLabel": "Internacional",
+          "bandera": "🌐",
+          "servicio": "Combo Max + Netflix",
+          "estrellas": 5,
+          "comentario": "Ya voy por mi tercer mes de renovación. Rápido, transparente y el ahorro en dólares se nota bastante.",
+          "metodo": "Binance ID",
+          "tiempo": "Hace 1 semana"
+        },
+        {
+          "nombre": "Marcela F.",
+          "ciudad": "Montevideo",
+          "paisLabel": "Internacional",
+          "bandera": "🌐",
+          "servicio": "Spotify Premium",
+          "estrellas": 5,
+          "comentario": "Muy buena atención, me guiaron paso a paso con el pago en Binance. 100% confiables y recomendados.",
+          "metodo": "Binance Pay",
+          "tiempo": "Hace 2 semanas"
+        }
+      ]
+    }
+  }
+}
+

@@ -1,0 +1,31 @@
+{
+  "inicio": {
+    "titulo": "Streaming en Perú · Yape, Plin y Garantía | {marca}",
+    "descripcion": "Cuentas y perfiles de streaming en Perú con pago por Yape y Plin. Entrega rápida por WhatsApp y garantía durante todo el tiempo contratado en {marca}."
+  },
+  "garantia": {
+    "titulo": "Garantía y Condiciones en Perú · Yape y Plin | {marca}",
+    "descripcion": "Revisa la garantía durante todo el tiempo contratado en Perú, pagos con Yape y Plin, tiempos de entrega y soporte por WhatsApp en {marca}."
+  },
+  "privacidad": {
+    "titulo": "Privacidad y Aviso Legal en Perú | {marca}",
+    "descripcion": "Política de privacidad sin cookies de rastreo, pagos con Yape y Plin en Perú, garantía del servicio y aviso de no afiliación de {marca}."
+  },
+  "noEncontrado": {
+    "titulo": "Página no encontrada (404) | {marca}",
+    "descripcion": "La página solicitada no existe. Vuelve al catálogo de streaming en Perú con pago por Yape y Plin y garantía en {marca}."
+  },
+  "quienesSomos": {
+    "titulo": "Quiénes Somos en Perú · Yape y Plin | {marca}",
+    "descripcion": "Conoce cómo opera {marca} en Perú, nuestro horario de soporte por WhatsApp, pagos locales con Yape y Plin y garantía durante todo el tiempo contratado."
+  },
+  "terminos": {
+    "titulo": "Términos del Servicio en Perú · Yape y Plin | {marca}",
+    "descripcion": "Términos de uso, entrega por WhatsApp, pagos con Yape y Plin en Perú y alcance de la garantía durante todo el tiempo contratado en {marca}."
+  },
+  "servicioPlantilla": {
+    "sufijoTitulo": "Cuentas y Perfiles con Yape",
+    "plantillaTitulo": "{servicio} en {pais} · {pagos_coma} | {marca}",
+    "plantillaDescripcion": "{servicio} en {pais}: {resumen}. Paga con {pagos_y}, entrega por WhatsApp y {garantia}."
+  }
+}

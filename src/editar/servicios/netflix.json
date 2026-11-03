@@ -1,0 +1,147 @@
+{
+    "id":  "netflix",
+    "nombre":  "Netflix",
+    "slug":  "netflix",
+    "iniciales":  "N",
+    "categoria":  "video",
+    "eslogan":  "Netflix barato en Perú en 4K Ultra HD. Perfiles con PIN y cuentas completas.",
+    "descripcion_corta":  "Perfil compartido propio con PIN o cuenta completa para Smart TV sin bloqueos de hogar, con pago por Yape.",
+    "descripcion_larga":  "Disfruta del catálogo completo de Netflix en máxima resolución 4K UHD. Configuramos tu perfil con nombre propio y código PIN de 4 dígitos para que nadie altere tu lista ni tu historial de reproducción. Compatible con Smart TV sin bloqueos de hogar.",
+    "caracteristicas":  [
+                            "Calidad 4K Ultra HD y HDR disponible en tu pantalla",
+                            "Perfil exclusivo protegido con PIN de 4 dígitos y tu propio nombre",
+                            "Compatible con Smart TV, celular, tablet, PC y TV Box",
+                            "Soporte inmediato para códigos de hogar y acceso en Smart TV",
+                            "Soporte técnico y garantía durante toda la vigencia contratada"
+                        ],
+    "planes":  [
+                   {
+                       "id":  "netflix-perfil-1m",
+                       "nombre":  "Perfil Personal 4K",
+                       "duracion":  "1 mes",
+                       "pantallas":  "1 pantalla a la vez (Con PIN)",
+                       "prices":  {
+                                      "PEN":  11,
+                                      "USD":  3.2,
+                                      "MXN":  65,
+                                      "ARS":  5300
+                                  },
+                       "nota":  "Válido para Smart TV, móvil o PC",
+                       "mensaje_comprar":  "",
+                       "mensaje_disponibilidad":  "",
+                       "incluye":  [
+
+                                   ],
+                       "nota_panel":  "",
+                       "descuentos":  {
+                                          "2":  0,
+                                          "3":  5,
+                                          "6":  8
+                                      }
+                   },
+                   {
+                       "id":  "netflix-duo-1m",
+                       "nombre":  "Dúo 2 Perfiles 4K",
+                       "duracion":  "1 mes",
+                       "pantallas":  "2 pantallas en simultáneo",
+                       "prices":  {
+                                      "PEN":  21,
+                                      "USD":  6,
+                                      "MXN":  120,
+                                      "ARS":  10000
+                                  },
+                       "nota":  "Ideal para compartir en pareja o dos cuartos",
+                       "mensaje_comprar":  "",
+                       "mensaje_disponibilidad":  "",
+                       "incluye":  [
+
+                                   ],
+                       "nota_panel":  "",
+                       "descuentos":  {
+                                          "2":  0,
+                                          "3":  5,
+                                          "6":  8
+                                      }
+                   },
+                   {
+                       "id":  "netflix-completa-1m",
+                       "nombre":  "Cuenta Completa Familiar 4K",
+                       "duracion":  "1 mes",
+                       "pantallas":  "5 perfiles · 4 pantallas a la vez",
+                       "prices":  {
+                                      "PEN":  52,
+                                      "USD":  15,
+                                      "MXN":  310,
+                                      "ARS":  25000
+                                  },
+                       "nota":  "Administración total toda la cuenta",
+                       "mensaje_comprar":  "",
+                       "mensaje_disponibilidad":  "",
+                       "incluye":  [
+
+                                   ],
+                       "nota_panel":  "",
+                       "descuentos":  {
+                                          "2":  0,
+                                          "3":  5,
+                                          "6":  8
+                                      }
+                   },
+                   {
+                       "id":  "netflix-perfil-extra",
+                       "nombre":  "Perfil Extra Netflix",
+                       "destacado":  true,
+                       "etiqueta":  "Sin códigos de hogar",
+                       "gancho":  "¿Cansado de los códigos de hogar y de viaje?",
+                       "duracion":  "1 mes",
+                       "pantallas":  "1 pantalla a la vez",
+                       "prices":  {
+                                      "PEN":  15,
+                                      "USD":  4.5,
+                                      "MXN":  90,
+                                      "ARS":  7200
+                                  },
+                       "nota":  "Acceso propio e independiente",
+                       "incluye":  [
+                                       "Acceso propio, independiente de la cuenta principal",
+                                       "Sin códigos de hogar ni de viaje",
+                                       "Úsalo en el dispositivo que quieras: Smart TV, móvil o PC",
+                                       "1 pantalla a la vez",
+                                       "Vigencia: {duracion}"
+                                   ],
+                       "nota_panel":  "Es una cuenta de miembro extra: usa 1 pantalla a la vez y no permite crear perfiles adicionales.",
+                       "nota_interna":  "",
+                       "mensaje_comprar":  "",
+                       "mensaje_disponibilidad":  "",
+                       "descuentos":  {
+                                          "2":  0,
+                                          "3":  5,
+                                          "6":  8
+                                      }
+                   }
+               ],
+    "mensaje_whatsapp":  "Hola, quiero información sobre Netflix. ¿Está disponible?",
+    "color_acento":  "#E50914",
+    "disponible":  true,
+    "faq":  [
+                {
+                    "pregunta":  "¿Qué hago si aparece \u0027Tu TV no forma parte del Hogar\u0027 o me pide código de \u0027Estoy de viaje\u0027?",
+                    "respuesta":  "Al contratar te entregamos el enlace a nuestra página web de códigos automáticos. Solo seleccionas \u0027Estoy de viaje\u0027 o \u0027Ver temporalmente\u0027 en tu TV, eliges enviar código por correo y en segundos podrás verlo directamente en nuestra web sin tener que esperar respuesta por chat."
+                },
+                {
+                    "pregunta":  "¿Qué es el Perfil Extra y en qué se diferencia de un perfil normal?",
+                    "respuesta":  "Es un acceso propio con credenciales independientes, pensado para usarse fuera del hogar principal sin los códigos de verificación de hogar, con 1 pantalla a la vez en cualquier dispositivo."
+                },
+                {
+                    "pregunta":  "¿Necesito introducir códigos de hogar o de viaje?",
+                    "respuesta":  "No. Al ser un perfil de miembro extra oficial, funciona de forma autónoma en tu Smart TV o cualquier equipo compatible sin requerir códigos de verificación de hogar."
+                },
+                {
+                    "pregunta":  "¿Puedo renovar el mismo perfil el próximo mes?",
+                    "respuesta":  "Sí, avisándonos 1 o 2 días antes de tu fecha de vencimiento conservas el mismo perfil con tu historial intacto."
+                }
+            ],
+    "mensaje_comprar":  "",
+    "mensaje_disponibilidad":  "",
+    "resumen_seo":  "perfil 4K con PIN o cuenta completa"
+}
