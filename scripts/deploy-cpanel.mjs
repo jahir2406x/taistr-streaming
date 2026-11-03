@@ -7,8 +7,9 @@ const CPANEL_HOST = process.env.CPANEL_HOST || 'dcma.gservidor.com';
 const CPANEL_PORT = process.env.CPANEL_PORT || '2083';
 const CPANEL_USER = process.env.CPANEL_USER || 'servici9';
 const CPANEL_TOKEN = process.env.CPANEL_TOKEN || '4DAEPR6K0RX4JR2IWP80IWQ7GNXQGWV8';
-const TARGET_DIR = process.env.CPANEL_TARGET_DIR || '/home/servici9/public_html';
-const LIVE_URL = process.env.CPANEL_LIVE_URL || 'https://serviciostai.com';
+const TARGET_DIR = process.env.CPANEL_TARGET_DIR || '/home/servici9/public_html/streaming';
+const REMOTE_UPLOAD_DIR = process.env.CPANEL_UPLOAD_DIR || 'public_html/streaming';
+const LIVE_URL = process.env.CPANEL_LIVE_URL || 'https://streaming.serviciostai.com';
 
 const authHeader = `cpanel ${CPANEL_USER}:${CPANEL_TOKEN}`;
 const baseUrl = `https://${CPANEL_HOST}:${CPANEL_PORT}`;
@@ -42,10 +43,10 @@ async function main() {
   const zipSize = (fs.statSync(zipPath).size / (1024 * 1024)).toFixed(2);
   console.log(`📦 Paquete generado (${zipSize} MB). Subiendo a cPanel...`);
 
-  // 3. Subir deploy.zip a public_html
+  // 3. Subir deploy.zip a la carpeta del subdominio
   const fileBuffer = fs.readFileSync(zipPath);
   const fd = new FormData();
-  fd.append('dir', 'public_html');
+  fd.append('dir', REMOTE_UPLOAD_DIR);
   fd.append('overwrite', '1');
   fd.append('file-1', new Blob([fileBuffer]), 'deploy.zip');
 
@@ -61,9 +62,9 @@ async function main() {
   }
   console.log('✅ Archivo deploy.zip subido exitosamente.');
 
-  // 4. Extraer en public_html
+  // 4. Extraer en la carpeta del subdominio
   console.log(`📂 Extrayendo archivos en ${TARGET_DIR}...`);
-  const extractUrl = `${baseUrl}/json-api/cpanel?cpanel_jsonapi_module=Fileman&cpanel_jsonapi_func=fileop&cpanel_jsonapi_version=2&op=extract&sourcefiles=public_html/deploy.zip&destfiles=${encodeURIComponent(TARGET_DIR)}&doubledecode=1`;
+  const extractUrl = `${baseUrl}/json-api/cpanel?cpanel_jsonapi_module=Fileman&cpanel_jsonapi_func=fileop&cpanel_jsonapi_version=2&op=extract&sourcefiles=${REMOTE_UPLOAD_DIR}/deploy.zip&destfiles=${encodeURIComponent(TARGET_DIR)}&doubledecode=1`;
   const extractRes = await fetch(extractUrl, {
     headers: { Authorization: authHeader }
   });
@@ -72,7 +73,7 @@ async function main() {
 
   // 5. Limpieza en el servidor y local
   console.log('🧹 Limpiando archivos temporales...');
-  await fetch(`${baseUrl}/json-api/cpanel?cpanel_jsonapi_module=Fileman&cpanel_jsonapi_func=fileop&cpanel_jsonapi_version=2&op=unlink&sourcefiles=public_html/deploy.zip&doubledecode=1`, {
+  await fetch(`${baseUrl}/json-api/cpanel?cpanel_jsonapi_module=Fileman&cpanel_jsonapi_func=fileop&cpanel_jsonapi_version=2&op=unlink&sourcefiles=${REMOTE_UPLOAD_DIR}/deploy.zip&doubledecode=1`, {
     headers: { Authorization: authHeader }
   }).catch(() => {});
 
@@ -96,3 +97,4 @@ main().catch((err) => {
   console.error('❌ Error en el despliegue:', err.message);
   process.exit(1);
 });
+
