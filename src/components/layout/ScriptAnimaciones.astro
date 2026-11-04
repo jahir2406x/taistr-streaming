@@ -74,13 +74,11 @@ import { AJUSTES } from '../../editar';
                   if (entry.isIntersecting) {
                     entry.target.classList.add('revelado');
                   } else {
-                    // Siempre reiniciar al salir del viewport (arriba o abajo)
-                    // para que las animaciones vuelvan a ejecutarse cada vez que se scrollea
                     entry.target.classList.remove('revelado');
                   }
                 }
               },
-              { rootMargin: '0px 0px -25px 0px', threshold: 0.06 }
+              { rootMargin: '0px 0px -40px 0px', threshold: 0 }
             );
             for (var j = 0; j < revealEls.length; j++) {
               revealObserver.observe(revealEls[j]);
@@ -91,21 +89,35 @@ import { AJUSTES } from '../../editar';
         if (window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
           var interactiveCards = document.querySelectorAll('.service-card, .tarjeta-plan');
           interactiveCards.forEach(function (card) {
+            var ticking = false;
             card.addEventListener('pointermove', function (e) {
-              var r = card.getBoundingClientRect();
-              card.style.setProperty('--x', Math.round(e.clientX - r.left) + 'px');
-              card.style.setProperty('--y', Math.round(e.clientY - r.top) + 'px');
+              if (!ticking) {
+                requestAnimationFrame(function () {
+                  var r = card.getBoundingClientRect();
+                  card.style.setProperty('--x', Math.round(e.clientX - r.left) + 'px');
+                  card.style.setProperty('--y', Math.round(e.clientY - r.top) + 'px');
+                  ticking = false;
+                });
+                ticking = true;
+              }
             }, { passive: true });
           });
 
           var magBtns = document.querySelectorAll('.btn-magnetic');
           magBtns.forEach(function (mag) {
+            var tickingMag = false;
             mag.addEventListener('pointermove', function (e) {
-              var mr = mag.getBoundingClientRect();
-              var dx = ((e.clientX - (mr.left + mr.width / 2)) / (mr.width / 2)) * 5;
-              var dy = ((e.clientY - (mr.top + mr.height / 2)) / (mr.height / 2)) * 5;
-              mag.style.setProperty('--mag-x', Math.max(-6, Math.min(6, dx)).toFixed(1) + 'px');
-              mag.style.setProperty('--mag-y', Math.max(-6, Math.min(6, dy)).toFixed(1) + 'px');
+              if (!tickingMag) {
+                requestAnimationFrame(function () {
+                  var mr = mag.getBoundingClientRect();
+                  var dx = ((e.clientX - (mr.left + mr.width / 2)) / (mr.width / 2)) * 5;
+                  var dy = ((e.clientY - (mr.top + mr.height / 2)) / (mr.height / 2)) * 5;
+                  mag.style.setProperty('--mag-x', Math.max(-6, Math.min(6, dx)).toFixed(1) + 'px');
+                  mag.style.setProperty('--mag-y', Math.max(-6, Math.min(6, dy)).toFixed(1) + 'px');
+                  tickingMag = false;
+                });
+                tickingMag = true;
+              }
             }, { passive: true });
             mag.addEventListener('pointerleave', function () {
               mag.style.setProperty('--mag-x', '0px');

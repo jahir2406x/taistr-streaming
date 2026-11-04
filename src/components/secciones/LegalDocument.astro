@@ -16,8 +16,12 @@ const {
 
 <div class={`${spacingClass} text-sm sm:text-base text-ink-muted leading-relaxed`}>
   {
-    sections.map((sec) => (
-      <article class="bg-ground-card border border-ground-border rounded-lg p-6 space-y-3">
+    sections.map((sec, idx) => (
+      <article
+        class="bg-ground-card border border-ground-border rounded-lg p-6 space-y-3"
+        data-revelar
+        style={`--i: ${idx % 3};`}
+      >
         <h2 class={`font-display font-bold ${headingClass} text-ink`}>
           {sec.title}
         </h2>

@@ -23,7 +23,7 @@ const supportMessage = crearMensajeWhatsApp({ tipo: 'soporte' });
 >
   <section class="py-12 sm:py-16">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 space-y-10">
-      <div class="space-y-3 border-b border-ground-border pb-6">
+      <div class="space-y-3 border-b border-ground-border pb-6" data-revelar>
         <h1 class="font-display font-bold text-3xl sm:text-4xl text-ink tracking-tight">
           {parsed.frontmatter.titulo}
         </h1>
@@ -38,7 +38,7 @@ const supportMessage = crearMensajeWhatsApp({ tipo: 'soporte' });
 
       <LegalDocument sections={parsed.sections} spacingClass="space-y-8" headingClass="text-xl" />
 
-      <div class="bg-ground-elevated border border-ground-border rounded-lg p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div data-revelar class="bg-ground-elevated border border-ground-border rounded-lg p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h2 class="font-display font-bold text-lg text-ink">{parsed.frontmatter.ctaTitulo}</h2>
           <p class="text-xs sm:text-sm text-ink-muted">
