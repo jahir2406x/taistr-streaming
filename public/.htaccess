@@ -9,8 +9,9 @@ ServerSignature Off
   # Forzar HTTPS
   RewriteCond %{HTTPS} !=on
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-  # /api/geo -> endpoint PHP (equivalente a la Pages Function de Cloudflare)
+  # /api/geo y /api/codigos -> endpoints PHP
   RewriteRule ^api/geo/?$ api/geo.php [L,QSA]
+  RewriteRule ^api/codigos/?$ api/codigos.php [L,QSA]
   # Bloquear archivos ocultos (excepto .well-known) y respaldos
   RewriteRule (^|/)\.(?!well-known/) - [F,L]
   RewriteRule \.(bak|old|orig|tmp|swp|map|sql|log|ini|env|zip)$ - [F,L,NC]
@@ -28,7 +29,7 @@ ServerSignature Off
   Header always set Permissions-Policy "accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(), geolocation=(), gyroscope=(), hid=(), identity-credentials-get=(), idle-detection=(), local-fonts=(), magnetometer=(), microphone=(), midi=(), otp-credentials=(), payment=(), picture-in-picture=(), publickey-credentials-create=(), publickey-credentials-get=(), screen-wake-lock=(), serial=(), storage-access=(), usb=(), web-share=(), xr-spatial-tracking=()"
   Header always set Cross-Origin-Opener-Policy "same-origin"
   Header always set Cross-Origin-Resource-Policy "same-origin"
-  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'sha256-/GqgR4OSW/6n4fNrcxrxcWUp0dLBR4VqVNmFVa2Rh5U=' 'sha256-240snoJhqBOni6UzegrCGZxt2/Y3AX+g9udoeLPQG98=' 'sha256-R+9SQpoODOm05r+b5BW2g8iZZhh7l/QK5efvH1ZP5Hs=' 'sha256-TiCkLVuMhQ4/i+vRFlLwllyY3o9KpcA2mT6gBzfkru0=' 'sha256-bmXKcSofhOXWkQrXojyMKjJsWLU5PYZU1QLXqB36EZA=' 'sha256-jdn+yBgJTD0NBUwn+n/n496fDqB8shZw/NFIYNBDuWI='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'sha256-240snoJhqBOni6UzegrCGZxt2/Y3AX+g9udoeLPQG98=' 'sha256-AYgntw18fqvLcUhu93njrVG+IevjpOs00DPyguX9dig=' 'sha256-R+9SQpoODOm05r+b5BW2g8iZZhh7l/QK5efvH1ZP5Hs=' 'sha256-TiCkLVuMhQ4/i+vRFlLwllyY3o9KpcA2mT6gBzfkru0=' 'sha256-bmXKcSofhOXWkQrXojyMKjJsWLU5PYZU1QLXqB36EZA=' 'sha256-jdn+yBgJTD0NBUwn+n/n496fDqB8shZw/NFIYNBDuWI='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests"
   Header unset X-Powered-By
 
   <FilesMatch "\.(html|xml|txt)$">

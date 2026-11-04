@@ -6,6 +6,7 @@ import { AJUSTES } from '../src/editar/ajustes.ts';
 import { onRequest as geoOnRequest } from '../functions/api/geo.ts';
 import { onRequest as valorarOnRequest } from '../functions/api/valorar.ts';
 import { onRequest as valoracionesOnRequest } from '../functions/api/valoraciones.ts';
+import { onRequest as codigosOnRequest } from '../functions/api/codigos.ts';
 import {
   resolveCountry,
   getCurrencyForCountry,
@@ -1497,6 +1498,59 @@ describe('src/core — lógica multi-país y multi-moneda', () => {
       env: {},
     });
     assert.equal(resSinEnv.status, 503);
+  });
+
+  test('25. Endpoint /api/codigos (seguridad, validación y respuesta de código)', async () => {
+    // a) GET o HEAD no permitido -> 405
+    const resGet = await codigosOnRequest({
+      request: new Request('https://streaming.serviciostai.com/api/codigos', { method: 'GET' }),
+    });
+    assert.equal(resGet.status, 405);
+    assert.equal(resGet.headers.get('Allow'), 'POST, OPTIONS');
+
+    // b) OPTIONS preflight -> 204
+    const resOptions = await codigosOnRequest({
+      request: new Request('https://streaming.serviciostai.com/api/codigos', { method: 'OPTIONS' }),
+    });
+    assert.equal(resOptions.status, 204);
+
+    // c) Body no JSON o inválido -> 400
+    const resBadBody = await codigosOnRequest({
+      request: new Request('https://streaming.serviciostai.com/api/codigos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: 'texto-no-json',
+      }),
+    });
+    assert.equal(resBadBody.status, 400);
+
+    // d) Email inválido -> 422
+    const resBadEmail = await codigosOnRequest({
+      request: new Request('https://streaming.serviciostai.com/api/codigos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: 'correo-sin-arroba' }),
+      }),
+    });
+    assert.equal(resBadEmail.status, 422);
+
+    // e) Email válido -> 200 con código de 4 dígitos, tiempo restante y soporte WhatsApp
+    const resOk = await codigosOnRequest({
+      request: new Request('https://streaming.serviciostai.com/api/codigos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: 'cliente@ejemplo.com' }),
+      }),
+    });
+    assert.equal(resOk.status, 200);
+    const data = await resOk.json();
+    assert.equal(data.status, 'ok');
+    assert.equal(data.email, 'cliente@ejemplo.com');
+    assert.equal(typeof data.code, 'string');
+    assert.equal(data.code.length, 4);
+    assert.ok(/^\d{4}$/.test(data.code));
+    assert.ok(data.expires_in_seconds > 0);
+    assert.ok(data.soporte_whatsapp.telefono);
   });
 });
 

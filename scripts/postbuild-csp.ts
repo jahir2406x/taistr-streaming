@@ -132,8 +132,9 @@ ServerSignature Off
   # Forzar HTTPS
   RewriteCond %{HTTPS} !=on
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-  # /api/geo -> endpoint PHP (equivalente a la Pages Function de Cloudflare)
+  # /api/geo y /api/codigos -> endpoints PHP
   RewriteRule ^api/geo/?$ api/geo.php [L,QSA]
+  RewriteRule ^api/codigos/?$ api/codigos.php [L,QSA]
   # Bloquear archivos ocultos (excepto .well-known) y respaldos
   RewriteRule (^|/)\\.(?!well-known/) - [F,L]
   RewriteRule \\.(bak|old|orig|tmp|swp|map|sql|log|ini|env|zip)$ - [F,L,NC]

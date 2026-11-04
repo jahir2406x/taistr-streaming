@@ -1,0 +1,847 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { MARCA } from '../editar';
+
+const title = `Códigos de Hogar Netflix · Actualizar Hogar y Viaje | ${MARCA.nombre}`;
+const description = `Consulta tu código temporal de 4 dígitos para Netflix o sigue el tutorial interactivo paso a paso para desbloquear tu Smart TV en segundos.`;
+
+const codigosSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'Cómo obtener el código temporal de hogar de Netflix en TaiSTR',
+  description: 'Guía paso a paso para actualizar el hogar de Netflix en tu Smart TV y obtener el código de verificación.',
+  step: [
+    {
+      '@type': 'HowToStep',
+      name: 'Seleccionar dispositivo',
+      text: 'Enciende tu Smart TV o TV Box y abre la aplicación de Netflix.',
+    },
+    {
+      '@type': 'HowToStep',
+      name: 'Solicitar código en pantalla',
+      text: 'Cuando Netflix muestre el aviso de hogar, pulsa en "Estoy de viaje" o "Actualizar hogar con código temporal".',
+    },
+    {
+      '@type': 'HowToStep',
+      name: 'Pulsar Enviar correo',
+      text: 'Confirma la solicitud en tu pantalla pulsando el botón "Enviar correo".',
+    },
+    {
+      '@type': 'HowToStep',
+      name: 'Consultar código en TaiSTR',
+      text: 'Ingresa tu correo aquí, obtén el código de 4 dígitos e ingrésalo en tu televisor.',
+    },
+  ],
+};
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath="/codigos"
+  structuredData={codigosSchema}
+>
+  <div class="relative min-h-[85vh] py-8 sm:py-14 overflow-hidden">
+    <!-- Fondos ambientales sutiles y performantes -->
+    <div class="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-red-600/10 rounded-full blur-3xl" aria-hidden="true"></div>
+    <div class="pointer-events-none absolute top-1/3 -right-20 w-[400px] h-[300px] bg-brand/10 rounded-full blur-3xl" aria-hidden="true"></div>
+
+    <div class="max-w-[var(--container-max)] mx-auto px-4 sm:px-[var(--container-px)] relative z-10">
+      
+      <!-- Migas de pan accesibles -->
+      <nav aria-label="Migas de pan" class="mb-6 text-xs text-ink-muted">
+        <ol class="flex items-center gap-2">
+          <li>
+            <a href="/" class="hover:text-ink transition-colors">Inicio</a>
+          </li>
+          <li aria-hidden="true">/</li>
+          <li class="text-ink font-medium" aria-current="page">Códigos de Hogar</li>
+        </ol>
+      </nav>
+
+      <!-- Encabezado de la página -->
+      <div class="text-center max-w-2xl mx-auto mb-8 sm:mb-10" data-revelar>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-950/60 border border-red-800/60 text-red-300 text-xs font-semibold mb-3.5 shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse" aria-hidden="true"></span>
+          <span>SISTEMA AUTOMÁTICO DE CÓDIGOS DE HOGAR</span>
+        </div>
+        <h1 class="font-display font-bold text-2xl sm:text-4xl text-ink tracking-tight mb-3">
+          Obtén tu código de Netflix al instante
+        </h1>
+        <p class="text-sm sm:text-base text-ink-muted leading-relaxed">
+          Pensado para resolver el aviso <span class="text-ink font-medium">"Esta pantalla no pertenece a tu Hogar"</span> o <span class="text-ink font-medium">"Estoy de viaje"</span> en cuestión de segundos.
+        </p>
+
+        <!-- Conmutador segmentado estilo Apple / Emil Kowalski -->
+        <div class="mt-6 inline-flex p-1 bg-ground-elevated rounded-xl border border-ground-border shadow-inner" role="tablist" aria-label="Modo de consulta">
+          <button
+            id="tab-btn-rapido"
+            type="button"
+            role="tab"
+            aria-selected="true"
+            aria-controls="panel-rapido"
+            class="mode-toggle-btn active flex items-center gap-2 px-4 sm:px-6 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer"
+          >
+            <svg class="w-4 h-4 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            <span>Modo Rápido</span>
+          </button>
+          <button
+            id="tab-btn-tutorial"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="panel-tutorial"
+            class="mode-toggle-btn flex items-center gap-2 px-4 sm:px-6 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer text-ink-muted hover:text-ink"
+          >
+            <svg class="w-4 h-4 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polygon points="10 8 16 12 10 16 10 8"></polygon>
+            </svg>
+            <span>Tutorial Paso a Paso</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- PESTAÑA 1: MODO RÁPIDO                    -->
+      <!-- ========================================== -->
+      <section
+        id="panel-rapido"
+        role="tabpanel"
+        aria-labelledby="tab-btn-rapido"
+        class="max-w-xl mx-auto transition-all duration-300"
+      >
+        <div class="bg-ground-elevated/90 backdrop-blur-md border border-ground-border rounded-2xl p-5 sm:p-7 shadow-xl">
+          <div class="flex items-center gap-3 mb-5 pb-4 border-b border-ground-border">
+            <div class="w-10 h-10 rounded-xl bg-red-600/15 border border-red-500/30 flex items-center justify-center shrink-0">
+              <span class="text-red-500 font-display font-black text-lg">N</span>
+            </div>
+            <div>
+              <h2 class="text-base sm:text-lg font-bold text-ink">Consulta directa por correo</h2>
+              <p class="text-xs text-ink-muted">Pega el correo de tu cuenta para ver el código más reciente.</p>
+            </div>
+          </div>
+
+          <form id="form-consulta-codigos" class="space-y-4" novalidate>
+            <div>
+              <label for="input-email-codigo" class="block text-xs font-semibold text-ink-muted mb-1.5">
+                Correo electrónico de tu cuenta Netflix
+              </label>
+              <div class="relative flex items-center">
+                <span class="absolute left-3.5 text-ink-subtle pointer-events-none" aria-hidden="true">
+                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                </span>
+                <input
+                  id="input-email-codigo"
+                  type="email"
+                  name="email"
+                  required
+                  placeholder="ejemplo@correo.com"
+                  autocomplete="email"
+                  class="w-full bg-ground border border-ground-border focus:border-brand rounded-xl pl-10 pr-24 py-3 text-sm text-ink placeholder:text-ink-subtle outline-none transition-colors"
+                />
+                <button
+                  id="btn-pegar-portapapeles"
+                  type="button"
+                  title="Pegar desde el portapapeles"
+                  class="absolute right-2 px-2.5 py-1.5 rounded-lg bg-ground-card hover:bg-ground-elevated text-xs font-medium text-ink-muted hover:text-ink border border-ground-border transition-colors flex items-center gap-1 cursor-pointer active:scale-95"
+                >
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                  </svg>
+                  <span>Pegar</span>
+                </button>
+              </div>
+              <p id="error-email-feedback" class="hidden text-xs text-red-400 mt-1.5 flex items-center gap-1"></p>
+            </div>
+
+            <button
+              id="btn-submit-codigo"
+              type="submit"
+              class="w-full min-h-[46px] bg-red-600 hover:bg-red-500 text-white font-bold text-sm px-5 py-3 rounded-xl transition-all duration-150 flex items-center justify-center gap-2 shadow-lg shadow-red-950/40 cursor-pointer active:scale-[0.98]"
+            >
+              <svg id="icon-submit-search" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <svg id="spinner-submit-search" class="w-4 h-4 animate-spin hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="12" y1="2" x2="12" y2="6"></line>
+                <line x1="12" y1="18" x2="12" y2="22"></line>
+                <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+                <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+                <line x1="2" y1="12" x2="6" y2="12"></line>
+                <line x1="18" y1="12" x2="22" y2="12"></line>
+                <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+                <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+              </svg>
+              <span id="label-submit-search">Obtener código temporal</span>
+            </button>
+          </form>
+
+          <!-- Contenedor dinámico del resultado -->
+          <div id="resultado-codigo-container" class="hidden mt-6 pt-5 border-t border-ground-border animate-fade-in" aria-live="polite">
+            <div class="p-4 sm:p-5 rounded-xl bg-ground/80 border border-emerald-500/30 relative overflow-hidden">
+              <div class="flex items-center justify-between gap-2 mb-3">
+                <div class="flex items-center gap-1.5 text-xs font-semibold text-emerald-400">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping" aria-hidden="true"></span>
+                  <span>CÓDIGO DISPONIBLE</span>
+                </div>
+                <div id="resultado-expiracion" class="text-[11px] font-mono text-ink-muted bg-ground-card px-2 py-0.5 rounded border border-ground-border">
+                  Expira en: 14:59 min
+                </div>
+              </div>
+
+              <!-- Bloque del código en grande -->
+              <div class="text-center py-4 bg-ground-elevated rounded-xl border border-ground-border my-2">
+                <span class="text-[11px] uppercase tracking-wider text-ink-muted block mb-1">Código de 4 dígitos</span>
+                <div id="valor-codigo" class="font-mono font-black text-3xl sm:text-4xl text-ink tracking-[0.35em] pl-[0.35em]">
+                  ----
+                </div>
+              </div>
+
+              <!-- Botón Copiar -->
+              <div class="flex flex-col sm:flex-row gap-2 mt-3">
+                <button
+                  id="btn-copiar-codigo"
+                  type="button"
+                  class="flex-1 min-h-[40px] bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-lg flex items-center justify-center gap-2 transition-colors cursor-pointer active:scale-95"
+                >
+                  <svg id="icon-copiar-svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span id="label-copiar-btn">Copiar código</span>
+                </button>
+
+                <a
+                  id="enlace-directo-btn"
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="min-h-[40px] bg-ground-card hover:bg-ground text-ink text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-lg border border-ground-border flex items-center justify-center gap-1.5 transition-colors"
+                >
+                  <span>Abrir enlace directo</span>
+                  <svg class="w-3.5 h-3.5 text-ink-subtle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                  </svg>
+                </a>
+              </div>
+
+              <!-- Instrucción breve -->
+              <p class="text-[11px] text-ink-muted text-center mt-3">
+                💡 Ingresa este código en tu televisor. Si Netflix te pidió revisar tu correo, pulsa <span class="text-ink font-semibold">"Abrir enlace directo"</span>.
+              </p>
+            </div>
+          </div>
+
+          <!-- Tarjeta de soporte WhatsApp siempre disponible -->
+          <div class="mt-5 p-3.5 rounded-xl bg-ground-card/60 border border-ground-border flex items-center justify-between gap-3">
+            <div class="text-xs">
+              <span class="font-semibold text-ink block">¿No recibes tu código o tienes problemas?</span>
+              <span class="text-ink-muted">Nuestro equipo de soporte te atiende de inmediato por WhatsApp.</span>
+            </div>
+            <a
+              id="btn-whatsapp-soporte-codigos"
+              href="https://wa.me/51921319266?text=Hola%20TaiSTR,%20necesito%20ayuda%20con%20el%20c%C3%B3digo%20de%20hogar%20de%20Netflix"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="shrink-0 bg-brand-whatsapp hover:bg-brand-whatsappHover text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer"
+            >
+              <span class="w-1.5 h-1.5 rounded-full bg-white shrink-0"></span>
+              <span>Soporte</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- PESTAÑA 2: TUTORIAL PASO A PASO            -->
+      <!-- ========================================== -->
+      <section
+        id="panel-tutorial"
+        role="tabpanel"
+        aria-labelledby="tab-btn-tutorial"
+        class="hidden max-w-2xl mx-auto transition-all duration-300"
+      >
+        <div class="bg-ground-elevated/90 backdrop-blur-md border border-ground-border rounded-2xl p-5 sm:p-7 shadow-xl">
+          
+          <!-- Stepper de 4 pasos interactivo -->
+          <div class="mb-6 pb-5 border-b border-ground-border">
+            <div class="flex items-center justify-between max-w-md mx-auto relative">
+              <!-- Barra de progreso de fondo -->
+              <div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-ground-border rounded-full" aria-hidden="true"></div>
+              <!-- Barra de progreso activa -->
+              <div id="stepper-progress-bar" class="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-brand rounded-full transition-all duration-300 w-[10%]" aria-hidden="true"></div>
+
+              <!-- Puntos del stepper -->
+              <button type="button" data-step-target="1" class="step-indicator active relative z-10 w-8 h-8 rounded-full bg-brand text-ground text-xs font-bold flex items-center justify-center transition-all cursor-pointer">
+                1
+              </button>
+              <button type="button" data-step-target="2" class="step-indicator relative z-10 w-8 h-8 rounded-full bg-ground border border-ground-border text-ink-muted text-xs font-bold flex items-center justify-center transition-all cursor-pointer">
+                2
+              </button>
+              <button type="button" data-step-target="3" class="step-indicator relative z-10 w-8 h-8 rounded-full bg-ground border border-ground-border text-ink-muted text-xs font-bold flex items-center justify-center transition-all cursor-pointer">
+                3
+              </button>
+              <button type="button" data-step-target="4" class="step-indicator relative z-10 w-8 h-8 rounded-full bg-ground border border-ground-border text-ink-muted text-xs font-bold flex items-center justify-center transition-all cursor-pointer">
+                4
+              </button>
+            </div>
+            
+            <div class="flex justify-between text-[11px] font-medium text-ink-muted mt-2 max-w-md mx-auto px-1">
+              <span>Dispositivo</span>
+              <span>Aviso Hogar</span>
+              <span>Enviar Correo</span>
+              <span>Ver Código</span>
+            </div>
+          </div>
+
+          <!-- CONTENIDO DEL PASO 1 -->
+          <div id="step-content-1" class="step-panel space-y-4">
+            <div class="text-center max-w-md mx-auto">
+              <span class="text-xs uppercase font-bold text-brand tracking-wider">Paso 1 de 4</span>
+              <h3 class="text-lg font-bold text-ink mt-1">¿En qué dispositivo estás viendo Netflix?</h3>
+              <p class="text-xs text-ink-muted mt-1 leading-relaxed">
+                El aviso de "Hogar con código temporal" aparece principalmente en Smart TVs y reproductores de sala.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+              <div class="device-card p-4 rounded-xl bg-ground border-2 border-brand/60 hover:border-brand transition-colors cursor-pointer text-left">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-lg bg-ground-card flex items-center justify-center text-ink shrink-0">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect>
+                      <polyline points="17 2 12 7 7 2"></polyline>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="text-sm font-bold text-ink">Smart TV / TV Box</h4>
+                    <p class="text-[11px] text-ink-muted">Samsung, LG, Fire TV, Chromecast, Roku, etc.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="device-card p-4 rounded-xl bg-ground border border-ground-border hover:border-ground-hover transition-colors cursor-pointer text-left opacity-80">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-lg bg-ground-card flex items-center justify-center text-ink shrink-0">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                      <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 class="text-sm font-bold text-ink">Celular o Tablet</h4>
+                    <p class="text-[11px] text-ink-muted">Android, iPhone, iPad o laptop.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-3 flex justify-end">
+              <button type="button" data-step-next="2" class="px-5 py-2.5 rounded-xl bg-brand text-ground text-xs sm:text-sm font-bold flex items-center gap-2 cursor-pointer hover:bg-brand-hover active:scale-95 transition-all">
+                <span>Continuar</span>
+                <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- CONTENIDO DEL PASO 2 -->
+          <div id="step-content-2" class="step-panel hidden space-y-4">
+            <div class="text-center max-w-md mx-auto">
+              <span class="text-xs uppercase font-bold text-brand tracking-wider">Paso 2 de 4</span>
+              <h3 class="text-lg font-bold text-ink mt-1">Identifica el aviso en tu pantalla</h3>
+              <p class="text-xs text-ink-muted mt-1 leading-relaxed">
+                Netflix mostrará una pantalla oscura avisando que el dispositivo no pertenece al hogar.
+              </p>
+            </div>
+
+            <!-- Maqueta visual interactiva de la pantalla de TV de Netflix -->
+            <div class="p-4 sm:p-6 rounded-xl bg-black border border-neutral-800 shadow-2xl relative overflow-hidden text-neutral-200">
+              <div class="flex items-center justify-between mb-4 pb-2 border-b border-neutral-800">
+                <span class="text-red-600 font-display font-black text-xl tracking-wider">NETFLIX</span>
+                <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-neutral-900 text-neutral-400">Pantalla de tu TV</span>
+              </div>
+              <h4 class="text-base sm:text-lg font-bold text-white mb-1.5">
+                Esta pantalla no pertenece a tu Hogar con código temporal
+              </h4>
+              <p class="text-xs text-neutral-400 leading-relaxed mb-4">
+                Una cuenta de Netflix es para las personas que viven en la misma casa. Si estás fuera de casa o de viaje, puedes actualizar tu acceso temporal.
+              </p>
+              
+              <div class="flex flex-col sm:flex-row gap-2">
+                <div class="px-4 py-2 rounded bg-red-600 text-white font-bold text-xs text-center border-2 border-white shadow-lg animate-pulse">
+                  👉 Estoy de viaje / Actualizar hogar
+                </div>
+                <div class="px-4 py-2 rounded bg-neutral-800 text-neutral-400 text-xs text-center">
+                  Cerrar Netflix
+                </div>
+              </div>
+            </div>
+
+            <p class="text-xs text-ink-muted text-center">
+              💡 Con tu control remoto, pulsa sobre la opción <span class="text-ink font-bold">"Estoy de viaje"</span> o <span class="text-ink font-bold">"Actualizar hogar con código temporal"</span>.
+            </p>
+
+            <div class="pt-3 flex justify-between">
+              <button type="button" data-step-prev="1" class="px-4 py-2 rounded-xl bg-ground-card text-ink-muted hover:text-ink text-xs font-semibold cursor-pointer transition-colors">
+                ← Anterior
+              </button>
+              <button type="button" data-step-next="3" class="px-5 py-2.5 rounded-xl bg-brand text-ground text-xs sm:text-sm font-bold flex items-center gap-2 cursor-pointer hover:bg-brand-hover active:scale-95 transition-all">
+                <span>Continuar</span>
+                <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- CONTENIDO DEL PASO 3 -->
+          <div id="step-content-3" class="step-panel hidden space-y-4">
+            <div class="text-center max-w-md mx-auto">
+              <span class="text-xs uppercase font-bold text-brand tracking-wider">Paso 3 de 4</span>
+              <h3 class="text-lg font-bold text-ink mt-1">Pulsa en "Enviar correo"</h3>
+              <p class="text-xs text-ink-muted mt-1 leading-relaxed">
+                Al seleccionar la opción, Netflix te preguntará cómo deseas recibir el código de verificación.
+              </p>
+            </div>
+
+            <!-- Maqueta de confirmación de envío -->
+            <div class="p-4 sm:p-6 rounded-xl bg-black border border-neutral-800 text-neutral-200">
+              <div class="flex items-center gap-2 text-xs text-neutral-400 mb-3">
+                <svg class="w-4 h-4 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                </svg>
+                <span>Te enviaremos un código para verificar que eres tú</span>
+              </div>
+              <p class="text-xs text-neutral-300 leading-relaxed mb-4">
+                Se enviará un código numérico de 4 dígitos o un enlace de confirmación al correo registrado.
+              </p>
+              <div class="inline-block px-5 py-2.5 rounded bg-white text-black font-bold text-xs shadow-md border-2 border-red-500">
+                ✓ Pulsar: "Enviar correo"
+              </div>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-amber-950/30 border border-amber-800/40 text-amber-200 text-xs flex items-start gap-2.5">
+              <span class="text-base leading-none">⚠️</span>
+              <span><strong>Importante:</strong> El código dura exactamente 15 minutos. Una vez pulsado "Enviar correo", consúltalo inmediatamente en el siguiente paso.</span>
+            </div>
+
+            <div class="pt-3 flex justify-between">
+              <button type="button" data-step-prev="2" class="px-4 py-2 rounded-xl bg-ground-card text-ink-muted hover:text-ink text-xs font-semibold cursor-pointer transition-colors">
+                ← Anterior
+              </button>
+              <button type="button" data-step-next="4" class="px-5 py-2.5 rounded-xl bg-brand text-ground text-xs sm:text-sm font-bold flex items-center gap-2 cursor-pointer hover:bg-brand-hover active:scale-95 transition-all">
+                <span>Ir al paso final: Obtener código</span>
+                <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- CONTENIDO DEL PASO 4 -->
+          <div id="step-content-4" class="step-panel hidden space-y-4">
+            <div class="text-center max-w-md mx-auto">
+              <span class="text-xs uppercase font-bold text-emerald-400 tracking-wider">Paso 4 de 4</span>
+              <h3 class="text-lg font-bold text-ink mt-1">¡Listo! Obtén tu código de 4 dígitos</h3>
+              <p class="text-xs text-ink-muted mt-1 leading-relaxed">
+                Ingresa aquí el correo electrónico de tu cuenta y pulsa consultar.
+              </p>
+            </div>
+
+            <!-- Botón de acción para cambiar a modo rápido con animación directa -->
+            <div class="p-5 rounded-xl bg-ground border border-ground-border text-center space-y-3">
+              <p class="text-xs text-ink-muted">
+                Para tu comodidad, la consulta directa está lista en el <span class="text-ink font-semibold">Modo Rápido</span>.
+              </p>
+              <button
+                id="btn-saltar-a-rapido"
+                type="button"
+                class="w-full min-h-[44px] bg-red-600 hover:bg-red-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-red-950/40"
+              >
+                <span>Consultar código ahora</span>
+                <span aria-hidden="true">⚡</span>
+              </button>
+            </div>
+
+            <div class="pt-2 flex justify-start">
+              <button type="button" data-step-prev="3" class="px-4 py-2 rounded-xl bg-ground-card text-ink-muted hover:text-ink text-xs font-semibold cursor-pointer transition-colors">
+                ← Volver al paso 3
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- PREGUNTAS FRECUENTES SOBRE CÓDIGOS         -->
+      <!-- ========================================== -->
+      <section class="max-w-2xl mx-auto mt-12 sm:mt-16" data-revelar>
+        <div class="text-center mb-6">
+          <h2 class="text-lg sm:text-xl font-bold text-ink">Preguntas frecuentes sobre códigos de hogar</h2>
+          <p class="text-xs text-ink-muted mt-1">Todo lo que necesitas saber sobre el funcionamiento de Netflix en Smart TV.</p>
+        </div>
+
+        <div class="space-y-3">
+          <details class="group bg-ground-elevated rounded-xl border border-ground-border p-4 [&_summary::-webkit-details-marker]:hidden">
+            <summary class="flex items-center justify-between cursor-pointer font-semibold text-xs sm:text-sm text-ink group-open:text-brand">
+              <span>¿Por qué Netflix me pide este código de hogar?</span>
+              <span class="text-xs text-ink-muted transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <p class="text-xs text-ink-muted mt-2.5 leading-relaxed pt-2 border-t border-ground-border">
+              Netflix implementó una verificación geográfica para dispositivos conectados a televisores (Smart TV y consolas). Al solicitar el código temporal de viaje, Netflix autoriza ese televisor para reproducir contenido sin ninguna restricción.
+            </p>
+          </details>
+
+          <details class="group bg-ground-elevated rounded-xl border border-ground-border p-4 [&_summary::-webkit-details-marker]:hidden">
+            <summary class="flex items-center justify-between cursor-pointer font-semibold text-xs sm:text-sm text-ink group-open:text-brand">
+              <span>¿Cuánto tiempo dura el código una vez generado?</span>
+              <span class="text-xs text-ink-muted transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <p class="text-xs text-ink-muted mt-2.5 leading-relaxed pt-2 border-t border-ground-border">
+              El código numérico tiene una vigencia de 15 minutos por motivos de seguridad de Netflix. Una vez ingresado en tu TV, el televisor queda autorizado para continuar disfrutando de tu cuenta.
+            </p>
+          </details>
+
+          <details class="group bg-ground-elevated rounded-xl border border-ground-border p-4 [&_summary::-webkit-details-marker]:hidden">
+            <summary class="flex items-center justify-between cursor-pointer font-semibold text-xs sm:text-sm text-ink group-open:text-brand">
+              <span>¿Puedo pedir el código las veces que sea necesario?</span>
+              <span class="text-xs text-ink-muted transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <p class="text-xs text-ink-muted mt-2.5 leading-relaxed pt-2 border-t border-ground-border">
+              Sí. Si cambias de red WiFi, viajas o Netflix vuelve a mostrar el aviso, puedes volver a esta misma página y generar tu código de confirmación las veces que haga falta.
+            </p>
+          </details>
+
+          <details class="group bg-ground-elevated rounded-xl border border-ground-border p-4 [&_summary::-webkit-details-marker]:hidden">
+            <summary class="flex items-center justify-between cursor-pointer font-semibold text-xs sm:text-sm text-ink group-open:text-brand">
+              <span>¿Qué hago si el código sale como inválido o expiró?</span>
+              <span class="text-xs text-ink-muted transition-transform group-open:rotate-180">▼</span>
+            </summary>
+            <p class="text-xs text-ink-muted mt-2.5 leading-relaxed pt-2 border-t border-ground-border">
+              En tu televisor, pulsa nuevamente en "Enviar correo de nuevo" para que Netflix genere una solicitud fresca, y luego vuelve a presionar "Obtener código" en esta página. Si persiste, usa el botón de soporte de WhatsApp para que un asesor te asista directamente.
+            </p>
+          </details>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- Toast de notificación flotante para copiado/pegado -->
+  <div
+    id="toast-notificacion"
+    role="status"
+    aria-live="polite"
+    class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-200 bg-ground-elevated border border-brand/40 shadow-2xl px-4 py-2.5 rounded-xl text-xs font-semibold text-ink flex items-center gap-2"
+  >
+    <span class="w-2 h-2 rounded-full bg-emerald-400" aria-hidden="true"></span>
+    <span id="toast-notificacion-texto">Copiado al portapapeles</span>
+  </div>
+</BaseLayout>
+
+<style>
+  .mode-toggle-btn.active {
+    background: var(--brand);
+    color: var(--ground);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .step-indicator.active {
+    box-shadow: 0 0 0 3px rgba(var(--brand-rgb, 229, 9, 20), 0.35);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+</style>
+
+<script>
+  (function () {
+    // 1. Conmutador entre Modo Rápido y Modo Tutorial
+    const btnRapido = document.getElementById('tab-btn-rapido');
+    const btnTutorial = document.getElementById('tab-btn-tutorial');
+    const panelRapido = document.getElementById('panel-rapido');
+    const panelTutorial = document.getElementById('panel-tutorial');
+    const btnSaltarARapido = document.getElementById('btn-saltar-a-rapido');
+
+    function activarModo(modo: 'rapido' | 'tutorial') {
+      if (modo === 'rapido') {
+        btnRapido?.classList.add('active');
+        btnRapido?.classList.remove('text-ink-muted');
+        btnRapido?.setAttribute('aria-selected', 'true');
+
+        btnTutorial?.classList.remove('active');
+        btnTutorial?.classList.add('text-ink-muted');
+        btnTutorial?.setAttribute('aria-selected', 'false');
+
+        panelRapido?.classList.remove('hidden');
+        panelTutorial?.classList.add('hidden');
+      } else {
+        btnTutorial?.classList.add('active');
+        btnTutorial?.classList.remove('text-ink-muted');
+        btnTutorial?.setAttribute('aria-selected', 'true');
+
+        btnRapido?.classList.remove('active');
+        btnRapido?.classList.add('text-ink-muted');
+        btnRapido?.setAttribute('aria-selected', 'false');
+
+        panelTutorial?.classList.remove('hidden');
+        panelRapido?.classList.add('hidden');
+      }
+    }
+
+    btnRapido?.addEventListener('click', () => activarModo('rapido'));
+    btnTutorial?.addEventListener('click', () => activarModo('tutorial'));
+    btnSaltarARapido?.addEventListener('click', () => {
+      activarModo('rapido');
+      const input = document.getElementById('input-email-codigo') as HTMLInputElement | null;
+      if (input) {
+        input.focus();
+        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+
+    // 2. Control del Stepper en Modo Tutorial
+    const steps = [1, 2, 3, 4];
+    const progressBar = document.getElementById('stepper-progress-bar');
+    const stepIndicators = document.querySelectorAll<HTMLButtonElement>('.step-indicator');
+    const stepPanels = document.querySelectorAll<HTMLElement>('.step-panel');
+
+    function irAlPaso(num: number) {
+      if (num < 1 || num > 4) return;
+      
+      // Actualizar ancho de barra de progreso
+      if (progressBar) {
+        const widths = ['10%', '37%', '68%', '100%'];
+        progressBar.style.width = widths[num - 1];
+      }
+
+      // Actualizar estilos de indicadores
+      stepIndicators.forEach((ind) => {
+        const target = Number(ind.getAttribute('data-step-target'));
+        if (target === num) {
+          ind.className = 'step-indicator active relative z-10 w-8 h-8 rounded-full bg-brand text-ground text-xs font-bold flex items-center justify-center transition-all cursor-pointer';
+        } else if (target < num) {
+          ind.className = 'step-indicator relative z-10 w-8 h-8 rounded-full bg-emerald-600 text-white text-xs font-bold flex items-center justify-center transition-all cursor-pointer';
+        } else {
+          ind.className = 'step-indicator relative z-10 w-8 h-8 rounded-full bg-ground border border-ground-border text-ink-muted text-xs font-bold flex items-center justify-center transition-all cursor-pointer';
+        }
+      });
+
+      // Mostrar panel activo
+      stepPanels.forEach((panel) => {
+        if (panel.id === `step-content-${num}`) {
+          panel.classList.remove('hidden');
+          panel.classList.add('animate-fade-in');
+        } else {
+          panel.classList.add('hidden');
+        }
+      });
+    }
+
+    stepIndicators.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const target = Number(btn.getAttribute('data-step-target'));
+        if (target) irAlPaso(target);
+      });
+    });
+
+    document.querySelectorAll<HTMLButtonElement>('[data-step-next]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const next = Number(btn.getAttribute('data-step-next'));
+        if (next) irAlPaso(next);
+      });
+    });
+
+    document.querySelectorAll<HTMLButtonElement>('[data-step-prev]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const prev = Number(btn.getAttribute('data-step-prev'));
+        if (prev) irAlPaso(prev);
+      });
+    });
+
+    // 3. Sistema de Notificación Toast
+    const toast = document.getElementById('toast-notificacion');
+    const toastTexto = document.getElementById('toast-notificacion-texto');
+    let toastTimeout: ReturnType<typeof setTimeout> | null = null;
+
+    function mostrarToast(texto: string) {
+      if (!toast || !toastTexto) return;
+      toastTexto.textContent = texto;
+      toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+      }, 2400);
+    }
+
+    // 4. Botón "Pegar" desde Portapapeles
+    const btnPegar = document.getElementById('btn-pegar-portapapeles');
+    const inputEmail = document.getElementById('input-email-codigo') as HTMLInputElement | null;
+    const errorFeedback = document.getElementById('error-email-feedback');
+
+    btnPegar?.addEventListener('click', async () => {
+      try {
+        if (!navigator.clipboard?.readText) {
+          mostrarToast('Tu navegador no permite lectura automática. Pega manualmente.');
+          inputEmail?.focus();
+          return;
+        }
+        const text = await navigator.clipboard.readText();
+        if (text && inputEmail) {
+          inputEmail.value = text.trim();
+          mostrarToast('✓ Correo pegado del portapapeles');
+          if (errorFeedback) errorFeedback.classList.add('hidden');
+        }
+      } catch (_) {
+        mostrarToast('Permiso de portapapeles denegado. Pega manualmente.');
+        inputEmail?.focus();
+      }
+    });
+
+    // 5. Envío del Formulario y Consulta a /api/codigos
+    const formConsulta = document.getElementById('form-consulta-codigos');
+    const btnSubmit = document.getElementById('btn-submit-codigo');
+    const iconSearch = document.getElementById('icon-submit-search');
+    const spinnerSearch = document.getElementById('spinner-submit-search');
+    const labelSubmit = document.getElementById('label-submit-search');
+    const resultContainer = document.getElementById('resultado-codigo-container');
+    const valorCodigo = document.getElementById('valor-codigo');
+    const resultadoExpiracion = document.getElementById('resultado-expiracion');
+    const enlaceDirectoBtn = document.getElementById('enlace-directo-btn') as HTMLAnchorElement | null;
+    const btnCopiar = document.getElementById('btn-copiar-codigo');
+    const labelCopiar = document.getElementById('label-copiar-btn');
+    const btnWhatsapp = document.getElementById('btn-whatsapp-soporte-codigos') as HTMLAnchorElement | null;
+
+    let countdownInterval: ReturnType<typeof setInterval> | null = null;
+
+    formConsulta?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!inputEmail) return;
+
+      const email = inputEmail.value.trim().toLowerCase();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!email || !emailRegex.test(email)) {
+        if (errorFeedback) {
+          errorFeedback.textContent = 'Ingresa un correo electrónico con formato válido (ej. usuario@gmail.com).';
+          errorFeedback.classList.remove('hidden');
+        }
+        inputEmail.focus();
+        return;
+      }
+
+      if (errorFeedback) errorFeedback.classList.add('hidden');
+
+      // Estado cargando
+      if (btnSubmit) btnSubmit.setAttribute('disabled', 'true');
+      iconSearch?.classList.add('hidden');
+      spinnerSearch?.classList.remove('hidden');
+      if (labelSubmit) labelSubmit.textContent = 'Consultando código...';
+
+      try {
+        const response = await fetch('/api/codigos', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.status === 'ok') {
+          // Mostrar código
+          if (valorCodigo) valorCodigo.textContent = data.code;
+          if (enlaceDirectoBtn && data.enlace_directo) {
+            enlaceDirectoBtn.href = data.enlace_directo;
+          }
+
+          // Iniciar temporizador regresivo
+          if (countdownInterval) clearInterval(countdownInterval);
+          let timeLeft = Number(data.expires_in_seconds) || 900;
+
+          const actualizarContador = () => {
+            const m = Math.floor(timeLeft / 60);
+            const s = timeLeft % 60;
+            if (resultadoExpiracion) {
+              resultadoExpiracion.textContent = `Expira en: ${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')} min`;
+            }
+            if (timeLeft <= 0) {
+              if (countdownInterval) clearInterval(countdownInterval);
+              if (resultadoExpiracion) resultadoExpiracion.textContent = 'Código expirado. Genera uno nuevo.';
+            }
+            timeLeft--;
+          };
+          actualizarContador();
+          countdownInterval = setInterval(actualizarContador, 1000);
+
+          // Actualizar botón de soporte con email prellenado
+          if (btnWhatsapp) {
+            btnWhatsapp.href = `https://wa.me/51921319266?text=${encodeURIComponent(
+              `Hola TaiSTR, estoy consultando el código de hogar para la cuenta: ${email}. ¿Me ayudan a verificarlo por favor?`
+            )}`;
+          }
+
+          resultContainer?.classList.remove('hidden');
+          resultContainer?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          mostrarToast('✓ Código temporal encontrado');
+        } else {
+          const mensaje = data.mensaje || 'No se pudo obtener el código en este momento.';
+          if (errorFeedback) {
+            errorFeedback.textContent = mensaje;
+            errorFeedback.classList.remove('hidden');
+          }
+          mostrarToast(mensaje);
+        }
+      } catch (err) {
+        if (errorFeedback) {
+          errorFeedback.textContent = 'Error de conexión. Verifica tu internet o contacta a soporte.';
+          errorFeedback.classList.remove('hidden');
+        }
+        mostrarToast('Error de conexión con el servidor.');
+      } finally {
+        if (btnSubmit) btnSubmit.removeAttribute('disabled');
+        iconSearch?.classList.remove('hidden');
+        spinnerSearch?.classList.add('hidden');
+        if (labelSubmit) labelSubmit.textContent = 'Obtener código temporal';
+      }
+    });
+
+    // 6. Copiado de Código al Portapapeles
+    btnCopiar?.addEventListener('click', async () => {
+      const codigoTexto = valorCodigo?.textContent?.trim();
+      if (!codigoTexto || codigoTexto === '----') return;
+
+      try {
+        await navigator.clipboard.writeText(codigoTexto);
+        if (labelCopiar) labelCopiar.textContent = '¡Copiado!';
+        mostrarToast(`✓ Código ${codigoTexto} copiado`);
+        setTimeout(() => {
+          if (labelCopiar) labelCopiar.textContent = 'Copiar código';
+        }, 2000);
+      } catch (_) {
+        mostrarToast(`Código: ${codigoTexto}`);
+      }
+    });
+  })();
+</script>

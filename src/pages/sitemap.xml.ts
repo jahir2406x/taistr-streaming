@@ -29,6 +29,12 @@ export const GET: APIRoute = () => {
       priority: '0.7',
     },
     {
+      path: '/codigos',
+      lastmod: obtenerFechaArchivo('public/api/codigos.php'),
+      changefreq: 'daily',
+      priority: '0.8',
+    },
+    {
       path: '/privacidad',
       lastmod: obtenerFechaArchivo('src/editar/textos/privacidad.md'),
       changefreq: 'weekly',

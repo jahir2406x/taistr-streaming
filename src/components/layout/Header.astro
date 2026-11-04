@@ -23,9 +23,13 @@ const nav = TEXTOS_BOTONES.navegacion;
       <span class="tracking-wide">{MARCA.nombre}</span>
     </a>
 
-    <nav id="site-nav" aria-label="Navegación principal" class="hidden md:flex items-center gap-7 text-sm font-medium text-ink-muted relative py-1.5">
+    <nav id="site-nav" aria-label="Navegación principal" class="hidden md:flex items-center gap-6 text-sm font-medium text-ink-muted relative py-1.5">
       <a href="/#catalogo" data-nav-target="catalogo" class="nav-link hover:text-ink transition-colors">{nav.catalogo}</a>
       <a href="/#como-funciona" data-nav-target="como-funciona" class="nav-link hover:text-ink transition-colors">{nav.comoFunciona}</a>
+      <a href="/codigos" data-nav-target="codigos" class="nav-link hover:text-ink transition-colors inline-flex items-center gap-1.5">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true"></span>
+        <span>{nav.codigosCorto || 'Códigos'}</span>
+      </a>
       <a href="/garantia" data-nav-target="legal" class="nav-link hover:text-ink transition-colors">{nav.garantia}</a>
       <a href="/#preguntas" data-nav-target="preguntas" class="nav-link hover:text-ink transition-colors">{nav.preguntas}</a>
       <span id="nav-indicator" class="nav-sliding-indicator" aria-hidden="true"></span>
@@ -104,6 +108,13 @@ const nav = TEXTOS_BOTONES.navegacion;
       <a href="/#como-funciona" data-nav-target="como-funciona" class="nav-link-mobile flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium text-ink-muted hover:text-ink hover:bg-ground-card transition-colors">
         <span>{nav.comoFunciona}</span>
         <span class="text-xs text-ink-subtle" aria-hidden="true">→</span>
+      </a>
+      <a href="/codigos" data-nav-target="codigos" class="nav-link-mobile flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium text-ink-muted hover:text-ink hover:bg-ground-card transition-colors">
+        <span class="inline-flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 shrink-0" aria-hidden="true"></span>
+          <span>{nav.codigos || 'Códigos de Hogar'}</span>
+        </span>
+        <span class="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-emerald-950/80 text-emerald-300 border border-emerald-800/60" aria-hidden="true">Auto</span>
       </a>
       <a href="/garantia" data-nav-target="legal" class="nav-link-mobile flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium text-ink-muted hover:text-ink hover:bg-ground-card transition-colors">
         <span>{nav.garantia}</span>
