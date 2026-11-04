@@ -1,17 +1,21 @@
 <?php
 /**
  * POST /api/codigos
- * Endpoint seguro para consulta de códigos temporales de hogar / viaje (Netflix).
- *
+ * Endpoint puente en tiempo real con el proveedor oficial (https://codigos-ya.lat/api/consulta).
+ * 
  * Características:
- *   - Método exclusivo: POST (OPTIONS para preflight si aplica).
- *   - Rate limiting: máx. 10 peticiones/minuto por IP (almacenado con SHA-256 + sal en temp).
- *   - Sanitización rigurosa de email (sin CRLF, RFC 5322 compatible).
- *   - Generación determinista temporal por ventana de 15 minutos:
- *     Si el cliente consulta varias veces el mismo correo dentro de su ventana de validez,
- *     obtiene exactamente el mismo código y el tiempo restante exacto.
- *   - Soporte futuro: si existe un archivo local de extracción IMAP o credenciales de proveedor,
- *     se enlaza automáticamente sin romper la respuesta.
+ *   - Método exclusivo: POST (OPTIONS para preflight).
+ *   - Rate limiting local: máx. 15 peticiones/minuto por IP.
+ *   - Sanitización rigurosa de email (RFC 5322 compatible).
+ *   - Proxy saliente en tiempo real a https://codigos-ya.lat/api/consulta mediante cURL y fallback a stream_context.
+ *   - Transmisión fiel de estados del proveedor:
+ *       • ok: enlace/código real encontrado en Telegram/Netflix
+ *       • not_found: sin resultados (no se ha solicitado código aún)
+ *       • not_owned: correo no pertenece al usuario
+ *       • home_update: intento de cambiar hogar principal
+ *       • rate: límite de peticiones del proveedor
+ *       • error: falla o timeout
+ *   - Inyección de enlace de soporte de emergencia por WhatsApp.
  */
 
 declare(strict_types=1);
@@ -36,7 +40,10 @@ if ($method === 'OPTIONS') {
 if ($method !== 'POST') {
     http_response_code(405);
     header('Allow: POST, OPTIONS');
-    echo json_encode(['status' => 'error', 'mensaje' => 'Método no permitido. Solo se acepta POST.'], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Método no permitido. Solo se acepta POST.'
+    ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     exit;
 }
 
@@ -65,7 +72,7 @@ $clientIp = codigos_obtener_ip();
 $ipHash = hash('sha256', 'taistr_codigos_' . $clientIp . date('Y-m-d'));
 $rateFile = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'taistr_rl_' . substr($ipHash, 0, 16) . '.json';
 
-$rateLimitMax = 12; // máx 12 consultas por minuto
+$rateLimitMax = 15; // máx 15 consultas por minuto
 $currentTime = time();
 $requests = [];
 
@@ -74,7 +81,6 @@ if (file_exists($rateFile)) {
     if ($raw) {
         $data = json_decode($raw, true);
         if (is_array($data)) {
-            // Filtrar las peticiones ocurridas en los últimos 60 segundos
             $requests = array_filter($data, function ($t) use ($currentTime) {
                 return is_int($t) && ($currentTime - $t) < 60;
             });
@@ -85,8 +91,8 @@ if (file_exists($rateFile)) {
 if (count($requests) >= $rateLimitMax) {
     http_response_code(429);
     echo json_encode([
-        'status' => 'rate_limited',
-        'mensaje' => 'Demasiadas consultas en poco tiempo. Por favor espera un minuto antes de volver a intentar.'
+        'status' => 'rate',
+        'message' => 'Demasiadas consultas en poco tiempo. Por favor espera un momento e inténtalo de nuevo.'
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     exit;
 }
@@ -100,7 +106,7 @@ if (!$inputRaw || strlen($inputRaw) > 2048) {
     http_response_code(400);
     echo json_encode([
         'status' => 'error',
-        'mensaje' => 'Petición inválida o cuerpo vacío.'
+        'message' => 'Petición inválida o cuerpo vacío.'
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     exit;
 }
@@ -110,7 +116,7 @@ if (!is_array($payload) || empty($payload['email'])) {
     http_response_code(400);
     echo json_encode([
         'status' => 'error',
-        'mensaje' => 'Debes proporcionar un correo electrónico válido.'
+        'message' => 'Debes proporcionar un correo electrónico válido.'
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     exit;
 }
@@ -123,55 +129,76 @@ if (strlen($email) > 120 || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     http_response_code(422);
     echo json_encode([
         'status' => 'error',
-        'mensaje' => 'El formato del correo electrónico ingresado no es válido. Verifica que no tenga espacios ni errores tipográficos.'
+        'message' => 'El formato del correo electrónico no es válido. Verifica que no tenga espacios ni errores.'
     ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     exit;
 }
 
-// 3. Generación determinista del código temporal (ventana de 15 minutos = 900 segundos)
-// Esto asegura que durante la vigencia de 15 minutos, la consulta del mismo correo
-// devuelva consistentemente el mismo código y un temporizador congruente.
-$windowLength = 900; // 15 minutos
-$currentWindowIndex = (int)floor($currentTime / $windowLength);
-$windowStart = $currentWindowIndex * $windowLength;
-$elapsedSeconds = $currentTime - $windowStart;
-$remainingSeconds = max(60, $windowLength - $elapsedSeconds);
+// 3. Consulta en tiempo real al backend del proveedor (FastAPI / Telegram @ViltrumBOT)
+$upstreamUrl = 'https://codigos-ya.lat/api/consulta';
+$upstreamPayload = json_encode(['email' => $email]);
+$upstreamResponse = null;
+$httpCode = 0;
 
-// Semilla determinista: hash del correo + ventana actual + sal secreta del servidor
-$salt = 'taistr_hogar_salt_2026_';
-$hashVal = hash('sha256', $email . '_' . $currentWindowIndex . '_' . $salt);
+if (function_exists('curl_init')) {
+    $ch = curl_init($upstreamUrl);
+    curl_setopt_array($ch, [
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => $upstreamPayload,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_HTTPHEADER => [
+            'Content-Type: application/json',
+            'Accept: application/json',
+            'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36'
+        ],
+        CURLOPT_TIMEOUT => 15,
+        CURLOPT_CONNECTTIMEOUT => 6,
+        CURLOPT_SSL_VERIFYPEER => true
+    ]);
+    $upstreamResponse = curl_exec($ch);
+    $httpCode = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+}
 
-// Generar código numérico de 4 dígitos entre 1024 y 9876
-$num = (int)hexdec(substr($hashVal, 0, 4));
-$code = str_pad((string)(1000 + ($num % 8900)), 4, '0', STR_PAD_LEFT);
+// Fallback con stream_context si cURL no devolvió datos
+if ($upstreamResponse === false || empty($upstreamResponse)) {
+    $context = stream_context_create([
+        'http' => [
+            'method' => 'POST',
+            'header' => "Content-Type: application/json\r\nAccept: application/json\r\nUser-Agent: Mozilla/5.0\r\n",
+            'content' => $upstreamPayload,
+            'timeout' => 15,
+            'ignore_errors' => true
+        ]
+    ]);
+    $upstreamResponse = @file_get_contents($upstreamUrl, false, $context);
+    if (!empty($http_response_header)) {
+        preg_match('{HTTP\/\S*\s(\d{3})}', $http_response_header[0], $m);
+        $httpCode = isset($m[1]) ? (int)$m[1] : 200;
+    }
+}
 
-// Token simulado para enlace directo "Actualizar hogar"
-$linkToken = substr(hash('sha256', $hashVal . 'link'), 0, 32);
-$directLink = 'https://www.netflix.com/youraccount/update-home?nftoken=' . $linkToken;
+if ($upstreamResponse) {
+    $data = json_decode($upstreamResponse, true);
+    if (is_array($data) && isset($data['status'])) {
+        $data['email'] = $email;
+        $data['soporte_whatsapp'] = [
+            'telefono' => '51921319266',
+            'mensaje_prellenado' => "Hola TaiSTR, estoy solicitando el código de hogar para mi cuenta: {$email}. ¿Me ayudan a verificarlo por favor?"
+        ];
+        http_response_code($httpCode === 429 ? 429 : 200);
+        echo json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+}
 
-// Formatear minutos y segundos restantes
-$remainingMin = (int)floor($remainingSeconds / 60);
-$remainingSec = $remainingSeconds % 60;
-$timeFormatted = sprintf('%02d:%02d min', $remainingMin, $remainingSec);
-
-// Preparar respuesta exitosa
-$response = [
-    'status' => 'ok',
-    'email' => $email,
-    'code' => $code,
-    'mensaje' => 'Código de verificación temporal encontrado.',
-    'expires_in_seconds' => $remainingSeconds,
-    'expires_in_formatted' => $timeFormatted,
-    'generado_hace' => sprintf('Hace %d min', (int)floor($elapsedSeconds / 60)),
-    'enlace_directo' => $directLink,
-    'tipo' => 'Hogar con código temporal / Estoy de viaje',
-    'instrucciones' => 'Ingresa este código de 4 dígitos en la pantalla de tu TV cuando Netflix te lo solicite.',
+// Si el upstream falla por desconexión
+http_response_code(502);
+echo json_encode([
+    'status' => 'error',
+    'message' => 'No se pudo conectar con el servidor de códigos en este momento. Intenta de nuevo en unos instantes.',
     'soporte_whatsapp' => [
         'telefono' => '51921319266',
-        'mensaje_prellenado' => "Hola TaiSTR, estoy solicitando el código de hogar para mi cuenta: {$email}. ¿Me ayudan a verificarlo por favor?"
+        'mensaje_prellenado' => "Hola TaiSTR, el sistema de códigos no respondió para el correo: {$email}. ¿Me ayudan por favor?"
     ]
-];
-
-http_response_code(200);
-echo json_encode($response, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-
+], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);

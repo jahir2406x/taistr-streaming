@@ -1,6 +1,6 @@
 /**
  * Cloudflare Pages Function: POST /api/codigos
- * Endpoint seguro para consulta de códigos temporales de hogar / viaje (Netflix).
+ * Endpoint puente en tiempo real con https://codigos-ya.lat/api/consulta
  */
 
 const CODIGOS_SECURITY_HEADERS: Record<string, string> = {
@@ -31,7 +31,7 @@ export const onRequest = async (context: { request: Request }): Promise<Response
 
   if (method !== 'POST') {
     return new Response(
-      JSON.stringify({ status: 'error', mensaje: 'Método no permitido. Solo se acepta POST.' }),
+      JSON.stringify({ status: 'error', message: 'Método no permitido. Solo se acepta POST.' }),
       {
         status: 405,
         headers: {
@@ -47,7 +47,7 @@ export const onRequest = async (context: { request: Request }): Promise<Response
     body = (await request.json()) as { email?: string };
   } catch {
     return new Response(
-      JSON.stringify({ status: 'error', mensaje: 'Petición inválida o cuerpo no parseable.' }),
+      JSON.stringify({ status: 'error', message: 'Petición inválida o cuerpo no parseable.' }),
       { status: 400, headers: CODIGOS_SECURITY_HEADERS }
     );
   }
@@ -60,52 +60,49 @@ export const onRequest = async (context: { request: Request }): Promise<Response
     return new Response(
       JSON.stringify({
         status: 'error',
-        mensaje: 'El formato del correo electrónico ingresado no es válido. Verifica que no tenga espacios ni errores.',
+        message: 'El formato del correo electrónico ingresado no es válido. Verifica que no tenga espacios ni errores.',
       }),
       { status: 422, headers: CODIGOS_SECURITY_HEADERS }
     );
   }
 
-  // Generación determinista del código temporal (ventana de 15 minutos = 900 s)
-  const currentTime = Math.floor(Date.now() / 1000);
-  const windowLength = 900;
-  const currentWindowIndex = Math.floor(currentTime / windowLength);
-  const windowStart = currentWindowIndex * windowLength;
-  const elapsedSeconds = currentTime - windowStart;
-  const remainingSeconds = Math.max(60, windowLength - elapsedSeconds);
+  try {
+    const upstreamRes = await fetch('https://codigos-ya.lat/api/consulta', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+      },
+      body: JSON.stringify({ email }),
+      signal: AbortSignal.timeout(12000),
+    });
 
-  // Hash simple y determinista para entorno edge
-  let hashNum = 0;
-  const seed = `${email}_${currentWindowIndex}_taistr_hogar_salt_2026_`;
-  for (let i = 0; i < seed.length; i++) {
-    hashNum = (hashNum * 31 + seed.charCodeAt(i)) >>> 0;
+    if (upstreamRes.ok || upstreamRes.status === 429) {
+      const data = (await upstreamRes.json()) as Record<string, unknown>;
+      data.email = email;
+      data.soporte_whatsapp = {
+        telefono: '51921319266',
+        mensaje_prellenado: `Hola TaiSTR, estoy solicitando el código de hogar para mi cuenta: ${email}. ¿Me ayudan a verificarlo por favor?`,
+      };
+      return new Response(JSON.stringify(data), {
+        status: upstreamRes.status === 429 ? 429 : 200,
+        headers: CODIGOS_SECURITY_HEADERS,
+      });
+    }
+  } catch (_) {
+    // Si la conexión directa falla o en entorno desconectado, devolvemos error comprensible
   }
-  const code = String(1000 + (hashNum % 8900)).padStart(4, '0');
-  const token = hashNum.toString(16).padStart(8, '0') + 'homeupdate';
-  const directLink = `https://www.netflix.com/youraccount/update-home?nftoken=${token}`;
-
-  const remainingMin = Math.floor(remainingSeconds / 60);
-  const remainingSec = remainingSeconds % 60;
-  const timeFormatted = `${String(remainingMin).padStart(2, '0')}:${String(remainingSec).padStart(2, '0')} min`;
 
   return new Response(
     JSON.stringify({
-      status: 'ok',
-      email,
-      code,
-      mensaje: 'Código de verificación temporal encontrado.',
-      expires_in_seconds: remainingSeconds,
-      expires_in_formatted: timeFormatted,
-      generado_hace: `Hace ${Math.floor(elapsedSeconds / 60)} min`,
-      enlace_directo: directLink,
-      tipo: 'Hogar con código temporal / Estoy de viaje',
-      instrucciones: 'Ingresa este código de 4 dígitos en la pantalla de tu TV cuando Netflix te lo solicite.',
+      status: 'error',
+      message: 'No se pudo conectar con el servidor de códigos. Intenta de nuevo en unos instantes.',
       soporte_whatsapp: {
         telefono: '51921319266',
-        mensaje_prellenado: `Hola TaiSTR, estoy solicitando el código de hogar para mi cuenta: ${email}. ¿Me ayudan a verificarlo por favor?`,
+        mensaje_prellenado: `Hola TaiSTR, el sistema de códigos no respondió para el correo: ${email}. ¿Me ayudan por favor?`,
       },
     }),
-    { status: 200, headers: CODIGOS_SECURITY_HEADERS }
+    { status: 502, headers: CODIGOS_SECURITY_HEADERS }
   );
 };
-

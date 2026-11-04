@@ -760,6 +760,46 @@ const codigosSchema = {
     text-align: center;
   }
 
+  /* Variantes de estado para el resultado */
+  .codigos-wrapper .result--warn {
+    background: linear-gradient(135deg, rgba(255, 193, 64, 0.12), rgba(255, 138, 76, 0.08)) !important;
+    border-color: rgba(255, 193, 64, 0.4) !important;
+  }
+  .codigos-wrapper .result--warn .result__badge {
+    color: #ffc140 !important;
+    background: rgba(255, 193, 64, 0.16) !important;
+  }
+  .codigos-wrapper .result--error {
+    background: linear-gradient(135deg, rgba(255, 107, 129, 0.12), rgba(255, 76, 120, 0.08)) !important;
+    border-color: rgba(255, 107, 129, 0.4) !important;
+  }
+  .codigos-wrapper .result--error .result__badge {
+    color: var(--cy-danger) !important;
+    background: rgba(255, 107, 129, 0.16) !important;
+  }
+  .codigos-wrapper .result__msg {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    text-align: left;
+  }
+  .codigos-wrapper .result__msg-icon {
+    font-size: 1.6rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .codigos-wrapper .result__msg-title {
+    font-weight: 700;
+    font-size: 0.98rem;
+    margin-bottom: 4px;
+    color: #ffffff;
+  }
+  .codigos-wrapper .result__msg-text {
+    color: var(--cy-text-dim);
+    font-size: 0.88rem;
+    line-height: 1.5;
+  }
+
   /* Stepper */
   .codigos-wrapper .stepper {
     margin-bottom: 6px;
@@ -1112,68 +1152,120 @@ const codigosSchema = {
     const COPY_SVG =
       '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg>';
 
-    // Renderizar resultado
+    const escapeHtml = (s: string) =>
+      String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] || c));
+
+    function msgBlock(emoji: string, title: string, text: string) {
+      return `
+        <div class="result__msg">
+          <span class="result__msg-icon">${emoji}</span>
+          <div>
+            <p class="result__msg-title">${escapeHtml(title)}</p>
+            <p class="result__msg-text">${escapeHtml(text)}</p>
+          </div>
+        </div>`;
+    }
+
+    // Renderizar resultado fiel a los estados reales del proveedor
     function renderResult(box: HTMLElement, data: any, emailConsultado: string) {
-      if (data.status === 'ok') {
-        const code = String(data.code || '----');
-        const link = data.enlace_directo || '#';
-        const formattedExpires = data.expires_in_formatted || '15:00 min';
+      box.classList.remove('result--ok', 'result--warn', 'result--error');
 
-        box.innerHTML = `
+      const waMsg = encodeURIComponent(
+        `Hola TaiSTR, tengo una consulta con el código de hogar para mi cuenta: ${emailConsultado}`
+      );
+      const waLink = `https://wa.me/51921319266?text=${waMsg}`;
+
+      // Actualizar enlace global de WhatsApp
+      const globalWa = document.getElementById('global-whatsapp-support-link') as HTMLAnchorElement | null;
+      if (globalWa) {
+        globalWa.href = waLink;
+      }
+
+      if (data.status === 'ok' && (data.link || data.code)) {
+        box.classList.add('result--ok');
+        const link = data.link || data.enlace_directo || '';
+        const safeLink = escapeHtml(link);
+        const code = data.code ? String(data.code) : '';
+
+        let innerContent = `
           <div class="result__head">
-            <span class="result__badge">Código temporal listo</span>
-            <button class="result__copy" type="button" data-copy title="Copiar código">
-              ${COPY_SVG}
-            </button>
-          </div>
-          <div class="result__code-box">
-            <span style="font-size:0.7rem;text-transform:uppercase;color:var(--cy-text-dim);display:block;margin-bottom:4px;letter-spacing:0.05em">Código de 4 dígitos</span>
-            <div class="result__code">${code}</div>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px">
-            <span style="font-size:0.75rem;color:var(--cy-accent);font-weight:600">✓ Válido por: ${formattedExpires}</span>
-            <span style="font-size:0.7rem;color:var(--cy-text-dim)">${data.generado_hace || 'Recién generado'}</span>
-          </div>
-          <div class="result__actions">
-            <button class="btn btn--accent btn--sm" type="button" data-copy style="flex:1">Copiar código</button>
-            <a class="btn btn--ghost btn--sm" href="${link}" target="_blank" rel="noopener noreferrer">Abrir enlace ↗</a>
-          </div>
-          <p class="result__meta">Ingresa los 4 dígitos en la pantalla de tu dispositivo.</p>
-        `;
+            <span class="result__badge">${code ? 'Código temporal listo' : 'Enlace de acceso listo'}</span>
+            <button class="result__copy" type="button" data-copy title="Copiar">${COPY_SVG}</button>
+          </div>`;
 
-        // Actualizar enlace global de WhatsApp
-        const waLink = document.getElementById('global-whatsapp-support-link') as HTMLAnchorElement | null;
-        if (waLink) {
-          waLink.href = `https://wa.me/51921319266?text=${encodeURIComponent(
-            `Hola TaiSTR, estoy solicitando el código de hogar para mi cuenta: ${emailConsultado}. ¿Me ayudan a verificarlo por favor?`
-          )}`;
+        if (code) {
+          innerContent += `
+            <div class="result__code-box">
+              <span style="font-size:0.7rem;text-transform:uppercase;color:var(--cy-text-dim);display:block;margin-bottom:4px;letter-spacing:0.05em">Código de acceso</span>
+              <div class="result__code">${escapeHtml(code)}</div>
+            </div>`;
         }
 
-        // Listener de copiar
+        if (link) {
+          innerContent += `
+            <a class="result__link" href="${safeLink}" target="_blank" rel="noopener noreferrer">${safeLink}</a>
+            <div class="result__actions">
+              <a class="btn btn--accent btn--sm" href="${safeLink}" target="_blank" rel="noopener noreferrer" style="flex:1">Abrir enlace ↗</a>
+              <button class="btn btn--ghost btn--sm" type="button" data-copy>Copiar enlace</button>
+            </div>`;
+        } else if (code) {
+          innerContent += `
+            <div class="result__actions">
+              <button class="btn btn--accent btn--sm w-full" type="button" data-copy>Copiar código</button>
+            </div>`;
+        }
+
+        innerContent += `<p class="result__meta">Ábrelo en el dispositivo donde quieres ver Netflix.</p>`;
+        box.innerHTML = innerContent;
+
+        const copyTarget = code || link;
         box.querySelectorAll('[data-copy]').forEach((btn) => {
           btn.addEventListener('click', async () => {
             try {
-              await navigator.clipboard.writeText(code);
-              toast(`Código ${code} copiado al portapapeles`, '📋');
+              await navigator.clipboard.writeText(copyTarget);
+              toast('Copiado al portapapeles', '📋');
             } catch {
-              toast(`Código: ${code}`, '📋');
+              toast('No se pudo copiar', '⚠️');
             }
           });
         });
 
-        toast('¡Código obtenido!', '🎉');
-      } else {
-        const msg = data.mensaje || 'No se pudo obtener el código en este momento.';
+        toast('¡Acceso obtenido!', '🎉');
+      } else if (data.status === 'not_found') {
+        box.classList.add('result--warn');
+        const notFoundMsg = data.message || data.mensaje || 'No se encontró el código solicitado';
+        box.innerHTML = msgBlock('🔍', 'Sin resultados', notFoundMsg);
+        toast(notFoundMsg, '🔍');
+      } else if (data.status === 'not_owned') {
+        box.classList.add('result--error');
         box.innerHTML = `
-          <div class="result__head">
-            <span class="result__badge" style="color:var(--cy-danger);background:rgba(255,107,129,0.15)">Aviso</span>
-          </div>
-          <p style="font-size:0.85rem;color:var(--cy-text);line-height:1.45;margin-bottom:10px">${msg}</p>
-          <a class="btn btn--accent btn--sm w-full" href="https://wa.me/51921319266?text=${encodeURIComponent(
-            `Hola TaiSTR, tengo una duda con el código de hogar de Netflix para el correo: ${emailConsultado}`
-          )}" target="_blank" rel="noopener noreferrer">Pedir ayuda por WhatsApp ↗</a>
-        `;
-        toast(msg, '⚠️');
+          ${msgBlock('⚠️', 'Problema con el correo', 'Hubo un problema con ese correo. Por favor, contacta a tu proveedor.')}
+          <div class="result__actions" style="margin-top:14px">
+            <a class="btn btn--accent btn--sm w-full" href="${waLink}" target="_blank" rel="noopener noreferrer">Contactar a soporte por WhatsApp ↗</a>
+          </div>`;
+        toast('Problema con el correo', '⚠️');
+      } else if (data.status === 'home_update') {
+        box.classList.add('result--warn');
+        box.innerHTML = `
+          ${msgBlock('🏠', 'Acción no permitida', 'Parece que están intentando establecer tu Hogar de Netflix. Contacta a tu proveedor.')}
+          <div class="result__actions" style="margin-top:14px">
+            <a class="btn btn--accent btn--sm w-full" href="${waLink}" target="_blank" rel="noopener noreferrer">Contactar a soporte por WhatsApp ↗</a>
+          </div>`;
+        toast('Acción no permitida', '🏠');
+      } else if (data.status === 'rate') {
+        box.classList.add('result--warn');
+        const rateMsg = data.message || data.mensaje || 'Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.';
+        box.innerHTML = msgBlock('⏳', 'Demasiadas solicitudes', rateMsg);
+        toast('Demasiadas solicitudes', '⏳');
+      } else {
+        box.classList.add('result--error');
+        const errorMsg = data.message || data.mensaje || 'Error de servidor, intenta más tarde';
+        box.innerHTML = `
+          ${msgBlock('🛠️', 'Algo salió mal', errorMsg)}
+          <div class="result__actions" style="margin-top:14px">
+            <a class="btn btn--accent btn--sm w-full" href="${waLink}" target="_blank" rel="noopener noreferrer">Pedir ayuda por WhatsApp ↗</a>
+          </div>`;
+        toast(errorMsg, '⚠️');
       }
 
       box.hidden = false;
