@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=3.0, user-scalable=yes" />
+  <title>Códigos Ya · Consulta tu código temporal</title>
+  <meta name="description" content="Consulta tu código temporal en segundos o sigue el tutorial interactivo paso a paso para desbloquear tu Smart TV o celular sin complicaciones." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M9 4 H23 L28 11 L16 28 L4 11 Z' fill='%236d8bff' stroke='%23fff' stroke-width='1.5'/%3E%3C/svg%3E" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Orbes ambientales de fondo -->
+  <div class="bg-orbs" aria-hidden="true">
+    <span class="orb orb--1"></span>
+    <span class="orb orb--2"></span>
+    <span class="orb orb--3"></span>
+  </div>
+
+  <main class="app">
+    <!-- Cabecera de la App Marca Blanca -->
+    <header class="app__header">
+      <div class="brand">
+        <span class="brand__logo" aria-hidden="true">
+          <svg viewBox="0 0 32 32" width="22" height="22" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
+            <path d="M9 4 H23 L28 11 L16 28 L4 11 Z" fill="rgba(255,255,255,0.15)"></path>
+            <path d="M4 11 H28"></path>
+            <path d="M9 4 L12.5 11"></path>
+            <path d="M23 4 L19.5 11"></path>
+            <path d="M12.5 11 L16 28"></path>
+            <path d="M19.5 11 L16 28"></path>
+          </svg>
+        </span>
+        <div class="brand__info">
+          <span class="brand__name">Códigos Ya</span>
+          <span class="brand__tag">Acceso Rápido</span>
+        </div>
+      </div>
+
+      <!-- Selector de Modo -->
+      <div class="mode-switch" role="tablist" aria-label="Modo de consulta">
+        <button class="mode-switch__btn is-active" data-mode="easy" role="tab" aria-selected="true" type="button">
+          Modo fácil
+        </button>
+        <button class="mode-switch__btn" data-mode="tutorial" role="tab" aria-selected="false" type="button">
+          Tutorial
+        </button>
+        <span class="mode-switch__thumb" aria-hidden="true"></span>
+      </div>
+    </header>
+
+    <!-- ========================================== -->
+    <!-- 1) VISTA MODO FÁCIL                       -->
+    <!-- ========================================== -->
+    <section class="view view--easy is-active" data-view="easy">
+      <div class="card">
+        <h1 class="card__title">Consulta tu código temporal</h1>
+        <p class="card__subtitle">Introduce el correo asociado y recupera el dato al instante.</p>
+
+        <form class="query-form" data-query-form="easy" novalidate>
+          <label class="field">
+            <span class="field__label">Correo electrónico</span>
+            <div class="field__control">
+              <svg class="field__icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                <path d="m22 7-10 5L2 7"></path>
+              </svg>
+              <input
+                type="email"
+                class="field__input"
+                placeholder="tucorreo@ejemplo.com"
+                autocomplete="email"
+                required
+              />
+              <button type="button" class="field__paste" data-paste title="Pegar del portapapeles">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="8" y="2" width="8" height="4" rx="1"></rect>
+                  <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                </svg>
+                <span>Pegar</span>
+              </button>
+            </div>
+            <span class="field__error" data-field-error></span>
+          </label>
+
+          <button type="submit" class="btn btn--primary" data-submit>
+            <span class="btn__label">Solicitar</span>
+            <span class="btn__spinner" aria-hidden="true"></span>
+          </button>
+        </form>
+
+        <div class="result" data-result hidden></div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 2) VISTA MODO TUTORIAL                     -->
+    <!-- ========================================== -->
+    <section class="view view--tutorial" data-view="tutorial">
+      <div class="stepper" data-stepper>
+        <div class="stepper__track">
+          <span class="stepper__progress" data-progress style="width: 25%;"></span>
+        </div>
+        <div class="stepper__dots" data-dots>
+          <span class="stepper__dot is-active" data-dot="1">Elegir</span>
+          <span class="stepper__dot" data-dot="2">Configurar</span>
+          <span class="stepper__dot" data-dot="3">Ajustar</span>
+          <span class="stepper__dot" data-dot="4">Consultar</span>
+        </div>
+      </div>
+
+      <div class="card card--wizard">
+        <!-- PASO 1: ELECCIÓN -->
+        <div class="step is-active" data-step="1">
+          <span class="step__pill">Paso 1 de 4</span>
+          <h2 class="step__title">¿En qué dispositivo quieres ver?</h2>
+          <p class="step__hint">Toca una opción para continuar:</p>
+
+          <div class="choices" data-choices>
+            <button class="choice" data-choice="movil" type="button" aria-label="Elegir Dispositivo móvil">
+              <span class="choice__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="6" y="2" width="12" height="20" rx="2.5"></rect>
+                  <path d="M11 18h2"></path>
+                </svg>
+              </span>
+              <span class="choice__label">Dispositivo móvil</span>
+            </button>
+
+            <button class="choice" data-choice="tv" type="button" aria-label="Elegir Televisor">
+              <span class="choice__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="4" width="20" height="13" rx="2"></rect>
+                  <path d="M8 21h8M12 17v4"></path>
+                </svg>
+              </span>
+              <span class="choice__label">Televisor</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- PASO 2: ACCIÓN EN DISPOSITIVO -->
+        <div class="step" data-step="2">
+          <span class="step__pill">Paso 2 de 4</span>
+          <h2 class="step__title" data-step2-title>Sigue esta indicación</h2>
+          <p class="step__hint">Realiza la acción en tu dispositivo y confirma cuando termines.</p>
+
+          <div class="illus" data-illus-2></div>
+
+          <button class="btn btn--primary" type="button" data-confirm-step="2">
+            Ya lo hice
+          </button>
+        </div>
+
+        <!-- PASO 3: ENVIAR EMAIL -->
+        <div class="step" data-step="3">
+          <span class="step__pill">Paso 3 de 4</span>
+          <h2 class="step__title">Un último ajuste</h2>
+          <p class="step__hint">Fíjate en la zona señalada y confirma para seguir.</p>
+
+          <div class="illus" data-illus-3></div>
+
+          <button class="btn btn--primary" type="button" data-confirm-step="3">
+            Continuar
+          </button>
+        </div>
+
+        <!-- PASO 4: CONSULTAR CÓDIGO -->
+        <div class="step" data-step="4">
+          <span class="step__pill">Paso 4 de 4</span>
+          <h2 class="step__title">Ya casi está</h2>
+          <p class="step__hint">Introduce tu correo para recuperar el código.</p>
+
+          <form class="query-form" data-query-form="tutorial" novalidate>
+            <label class="field">
+              <span class="field__label">Correo electrónico</span>
+              <div class="field__control">
+                <svg class="field__icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                  <path d="m22 7-10 5L2 7"></path>
+                </svg>
+                <input
+                  type="email"
+                  class="field__input"
+                  placeholder="tucorreo@ejemplo.com"
+                  autocomplete="email"
+                  required
+                />
+                <button type="button" class="field__paste" data-paste title="Pegar del portapapeles">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="8" y="2" width="8" height="4" rx="1"></rect>
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                  </svg>
+                  <span>Pegar</span>
+                </button>
+              </div>
+              <span class="field__error" data-field-error></span>
+            </label>
+
+            <button type="submit" class="btn btn--primary" data-submit>
+              <span class="btn__label">Solicitar</span>
+              <span class="btn__spinner" aria-hidden="true"></span>
+            </button>
+          </form>
+
+          <div class="result" data-result hidden></div>
+        </div>
+      </div>
+
+      <!-- Navegación del Wizard -->
+      <div class="wizard-nav">
+        <button class="btn btn--ghost" type="button" data-back hidden>
+          ← Atrás
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Notificación Toast Flotante -->
+  <div class="toast" data-toast aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

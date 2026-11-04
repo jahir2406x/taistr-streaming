@@ -20,6 +20,7 @@
     "a11y": "node --experimental-strip-types scripts/a11y.ts",
     "verificar": "node --experimental-strip-types scripts/verificar.ts",
     "deploy:cpanel": "node scripts/deploy-cpanel.mjs",
+    "deploy:cdg": "node scripts/deploy-cdg.mjs",
     "preview": "astro preview"
   },
   "dependencies": {

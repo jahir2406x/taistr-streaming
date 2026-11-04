@@ -57,3 +57,4 @@ array_unshift($reviews, [
 @file_put_contents($file, json_encode($reviews), LOCK_EX);
 
 echo json_encode(['ok' => true, 'mensaje' => 'Valoración registrada con éxito']);
+

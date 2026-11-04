@@ -47,8 +47,6 @@ import { AJUSTES } from '../../editar';
 
             if (location.pathname.indexOf('/garantia') === 0) {
               setNavActive('legal');
-            } else if (location.pathname.indexOf('/codigos') === 0) {
-              setNavActive('codigos');
             } else {
               var secIds = ['catalogo', 'como-funciona', 'preguntas'];
               var secObs = new IntersectionObserver(function (entries) {
