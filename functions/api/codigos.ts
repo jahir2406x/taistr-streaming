@@ -108,3 +108,4 @@ export const onRequest = async (context: { request: Request }): Promise<Response
     { status: 200, headers: CODIGOS_SECURITY_HEADERS }
   );
 };
+

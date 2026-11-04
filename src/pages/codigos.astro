@@ -3,33 +3,33 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { MARCA } from '../editar';
 
 const title = `Códigos de Hogar Netflix · Actualizar Hogar y Viaje | ${MARCA.nombre}`;
-const description = `Consulta tu código temporal de 4 dígitos para Netflix o sigue el tutorial interactivo paso a paso para desbloquear tu Smart TV en segundos.`;
+const description = `Consulta tu código temporal de Netflix en segundos o sigue el tutorial interactivo paso a paso para desbloquear tu Smart TV o celular sin complicaciones.`;
 
 const codigosSchema = {
   '@context': 'https://schema.org',
   '@type': 'HowTo',
-  name: 'Cómo obtener el código temporal de hogar de Netflix en TaiSTR',
-  description: 'Guía paso a paso para actualizar el hogar de Netflix en tu Smart TV y obtener el código de verificación.',
+  name: `Cómo obtener el código temporal de hogar de Netflix en ${MARCA.nombre}`,
+  description: 'Guía interactiva paso a paso para actualizar el hogar de Netflix en tu Smart TV o dispositivo móvil.',
   step: [
     {
       '@type': 'HowToStep',
-      name: 'Seleccionar dispositivo',
-      text: 'Enciende tu Smart TV o TV Box y abre la aplicación de Netflix.',
+      name: 'Elegir dispositivo',
+      text: 'Selecciona si estás viendo en Smart TV o en un celular / tablet.',
     },
     {
       '@type': 'HowToStep',
-      name: 'Solicitar código en pantalla',
-      text: 'Cuando Netflix muestre el aviso de hogar, pulsa en "Estoy de viaje" o "Actualizar hogar con código temporal".',
+      name: 'Configurar en tu pantalla',
+      text: 'Pulsa en "Ver temporalmente" o "Estoy de viaje / Actualizar hogar" en la pantalla.',
     },
     {
       '@type': 'HowToStep',
-      name: 'Pulsar Enviar correo',
-      text: 'Confirma la solicitud en tu pantalla pulsando el botón "Enviar correo".',
+      name: 'Pulsar Enviar email',
+      text: 'Confirma pulsando en "Enviar email" para generar la solicitud del código.',
     },
     {
       '@type': 'HowToStep',
       name: 'Consultar código en TaiSTR',
-      text: 'Ingresa tu correo aquí, obtén el código de 4 dígitos e ingrésalo en tu televisor.',
+      text: 'Ingresa tu correo, obtén el código temporal de 4 dígitos o el enlace directo y disfruta de tu contenido.',
     },
   ],
 };
@@ -41,807 +41,1350 @@ const codigosSchema = {
   canonicalPath="/codigos"
   structuredData={codigosSchema}
 >
-  <div class="relative min-h-[85vh] py-8 sm:py-14 overflow-hidden">
-    <!-- Fondos ambientales sutiles y performantes -->
-    <div class="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-red-600/10 rounded-full blur-3xl" aria-hidden="true"></div>
-    <div class="pointer-events-none absolute top-1/3 -right-20 w-[400px] h-[300px] bg-brand/10 rounded-full blur-3xl" aria-hidden="true"></div>
+  <div class="codigos-wrapper">
+    <!-- Orbes ambientales de fondo -->
+    <div class="bg-orbs" aria-hidden="true">
+      <span class="orb orb--1"></span>
+      <span class="orb orb--2"></span>
+      <span class="orb orb--3"></span>
+    </div>
 
-    <div class="max-w-[var(--container-max)] mx-auto px-4 sm:px-[var(--container-px)] relative z-10">
+    <div class="codigos-container">
       
       <!-- Migas de pan accesibles -->
-      <nav aria-label="Migas de pan" class="mb-6 text-xs text-ink-muted">
-        <ol class="flex items-center gap-2">
+      <nav aria-label="Migas de pan" class="codigos-breadcrumb">
+        <ol class="flex items-center gap-2 text-xs text-ink-muted">
           <li>
             <a href="/" class="hover:text-ink transition-colors">Inicio</a>
           </li>
           <li aria-hidden="true">/</li>
-          <li class="text-ink font-medium" aria-current="page">Códigos de Hogar</li>
+          <li class="text-ink font-semibold" aria-current="page">Códigos de Hogar</li>
         </ol>
       </nav>
 
-      <!-- Encabezado de la página -->
-      <div class="text-center max-w-2xl mx-auto mb-8 sm:mb-10" data-revelar>
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-950/60 border border-red-800/60 text-red-300 text-xs font-semibold mb-3.5 shadow-sm">
-          <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse" aria-hidden="true"></span>
-          <span>SISTEMA AUTOMÁTICO DE CÓDIGOS DE HOGAR</span>
-        </div>
-        <h1 class="font-display font-bold text-2xl sm:text-4xl text-ink tracking-tight mb-3">
-          Obtén tu código de Netflix al instante
-        </h1>
-        <p class="text-sm sm:text-base text-ink-muted leading-relaxed">
-          Pensado para resolver el aviso <span class="text-ink font-medium">"Esta pantalla no pertenece a tu Hogar"</span> o <span class="text-ink font-medium">"Estoy de viaje"</span> en cuestión de segundos.
-        </p>
-
-        <!-- Conmutador segmentado estilo Apple / Emil Kowalski -->
-        <div class="mt-6 inline-flex p-1 bg-ground-elevated rounded-xl border border-ground-border shadow-inner" role="tablist" aria-label="Modo de consulta">
-          <button
-            id="tab-btn-rapido"
-            type="button"
-            role="tab"
-            aria-selected="true"
-            aria-controls="panel-rapido"
-            class="mode-toggle-btn active flex items-center gap-2 px-4 sm:px-6 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer"
-          >
-            <svg class="w-4 h-4 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-            </svg>
-            <span>Modo Rápido</span>
-          </button>
-          <button
-            id="tab-btn-tutorial"
-            type="button"
-            role="tab"
-            aria-selected="false"
-            aria-controls="panel-tutorial"
-            class="mode-toggle-btn flex items-center gap-2 px-4 sm:px-6 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer text-ink-muted hover:text-ink"
-          >
-            <svg class="w-4 h-4 text-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"></circle>
-              <polygon points="10 8 16 12 10 16 10 8"></polygon>
-            </svg>
-            <span>Tutorial Paso a Paso</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- ========================================== -->
-      <!-- PESTAÑA 1: MODO RÁPIDO                    -->
-      <!-- ========================================== -->
-      <section
-        id="panel-rapido"
-        role="tabpanel"
-        aria-labelledby="tab-btn-rapido"
-        class="max-w-xl mx-auto transition-all duration-300"
-      >
-        <div class="bg-ground-elevated/90 backdrop-blur-md border border-ground-border rounded-2xl p-5 sm:p-7 shadow-xl">
-          <div class="flex items-center gap-3 mb-5 pb-4 border-b border-ground-border">
-            <div class="w-10 h-10 rounded-xl bg-red-600/15 border border-red-500/30 flex items-center justify-center shrink-0">
-              <span class="text-red-500 font-display font-black text-lg">N</span>
-            </div>
-            <div>
-              <h2 class="text-base sm:text-lg font-bold text-ink">Consulta directa por correo</h2>
-              <p class="text-xs text-ink-muted">Pega el correo de tu cuenta para ver el código más reciente.</p>
+      <!-- App Card Principal -->
+      <main class="app-card" id="codigos-app">
+        <!-- Cabecera de la App -->
+        <header class="app__header">
+          <div class="brand-badge">
+            <span class="brand-badge__logo" aria-hidden="true">
+              <svg viewBox="0 0 32 32" width="22" height="22" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round">
+                <path d="M9 4 H23 L28 11 L16 28 L4 11 Z" fill="rgba(255,255,255,0.15)"></path>
+                <path d="M4 11 H28"></path>
+                <path d="M9 4 L12.5 11"></path>
+                <path d="M23 4 L19.5 11"></path>
+                <path d="M12.5 11 L16 28"></path>
+                <path d="M19.5 11 L16 28"></path>
+              </svg>
+            </span>
+            <div class="brand-badge__info">
+              <span class="brand-badge__name">Códigos Ya</span>
+              <span class="brand-badge__tag">TaiSTR</span>
             </div>
           </div>
 
-          <form id="form-consulta-codigos" class="space-y-4" novalidate>
-            <div>
-              <label for="input-email-codigo" class="block text-xs font-semibold text-ink-muted mb-1.5">
-                Correo electrónico de tu cuenta Netflix
-              </label>
-              <div class="relative flex items-center">
-                <span class="absolute left-3.5 text-ink-subtle pointer-events-none" aria-hidden="true">
-                  <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                    <polyline points="22,6 12,13 2,6"></polyline>
-                  </svg>
-                </span>
-                <input
-                  id="input-email-codigo"
-                  type="email"
-                  name="email"
-                  required
-                  placeholder="ejemplo@correo.com"
-                  autocomplete="email"
-                  class="w-full bg-ground border border-ground-border focus:border-brand rounded-xl pl-10 pr-24 py-3 text-sm text-ink placeholder:text-ink-subtle outline-none transition-colors"
-                />
-                <button
-                  id="btn-pegar-portapapeles"
-                  type="button"
-                  title="Pegar desde el portapapeles"
-                  class="absolute right-2 px-2.5 py-1.5 rounded-lg bg-ground-card hover:bg-ground-elevated text-xs font-medium text-ink-muted hover:text-ink border border-ground-border transition-colors flex items-center gap-1 cursor-pointer active:scale-95"
-                >
-                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
-                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
-                  </svg>
-                  <span>Pegar</span>
-                </button>
-              </div>
-              <p id="error-email-feedback" class="hidden text-xs text-red-400 mt-1.5 flex items-center gap-1"></p>
-            </div>
-
-            <button
-              id="btn-submit-codigo"
-              type="submit"
-              class="w-full min-h-[46px] bg-red-600 hover:bg-red-500 text-white font-bold text-sm px-5 py-3 rounded-xl transition-all duration-150 flex items-center justify-center gap-2 shadow-lg shadow-red-950/40 cursor-pointer active:scale-[0.98]"
-            >
-              <svg id="icon-submit-search" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-              </svg>
-              <svg id="spinner-submit-search" class="w-4 h-4 animate-spin hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <line x1="12" y1="2" x2="12" y2="6"></line>
-                <line x1="12" y1="18" x2="12" y2="22"></line>
-                <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
-                <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
-                <line x1="2" y1="12" x2="6" y2="12"></line>
-                <line x1="18" y1="12" x2="22" y2="12"></line>
-                <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
-                <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
-              </svg>
-              <span id="label-submit-search">Obtener código temporal</span>
+          <!-- Switch de Modo (Modo fácil / Tutorial) -->
+          <div class="mode-switch" role="tablist" aria-label="Modo de consulta">
+            <button class="mode-switch__btn is-active" data-mode="easy" role="tab" aria-selected="true" type="button">
+              Modo fácil
             </button>
-          </form>
+            <button class="mode-switch__btn" data-mode="tutorial" role="tab" aria-selected="false" type="button">
+              Tutorial
+            </button>
+            <span class="mode-switch__thumb" aria-hidden="true"></span>
+          </div>
+        </header>
 
-          <!-- Contenedor dinámico del resultado -->
-          <div id="resultado-codigo-container" class="hidden mt-6 pt-5 border-t border-ground-border animate-fade-in" aria-live="polite">
-            <div class="p-4 sm:p-5 rounded-xl bg-ground/80 border border-emerald-500/30 relative overflow-hidden">
-              <div class="flex items-center justify-between gap-2 mb-3">
-                <div class="flex items-center gap-1.5 text-xs font-semibold text-emerald-400">
-                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping" aria-hidden="true"></span>
-                  <span>CÓDIGO DISPONIBLE</span>
-                </div>
-                <div id="resultado-expiracion" class="text-[11px] font-mono text-ink-muted bg-ground-card px-2 py-0.5 rounded border border-ground-border">
-                  Expira en: 14:59 min
-                </div>
-              </div>
+        <!-- ========================================== -->
+        <!-- 1) VISTA MODO FÁCIL                       -->
+        <!-- ========================================== -->
+        <section class="view view--easy is-active" data-view="easy">
+          <div class="card-inner">
+            <h1 class="card__title">Consulta tu código temporal</h1>
+            <p class="card__subtitle">Introduce el correo asociado y recupera el dato al instante.</p>
 
-              <!-- Bloque del código en grande -->
-              <div class="text-center py-4 bg-ground-elevated rounded-xl border border-ground-border my-2">
-                <span class="text-[11px] uppercase tracking-wider text-ink-muted block mb-1">Código de 4 dígitos</span>
-                <div id="valor-codigo" class="font-mono font-black text-3xl sm:text-4xl text-ink tracking-[0.35em] pl-[0.35em]">
-                  ----
-                </div>
-              </div>
-
-              <!-- Botón Copiar -->
-              <div class="flex flex-col sm:flex-row gap-2 mt-3">
-                <button
-                  id="btn-copiar-codigo"
-                  type="button"
-                  class="flex-1 min-h-[40px] bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm px-4 py-2.5 rounded-lg flex items-center justify-center gap-2 transition-colors cursor-pointer active:scale-95"
-                >
-                  <svg id="icon-copiar-svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            <form class="query-form" data-query-form="easy" novalidate>
+              <label class="field">
+                <span class="field__label">Correo electrónico</span>
+                <div class="field__control">
+                  <svg class="field__icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                    <path d="m22 7-10 5L2 7"></path>
                   </svg>
-                  <span id="label-copiar-btn">Copiar código</span>
+                  <input
+                    type="email"
+                    class="field__input"
+                    placeholder="tucorreo@ejemplo.com"
+                    autocomplete="email"
+                    required
+                  />
+                  <button type="button" class="field__paste" data-paste title="Pegar del portapapeles">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="8" y="2" width="8" height="4" rx="1"></rect>
+                      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                    </svg>
+                    <span>Pegar</span>
+                  </button>
+                </div>
+                <span class="field__error" data-field-error></span>
+              </label>
+
+              <button type="submit" class="btn btn--primary" data-submit>
+                <span class="btn__label">Solicitar</span>
+                <span class="btn__spinner" aria-hidden="true"></span>
+              </button>
+            </form>
+
+            <!-- Bloque de Resultado Dinámico -->
+            <div class="result" data-result hidden></div>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 2) VISTA MODO TUTORIAL                     -->
+        <!-- ========================================== -->
+        <section class="view view--tutorial" data-view="tutorial">
+          <!-- Stepper con Progreso y Puntos -->
+          <div class="stepper" data-stepper>
+            <div class="stepper__track">
+              <span class="stepper__progress" data-progress style="width: 25%;"></span>
+            </div>
+            <div class="stepper__dots" data-dots>
+              <span class="stepper__dot is-active" data-dot="1">Elegir</span>
+              <span class="stepper__dot" data-dot="2">Configurar</span>
+              <span class="stepper__dot" data-dot="3">Ajustar</span>
+              <span class="stepper__dot" data-dot="4">Consultar</span>
+            </div>
+          </div>
+
+          <div class="card-inner card--wizard">
+            <!-- PASO 1: ELECCIÓN (MÓVIL VS TELEVISOR) -->
+            <div class="step is-active" data-step="1">
+              <span class="step__pill">Paso 1 de 4</span>
+              <h2 class="step__title">¿En qué dispositivo quieres ver?</h2>
+              <p class="step__hint">Toca una opción para continuar:</p>
+
+              <div class="choices" data-choices>
+                <button class="choice" data-choice="movil" type="button" aria-label="Elegir Dispositivo móvil">
+                  <span class="choice__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="6" y="2" width="12" height="20" rx="2.5"></rect>
+                      <path d="M11 18h2"></path>
+                    </svg>
+                  </span>
+                  <span class="choice__label">Dispositivo móvil</span>
                 </button>
 
-                <a
-                  id="enlace-directo-btn"
-                  href="#"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="min-h-[40px] bg-ground-card hover:bg-ground text-ink text-xs sm:text-sm font-semibold px-4 py-2.5 rounded-lg border border-ground-border flex items-center justify-center gap-1.5 transition-colors"
-                >
-                  <span>Abrir enlace directo</span>
-                  <svg class="w-3.5 h-3.5 text-ink-subtle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                    <polyline points="15 3 21 3 21 9"></polyline>
-                    <line x1="10" y1="14" x2="21" y2="3"></line>
-                  </svg>
-                </a>
-              </div>
-
-              <!-- Instrucción breve -->
-              <p class="text-[11px] text-ink-muted text-center mt-3">
-                💡 Ingresa este código en tu televisor. Si Netflix te pidió revisar tu correo, pulsa <span class="text-ink font-semibold">"Abrir enlace directo"</span>.
-              </p>
-            </div>
-          </div>
-
-          <!-- Tarjeta de soporte WhatsApp siempre disponible -->
-          <div class="mt-5 p-3.5 rounded-xl bg-ground-card/60 border border-ground-border flex items-center justify-between gap-3">
-            <div class="text-xs">
-              <span class="font-semibold text-ink block">¿No recibes tu código o tienes problemas?</span>
-              <span class="text-ink-muted">Nuestro equipo de soporte te atiende de inmediato por WhatsApp.</span>
-            </div>
-            <a
-              id="btn-whatsapp-soporte-codigos"
-              href="https://wa.me/51921319266?text=Hola%20TaiSTR,%20necesito%20ayuda%20con%20el%20c%C3%B3digo%20de%20hogar%20de%20Netflix"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="shrink-0 bg-brand-whatsapp hover:bg-brand-whatsappHover text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer"
-            >
-              <span class="w-1.5 h-1.5 rounded-full bg-white shrink-0"></span>
-              <span>Soporte</span>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <!-- ========================================== -->
-      <!-- PESTAÑA 2: TUTORIAL PASO A PASO            -->
-      <!-- ========================================== -->
-      <section
-        id="panel-tutorial"
-        role="tabpanel"
-        aria-labelledby="tab-btn-tutorial"
-        class="hidden max-w-2xl mx-auto transition-all duration-300"
-      >
-        <div class="bg-ground-elevated/90 backdrop-blur-md border border-ground-border rounded-2xl p-5 sm:p-7 shadow-xl">
-          
-          <!-- Stepper de 4 pasos interactivo -->
-          <div class="mb-6 pb-5 border-b border-ground-border">
-            <div class="flex items-center justify-between max-w-md mx-auto relative">
-              <!-- Barra de progreso de fondo -->
-              <div class="absolute left-0 top-1/2 -translate-y-1/2 w-full h-1 bg-ground-border rounded-full" aria-hidden="true"></div>
-              <!-- Barra de progreso activa -->
-              <div id="stepper-progress-bar" class="absolute left-0 top-1/2 -translate-y-1/2 h-1 bg-brand rounded-full transition-all duration-300 w-[10%]" aria-hidden="true"></div>
-
-              <!-- Puntos del stepper -->
-              <button type="button" data-step-target="1" class="step-indicator active relative z-10 w-8 h-8 rounded-full bg-brand text-ground text-xs font-bold flex items-center justify-center transition-all cursor-pointer">
-                1
-              </button>
-              <button type="button" data-step-target="2" class="step-indicator relative z-10 w-8 h-8 rounded-full bg-ground border border-ground-border text-ink-muted text-xs font-bold flex items-center justify-center transition-all cursor-pointer">
-                2
-              </button>
-              <button type="button" data-step-target="3" class="step-indicator relative z-10 w-8 h-8 rounded-full bg-ground border border-ground-border text-ink-muted text-xs font-bold flex items-center justify-center transition-all cursor-pointer">
-                3
-              </button>
-              <button type="button" data-step-target="4" class="step-indicator relative z-10 w-8 h-8 rounded-full bg-ground border border-ground-border text-ink-muted text-xs font-bold flex items-center justify-center transition-all cursor-pointer">
-                4
-              </button>
-            </div>
-            
-            <div class="flex justify-between text-[11px] font-medium text-ink-muted mt-2 max-w-md mx-auto px-1">
-              <span>Dispositivo</span>
-              <span>Aviso Hogar</span>
-              <span>Enviar Correo</span>
-              <span>Ver Código</span>
-            </div>
-          </div>
-
-          <!-- CONTENIDO DEL PASO 1 -->
-          <div id="step-content-1" class="step-panel space-y-4">
-            <div class="text-center max-w-md mx-auto">
-              <span class="text-xs uppercase font-bold text-brand tracking-wider">Paso 1 de 4</span>
-              <h3 class="text-lg font-bold text-ink mt-1">¿En qué dispositivo estás viendo Netflix?</h3>
-              <p class="text-xs text-ink-muted mt-1 leading-relaxed">
-                El aviso de "Hogar con código temporal" aparece principalmente en Smart TVs y reproductores de sala.
-              </p>
-            </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-              <div class="device-card p-4 rounded-xl bg-ground border-2 border-brand/60 hover:border-brand transition-colors cursor-pointer text-left">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-lg bg-ground-card flex items-center justify-center text-ink shrink-0">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <rect x="2" y="7" width="20" height="15" rx="2" ry="2"></rect>
-                      <polyline points="17 2 12 7 7 2"></polyline>
+                <button class="choice" data-choice="tv" type="button" aria-label="Elegir Televisor">
+                  <span class="choice__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="2" y="4" width="20" height="13" rx="2"></rect>
+                      <path d="M8 21h8M12 17v4"></path>
                     </svg>
-                  </div>
-                  <div>
-                    <h4 class="text-sm font-bold text-ink">Smart TV / TV Box</h4>
-                    <p class="text-[11px] text-ink-muted">Samsung, LG, Fire TV, Chromecast, Roku, etc.</p>
-                  </div>
-                </div>
+                  </span>
+                  <span class="choice__label">Televisor</span>
+                </button>
               </div>
 
-              <div class="device-card p-4 rounded-xl bg-ground border border-ground-border hover:border-ground-hover transition-colors cursor-pointer text-left opacity-80">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-lg bg-ground-card flex items-center justify-center text-ink shrink-0">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-                      <line x1="12" y1="18" x2="12.01" y2="18"></line>
+              <div class="step__actions-dynamic" data-step1-action hidden>
+                <button class="btn btn--accent w-full" type="button" data-next-step="2">
+                  <span>¡Genial! Continuar</span>
+                  <span aria-hidden="true">🚀</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- PASO 2: CONFIGURAR EN DISPOSITIVO (SEGÚN ELECCIÓN) -->
+            <div class="step" data-step="2">
+              <span class="step__pill">Paso 2 de 4</span>
+              <h2 class="step__title" data-step2-title>Sigue esta indicación</h2>
+              <p class="step__hint">Realiza la acción en tu dispositivo y confirma cuando termines.</p>
+
+              <div class="illus" data-illus-2>
+                <!-- Ilustración inyectada por JavaScript con anillo animado y puntero -->
+              </div>
+
+              <button class="btn btn--primary" type="button" data-confirm-step="2">
+                Ya lo hice
+              </button>
+            </div>
+
+            <!-- PASO 3: ENVIAR EMAIL (AJUSTE FINAL) -->
+            <div class="step" data-step="3">
+              <span class="step__pill">Paso 3 de 4</span>
+              <h2 class="step__title">Un último ajuste</h2>
+              <p class="step__hint">Fíjate en la zona señalada y confirma para seguir.</p>
+
+              <div class="illus" data-illus-3>
+                <!-- Ilustración común inyectada por JavaScript -->
+              </div>
+
+              <button class="btn btn--primary" type="button" data-confirm-step="3">
+                Continuar
+              </button>
+            </div>
+
+            <!-- PASO 4: CONSULTAR CÓDIGO -->
+            <div class="step" data-step="4">
+              <span class="step__pill">Paso 4 de 4</span>
+              <h2 class="step__title">Ya casi está</h2>
+              <p class="step__hint">Introduce tu correo para recuperar el código.</p>
+
+              <form class="query-form" data-query-form="tutorial" novalidate>
+                <label class="field">
+                  <span class="field__label">Correo electrónico</span>
+                  <div class="field__control">
+                    <svg class="field__icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                      <path d="m22 7-10 5L2 7"></path>
                     </svg>
+                    <input
+                      type="email"
+                      class="field__input"
+                      placeholder="tucorreo@ejemplo.com"
+                      autocomplete="email"
+                      required
+                    />
+                    <button type="button" class="field__paste" data-paste title="Pegar del portapapeles">
+                      <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="8" y="2" width="8" height="4" rx="1"></rect>
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                      </svg>
+                      <span>Pegar</span>
+                    </button>
                   </div>
-                  <div>
-                    <h4 class="text-sm font-bold text-ink">Celular o Tablet</h4>
-                    <p class="text-[11px] text-ink-muted">Android, iPhone, iPad o laptop.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+                  <span class="field__error" data-field-error></span>
+                </label>
 
-            <div class="pt-3 flex justify-end">
-              <button type="button" data-step-next="2" class="px-5 py-2.5 rounded-xl bg-brand text-ground text-xs sm:text-sm font-bold flex items-center gap-2 cursor-pointer hover:bg-brand-hover active:scale-95 transition-all">
-                <span>Continuar</span>
-                <span aria-hidden="true">→</span>
-              </button>
+                <button type="submit" class="btn btn--primary" data-submit>
+                  <span class="btn__label">Solicitar</span>
+                  <span class="btn__spinner" aria-hidden="true"></span>
+                </button>
+              </form>
+
+              <div class="result" data-result hidden></div>
             </div>
           </div>
 
-          <!-- CONTENIDO DEL PASO 2 -->
-          <div id="step-content-2" class="step-panel hidden space-y-4">
-            <div class="text-center max-w-md mx-auto">
-              <span class="text-xs uppercase font-bold text-brand tracking-wider">Paso 2 de 4</span>
-              <h3 class="text-lg font-bold text-ink mt-1">Identifica el aviso en tu pantalla</h3>
-              <p class="text-xs text-ink-muted mt-1 leading-relaxed">
-                Netflix mostrará una pantalla oscura avisando que el dispositivo no pertenece al hogar.
-              </p>
-            </div>
+          <!-- Navegación del Wizard (Botón Atrás) -->
+          <div class="wizard-nav">
+            <button class="btn btn--ghost" type="button" data-back hidden>
+              ← Atrás
+            </button>
+          </div>
+        </section>
+      </main>
 
-            <!-- Maqueta visual interactiva de la pantalla de TV de Netflix -->
-            <div class="p-4 sm:p-6 rounded-xl bg-black border border-neutral-800 shadow-2xl relative overflow-hidden text-neutral-200">
-              <div class="flex items-center justify-between mb-4 pb-2 border-b border-neutral-800">
-                <span class="text-red-600 font-display font-black text-xl tracking-wider">NETFLIX</span>
-                <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-neutral-900 text-neutral-400">Pantalla de tu TV</span>
-              </div>
-              <h4 class="text-base sm:text-lg font-bold text-white mb-1.5">
-                Esta pantalla no pertenece a tu Hogar con código temporal
-              </h4>
-              <p class="text-xs text-neutral-400 leading-relaxed mb-4">
-                Una cuenta de Netflix es para las personas que viven en la misma casa. Si estás fuera de casa o de viaje, puedes actualizar tu acceso temporal.
-              </p>
-              
-              <div class="flex flex-col sm:flex-row gap-2">
-                <div class="px-4 py-2 rounded bg-red-600 text-white font-bold text-xs text-center border-2 border-white shadow-lg animate-pulse">
-                  👉 Estoy de viaje / Actualizar hogar
-                </div>
-                <div class="px-4 py-2 rounded bg-neutral-800 text-neutral-400 text-xs text-center">
-                  Cerrar Netflix
-                </div>
-              </div>
-            </div>
-
-            <p class="text-xs text-ink-muted text-center">
-              💡 Con tu control remoto, pulsa sobre la opción <span class="text-ink font-bold">"Estoy de viaje"</span> o <span class="text-ink font-bold">"Actualizar hogar con código temporal"</span>.
-            </p>
-
-            <div class="pt-3 flex justify-between">
-              <button type="button" data-step-prev="1" class="px-4 py-2 rounded-xl bg-ground-card text-ink-muted hover:text-ink text-xs font-semibold cursor-pointer transition-colors">
-                ← Anterior
-              </button>
-              <button type="button" data-step-next="3" class="px-5 py-2.5 rounded-xl bg-brand text-ground text-xs sm:text-sm font-bold flex items-center gap-2 cursor-pointer hover:bg-brand-hover active:scale-95 transition-all">
-                <span>Continuar</span>
-                <span aria-hidden="true">→</span>
-              </button>
+      <!-- Tarjeta de Soporte Humano Directo -->
+      <aside class="support-card mt-6">
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-ground-elevated/80 border border-ground-border">
+          <div class="flex items-center gap-3 text-left">
+            <span class="w-10 h-10 rounded-xl bg-emerald-950/70 border border-emerald-800/60 flex items-center justify-center text-emerald-400 shrink-0">
+              <span class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></span>
+            </span>
+            <div>
+              <p class="text-xs sm:text-sm font-bold text-ink">¿No te llegó el código o tu cuenta pide confirmación manual?</p>
+              <p class="text-[11px] sm:text-xs text-ink-muted">Nuestro equipo de soporte por WhatsApp te ayuda de inmediato.</p>
             </div>
           </div>
-
-          <!-- CONTENIDO DEL PASO 3 -->
-          <div id="step-content-3" class="step-panel hidden space-y-4">
-            <div class="text-center max-w-md mx-auto">
-              <span class="text-xs uppercase font-bold text-brand tracking-wider">Paso 3 de 4</span>
-              <h3 class="text-lg font-bold text-ink mt-1">Pulsa en "Enviar correo"</h3>
-              <p class="text-xs text-ink-muted mt-1 leading-relaxed">
-                Al seleccionar la opción, Netflix te preguntará cómo deseas recibir el código de verificación.
-              </p>
-            </div>
-
-            <!-- Maqueta de confirmación de envío -->
-            <div class="p-4 sm:p-6 rounded-xl bg-black border border-neutral-800 text-neutral-200">
-              <div class="flex items-center gap-2 text-xs text-neutral-400 mb-3">
-                <svg class="w-4 h-4 text-red-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                </svg>
-                <span>Te enviaremos un código para verificar que eres tú</span>
-              </div>
-              <p class="text-xs text-neutral-300 leading-relaxed mb-4">
-                Se enviará un código numérico de 4 dígitos o un enlace de confirmación al correo registrado.
-              </p>
-              <div class="inline-block px-5 py-2.5 rounded bg-white text-black font-bold text-xs shadow-md border-2 border-red-500">
-                ✓ Pulsar: "Enviar correo"
-              </div>
-            </div>
-
-            <div class="p-3.5 rounded-xl bg-amber-950/30 border border-amber-800/40 text-amber-200 text-xs flex items-start gap-2.5">
-              <span class="text-base leading-none">⚠️</span>
-              <span><strong>Importante:</strong> El código dura exactamente 15 minutos. Una vez pulsado "Enviar correo", consúltalo inmediatamente en el siguiente paso.</span>
-            </div>
-
-            <div class="pt-3 flex justify-between">
-              <button type="button" data-step-prev="2" class="px-4 py-2 rounded-xl bg-ground-card text-ink-muted hover:text-ink text-xs font-semibold cursor-pointer transition-colors">
-                ← Anterior
-              </button>
-              <button type="button" data-step-next="4" class="px-5 py-2.5 rounded-xl bg-brand text-ground text-xs sm:text-sm font-bold flex items-center gap-2 cursor-pointer hover:bg-brand-hover active:scale-95 transition-all">
-                <span>Ir al paso final: Obtener código</span>
-                <span aria-hidden="true">→</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- CONTENIDO DEL PASO 4 -->
-          <div id="step-content-4" class="step-panel hidden space-y-4">
-            <div class="text-center max-w-md mx-auto">
-              <span class="text-xs uppercase font-bold text-emerald-400 tracking-wider">Paso 4 de 4</span>
-              <h3 class="text-lg font-bold text-ink mt-1">¡Listo! Obtén tu código de 4 dígitos</h3>
-              <p class="text-xs text-ink-muted mt-1 leading-relaxed">
-                Ingresa aquí el correo electrónico de tu cuenta y pulsa consultar.
-              </p>
-            </div>
-
-            <!-- Botón de acción para cambiar a modo rápido con animación directa -->
-            <div class="p-5 rounded-xl bg-ground border border-ground-border text-center space-y-3">
-              <p class="text-xs text-ink-muted">
-                Para tu comodidad, la consulta directa está lista en el <span class="text-ink font-semibold">Modo Rápido</span>.
-              </p>
-              <button
-                id="btn-saltar-a-rapido"
-                type="button"
-                class="w-full min-h-[44px] bg-red-600 hover:bg-red-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-red-950/40"
-              >
-                <span>Consultar código ahora</span>
-                <span aria-hidden="true">⚡</span>
-              </button>
-            </div>
-
-            <div class="pt-2 flex justify-start">
-              <button type="button" data-step-prev="3" class="px-4 py-2 rounded-xl bg-ground-card text-ink-muted hover:text-ink text-xs font-semibold cursor-pointer transition-colors">
-                ← Volver al paso 3
-              </button>
-            </div>
-          </div>
-
+          <a
+            id="global-whatsapp-support-link"
+            href="https://wa.me/51921319266?text=Hola%20TaiSTR,%20necesito%20ayuda%20con%20el%20c%C3%B3digo%20de%20hogar%20de%20Netflix"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn--whatsapp shrink-0 min-h-[42px] px-4 py-2 text-xs font-bold rounded-xl text-white bg-emerald-600 hover:bg-emerald-500 transition-colors flex items-center gap-2"
+          >
+            <span>Escribir a soporte</span>
+            <span aria-hidden="true">→</span>
+          </a>
         </div>
-      </section>
-
-      <!-- ========================================== -->
-      <!-- PREGUNTAS FRECUENTES SOBRE CÓDIGOS         -->
-      <!-- ========================================== -->
-      <section class="max-w-2xl mx-auto mt-12 sm:mt-16" data-revelar>
-        <div class="text-center mb-6">
-          <h2 class="text-lg sm:text-xl font-bold text-ink">Preguntas frecuentes sobre códigos de hogar</h2>
-          <p class="text-xs text-ink-muted mt-1">Todo lo que necesitas saber sobre el funcionamiento de Netflix en Smart TV.</p>
-        </div>
-
-        <div class="space-y-3">
-          <details class="group bg-ground-elevated rounded-xl border border-ground-border p-4 [&_summary::-webkit-details-marker]:hidden">
-            <summary class="flex items-center justify-between cursor-pointer font-semibold text-xs sm:text-sm text-ink group-open:text-brand">
-              <span>¿Por qué Netflix me pide este código de hogar?</span>
-              <span class="text-xs text-ink-muted transition-transform group-open:rotate-180">▼</span>
-            </summary>
-            <p class="text-xs text-ink-muted mt-2.5 leading-relaxed pt-2 border-t border-ground-border">
-              Netflix implementó una verificación geográfica para dispositivos conectados a televisores (Smart TV y consolas). Al solicitar el código temporal de viaje, Netflix autoriza ese televisor para reproducir contenido sin ninguna restricción.
-            </p>
-          </details>
-
-          <details class="group bg-ground-elevated rounded-xl border border-ground-border p-4 [&_summary::-webkit-details-marker]:hidden">
-            <summary class="flex items-center justify-between cursor-pointer font-semibold text-xs sm:text-sm text-ink group-open:text-brand">
-              <span>¿Cuánto tiempo dura el código una vez generado?</span>
-              <span class="text-xs text-ink-muted transition-transform group-open:rotate-180">▼</span>
-            </summary>
-            <p class="text-xs text-ink-muted mt-2.5 leading-relaxed pt-2 border-t border-ground-border">
-              El código numérico tiene una vigencia de 15 minutos por motivos de seguridad de Netflix. Una vez ingresado en tu TV, el televisor queda autorizado para continuar disfrutando de tu cuenta.
-            </p>
-          </details>
-
-          <details class="group bg-ground-elevated rounded-xl border border-ground-border p-4 [&_summary::-webkit-details-marker]:hidden">
-            <summary class="flex items-center justify-between cursor-pointer font-semibold text-xs sm:text-sm text-ink group-open:text-brand">
-              <span>¿Puedo pedir el código las veces que sea necesario?</span>
-              <span class="text-xs text-ink-muted transition-transform group-open:rotate-180">▼</span>
-            </summary>
-            <p class="text-xs text-ink-muted mt-2.5 leading-relaxed pt-2 border-t border-ground-border">
-              Sí. Si cambias de red WiFi, viajas o Netflix vuelve a mostrar el aviso, puedes volver a esta misma página y generar tu código de confirmación las veces que haga falta.
-            </p>
-          </details>
-
-          <details class="group bg-ground-elevated rounded-xl border border-ground-border p-4 [&_summary::-webkit-details-marker]:hidden">
-            <summary class="flex items-center justify-between cursor-pointer font-semibold text-xs sm:text-sm text-ink group-open:text-brand">
-              <span>¿Qué hago si el código sale como inválido o expiró?</span>
-              <span class="text-xs text-ink-muted transition-transform group-open:rotate-180">▼</span>
-            </summary>
-            <p class="text-xs text-ink-muted mt-2.5 leading-relaxed pt-2 border-t border-ground-border">
-              En tu televisor, pulsa nuevamente en "Enviar correo de nuevo" para que Netflix genere una solicitud fresca, y luego vuelve a presionar "Obtener código" en esta página. Si persiste, usa el botón de soporte de WhatsApp para que un asesor te asista directamente.
-            </p>
-          </details>
-        </div>
-      </section>
+      </aside>
 
     </div>
   </div>
 
-  <!-- Toast de notificación flotante para copiado/pegado -->
-  <div
-    id="toast-notificacion"
-    role="status"
-    aria-live="polite"
-    class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-200 bg-ground-elevated border border-brand/40 shadow-2xl px-4 py-2.5 rounded-xl text-xs font-semibold text-ink flex items-center gap-2"
-  >
-    <span class="w-2 h-2 rounded-full bg-emerald-400" aria-hidden="true"></span>
-    <span id="toast-notificacion-texto">Copiado al portapapeles</span>
-  </div>
+  <!-- Toast de Notificación Flotante -->
+  <div class="toast" data-toast aria-live="polite"></div>
 </BaseLayout>
 
 <style>
-  .mode-toggle-btn.active {
-    background: var(--brand);
-    color: var(--ground);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  /* ============================================================
+     Tokens y variables visuales de Códigos Ya
+     ============================================================ */
+  .codigos-wrapper {
+    position: relative;
+    min-height: 85vh;
+    padding: 24px 16px 48px;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    --cy-bg: #0b0f1a;
+    --cy-elev: rgba(23, 29, 46, 0.78);
+    --cy-elev-2: rgba(30, 38, 60, 0.92);
+    --cy-border: rgba(255, 255, 255, 0.08);
+    --cy-border-strong: rgba(255, 255, 255, 0.16);
+    --cy-text: #eef2ff;
+    --cy-text-dim: #9aa6c4;
+    --cy-brand: #6d8bff;
+    --cy-brand-2: #7c5cff;
+    --cy-accent: #35d6a4;
+    --cy-danger: #ff6b81;
+    --cy-shadow: 0 24px 60px rgba(4, 8, 20, 0.65);
+    --cy-radius: 22px;
+    --cy-radius-sm: 13px;
+    --cy-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --cy-ease-back: cubic-bezier(0.34, 1.56, 0.64, 1);
   }
 
-  .step-indicator.active {
-    box-shadow: 0 0 0 3px rgba(var(--brand-rgb, 229, 9, 20), 0.35);
+  .codigos-container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 500px;
   }
 
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(6px);
+  .codigos-breadcrumb {
+    margin-bottom: 16px;
+  }
+
+  /* Orbes ambientales */
+  .bg-orbs {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    filter: blur(60px);
+  }
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.45;
+    animation: floatOrb 18s var(--cy-ease) infinite alternate;
+  }
+  .orb--1 { width: 340px; height: 340px; background: var(--cy-brand-2); top: -80px; right: -60px; }
+  .orb--2 { width: 280px; height: 280px; background: var(--cy-brand); bottom: -100px; left: -80px; animation-delay: -6s; }
+  .orb--3 { width: 220px; height: 220px; background: var(--cy-accent); top: 40%; left: 60%; opacity: 0.2; animation-delay: -12s; }
+  @keyframes floatOrb {
+    to { transform: translate3d(30px, -40px, 0) scale(1.1); }
+  }
+
+  /* Tarjeta contenedora de la App */
+  .app-card {
+    position: relative;
+    background: var(--cy-elev);
+    border: 1px solid var(--cy-border);
+    border-radius: var(--cy-radius);
+    padding: 24px 20px;
+    box-shadow: var(--cy-shadow);
+    backdrop-filter: blur(18px);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  @media (min-width: 480px) {
+    .app-card {
+      padding: 28px 24px;
     }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
   }
 
-  .animate-fade-in {
-    animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  /* Encabezado */
+  .app__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .brand-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand-badge__logo {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--cy-brand), var(--cy-brand-2));
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(109, 139, 255, 0.4);
+    flex-shrink: 0;
+  }
+  .brand-badge__info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+  }
+  .brand-badge__name {
+    font-size: 1.02rem;
+    font-weight: 700;
+    color: var(--cy-text);
+    letter-spacing: -0.02em;
+  }
+  .brand-badge__tag {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--cy-brand);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* Mode Switch */
+  .mode-switch {
+    position: relative;
+    display: inline-flex;
+    padding: 4px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--cy-border);
+    border-radius: 999px;
+    backdrop-filter: blur(12px);
+  }
+  .mode-switch__btn {
+    position: relative;
+    z-index: 1;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    color: var(--cy-text-dim);
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.82rem;
+    padding: 7px 15px;
+    border-radius: 999px;
+    transition: color 0.35s var(--cy-ease);
+    white-space: nowrap;
+  }
+  .mode-switch__btn.is-active {
+    color: #fff;
+  }
+  .mode-switch__thumb {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    z-index: 0;
+    height: calc(100% - 8px);
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--cy-brand), var(--cy-brand-2));
+    box-shadow: 0 6px 16px rgba(109, 139, 255, 0.45);
+    transition: transform 0.45s var(--cy-ease-back), width 0.45s var(--cy-ease-back);
+  }
+
+  /* Vistas */
+  .view {
+    display: none;
+  }
+  .view.is-active {
+    display: block;
+    animation: viewIn 0.45s var(--cy-ease) both;
+  }
+  @keyframes viewIn {
+    from { opacity: 0; transform: translateY(12px) scale(0.985); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .card__title {
+    font-size: 1.45rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--cy-text);
+    margin-bottom: 6px;
+  }
+  .card__subtitle {
+    color: var(--cy-text-dim);
+    font-size: 0.88rem;
+    line-height: 1.45;
+    margin-bottom: 20px;
+  }
+
+  /* Form & Campos */
+  .query-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .field__label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--cy-text-dim);
+  }
+  .field__control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 14px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--cy-border-strong);
+    border-radius: var(--cy-radius-sm);
+    transition: border-color 0.3s var(--cy-ease), box-shadow 0.3s var(--cy-ease), background 0.3s var(--cy-ease);
+  }
+  .field__control:focus-within {
+    border-color: var(--cy-brand);
+    box-shadow: 0 0 0 4px rgba(109, 139, 255, 0.2);
+    background: rgba(0, 0, 0, 0.4);
+  }
+  .field__icon {
+    color: var(--cy-text-dim);
+    flex-shrink: 0;
+  }
+  .field__input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    color: var(--cy-text);
+    font: inherit;
+    font-size: 15px;
+    padding: 13px 0;
+    outline: none;
+  }
+  .field__input::placeholder {
+    color: rgba(154, 166, 196, 0.55);
+  }
+
+  .field__paste {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+    border: 0;
+    cursor: pointer;
+    color: var(--cy-text-dim);
+    background: rgba(255, 255, 255, 0.08);
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 7px 11px;
+    margin: 5px -6px 5px 0;
+    border-radius: 9px;
+    transition: color 0.2s var(--cy-ease), background 0.2s var(--cy-ease), transform 0.15s var(--cy-ease-back);
+  }
+  .field__paste:hover {
+    color: var(--cy-text);
+    background: rgba(255, 255, 255, 0.14);
+  }
+  .field__paste:active {
+    transform: scale(0.94);
+  }
+
+  .field.has-error .field__control {
+    border-color: var(--cy-danger);
+    box-shadow: 0 0 0 4px rgba(255, 107, 129, 0.18);
+  }
+  .field__error {
+    font-size: 0.75rem;
+    color: var(--cy-danger);
+    min-height: 0;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: 0.25s var(--cy-ease);
+  }
+  .field.has-error .field__error {
+    opacity: 1;
+    transform: none;
+    min-height: 1.1em;
+  }
+
+  /* Botones */
+  .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 13px 20px;
+    border-radius: var(--cy-radius-sm);
+    transition: transform 0.25s var(--cy-ease-back), box-shadow 0.3s var(--cy-ease), filter 0.3s var(--cy-ease);
+    overflow: hidden;
+  }
+  .btn:active {
+    transform: scale(0.97);
+  }
+  .btn--primary {
+    color: #fff;
+    background: linear-gradient(135deg, var(--cy-brand), var(--cy-brand-2));
+    box-shadow: 0 10px 24px rgba(109, 139, 255, 0.4);
+  }
+  .btn--primary:hover {
+    filter: brightness(1.08);
+    box-shadow: 0 14px 30px rgba(109, 139, 255, 0.5);
+  }
+  .btn--accent {
+    color: #04170f;
+    background: linear-gradient(135deg, var(--cy-accent), #2bb98d);
+    box-shadow: 0 10px 24px rgba(53, 214, 164, 0.35);
+    font-weight: 700;
+  }
+  .btn--accent:hover {
+    filter: brightness(1.06);
+    box-shadow: 0 12px 28px rgba(53, 214, 164, 0.45);
+  }
+  .btn--ghost {
+    color: var(--cy-text-dim);
+    background: transparent;
+    border: 1px solid var(--cy-border-strong);
+  }
+  .btn--ghost:hover {
+    color: var(--cy-text);
+    border-color: var(--cy-text-dim);
+  }
+  .btn.is-loading {
+    pointer-events: none;
+  }
+  .btn.is-loading .btn__label {
+    opacity: 0;
+  }
+  .btn__spinner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #fff;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .btn.is-loading .btn__spinner {
+    opacity: 1;
+    animation: spin 0.7s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Resultado */
+  .result {
+    margin-top: 20px;
+    padding: 18px;
+    border-radius: var(--cy-radius-sm);
+    background: linear-gradient(135deg, rgba(53, 214, 164, 0.12), rgba(109, 139, 255, 0.1));
+    border: 1px solid rgba(53, 214, 164, 0.35);
+    animation: resultIn 0.45s var(--cy-ease-back) both;
+  }
+  @keyframes resultIn {
+    from { opacity: 0; transform: translateY(10px) scale(0.97); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .result__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .result__badge {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--cy-accent);
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(53, 214, 164, 0.14);
+  }
+  .result__copy {
+    border: 0;
+    background: transparent;
+    color: var(--cy-text-dim);
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 8px;
+    transition: 0.2s var(--cy-ease);
+    display: flex;
+    align-items: center;
+  }
+  .result__copy:hover {
+    color: var(--cy-text);
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .result__code-box {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--cy-border);
+    padding: 16px 12px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+  }
+  .result__code {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 2.3rem;
+    font-weight: 800;
+    letter-spacing: 0.25em;
+    padding-left: 0.25em;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(53, 214, 164, 0.4);
+  }
+  .result__link {
+    display: block;
+    word-break: break-all;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    font-size: 0.75rem;
+    line-height: 1.45;
+    color: var(--cy-text);
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--cy-border);
+    padding: 9px 12px;
+    border-radius: 10px;
+    max-height: 90px;
+    overflow: auto;
+    text-decoration: none;
+    margin-bottom: 10px;
+  }
+  .result__link:hover {
+    border-color: var(--cy-accent);
+  }
+  .result__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .btn--sm {
+    padding: 9px 15px;
+    font-size: 0.85rem;
+    text-decoration: none;
+  }
+  .result__meta {
+    margin-top: 8px;
+    font-size: 0.78rem;
+    color: var(--cy-text-dim);
+    text-align: center;
+  }
+
+  /* Stepper */
+  .stepper {
+    margin-bottom: 6px;
+  }
+  .stepper__track {
+    height: 5px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+  }
+  .stepper__progress {
+    display: block;
+    height: 100%;
+    width: 25%;
+    background: linear-gradient(90deg, var(--cy-brand), var(--cy-brand-2));
+    border-radius: 999px;
+    transition: width 0.5s var(--cy-ease);
+  }
+  .stepper__dots {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 9px;
+    padding: 0 4px;
+  }
+  .stepper__dot {
+    font-size: 0.72rem;
+    color: var(--cy-text-dim);
+    transition: color 0.3s var(--cy-ease);
+  }
+  .stepper__dot.is-done {
+    color: var(--cy-accent);
+  }
+  .stepper__dot.is-active {
+    color: var(--cy-text);
+    font-weight: 700;
+  }
+
+  /* Wizard / Steps */
+  .card--wizard {
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .step {
+    display: none;
+    flex-direction: column;
+    gap: 14px;
+    flex: 1;
+  }
+  .step.is-active {
+    display: flex;
+    animation: stepIn 0.45s var(--cy-ease) both;
+  }
+  .step.is-leaving {
+    animation: stepOut 0.3s var(--cy-ease) both;
+  }
+  @keyframes stepIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes stepOut {
+    to { opacity: 0; transform: translateX(-20px); }
+  }
+
+  .step__pill {
+    align-self: flex-start;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--cy-brand);
+    padding: 4px 11px;
+    border-radius: 999px;
+    background: rgba(109, 139, 255, 0.14);
+    border: 1px solid rgba(109, 139, 255, 0.3);
+  }
+  .step__title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--cy-text);
+  }
+  .step__hint {
+    color: var(--cy-text-dim);
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
+  .step > .btn--primary {
+    margin-top: auto;
+    align-self: stretch;
+  }
+
+  /* Paso 1: Choices */
+  .choices {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 4px;
+  }
+  .choice {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 24px 14px;
+    border: 1.5px solid var(--cy-border-strong);
+    border-radius: var(--cy-radius-sm);
+    background: rgba(0, 0, 0, 0.25);
+    color: var(--cy-text);
+    cursor: pointer;
+    transition: transform 0.25s var(--cy-ease-back), border-color 0.25s var(--cy-ease), background 0.25s var(--cy-ease), box-shadow 0.25s var(--cy-ease);
+  }
+  .choice:hover {
+    transform: translateY(-3px);
+    border-color: var(--cy-brand);
+    box-shadow: 0 12px 28px rgba(109, 139, 255, 0.22);
+  }
+  .choice__icon {
+    color: var(--cy-brand);
+    transition: transform 0.35s var(--cy-ease-back), color 0.25s var(--cy-ease);
+  }
+  .choice:hover .choice__icon {
+    transform: scale(1.1);
+  }
+  .choice__label {
+    font-weight: 600;
+    font-size: 0.88rem;
+  }
+  .choice.is-selected {
+    border-color: var(--cy-accent);
+    background: rgba(53, 214, 164, 0.12);
+    box-shadow: 0 0 0 4px rgba(53, 214, 164, 0.2);
+  }
+  .choice.is-selected .choice__icon {
+    color: var(--cy-accent);
+  }
+
+  /* Ilustraciones y maquetas interactivas */
+  .illus {
+    position: relative;
+    border-radius: var(--cy-radius-sm);
+    overflow: hidden;
+    background:
+      repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0 12px, transparent 12px 24px),
+      linear-gradient(135deg, rgba(109,139,255,0.12), rgba(124,92,255,0.08));
+    border: 1px dashed var(--cy-border-strong);
+    min-height: 220px;
+    display: grid;
+    place-items: center;
+    animation: resultIn 0.45s var(--cy-ease-back) both;
+  }
+  .illus__stage {
+    position: relative;
+    display: inline-block;
+    line-height: 0;
+    max-width: 100%;
+  }
+  .illus__img {
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 380px;
+    display: block;
+    object-fit: contain;
+    border-radius: 8px;
+  }
+  .illus__caption {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--cy-text);
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px);
+    z-index: 5;
+  }
+
+  /* Puntero animado */
+  .pointer {
+    position: absolute;
+    font-size: 2.1rem;
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.65));
+    animation: pointAnim 1.25s var(--cy-ease) infinite;
+    pointer-events: none;
+    z-index: 6;
+  }
+  @keyframes pointAnim {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(6px, -8px); }
+  }
+
+  /* Resaltado animado (pill ring) */
+  .hl-ring {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    border-radius: 999px;
+    pointer-events: none;
+    z-index: 4;
+  }
+  .hl-ring__core {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 2.5px solid rgba(53, 214, 164, 0.95);
+    box-shadow: 0 0 0 3px rgba(53, 214, 164, 0.15), 0 0 22px rgba(53, 214, 164, 0.45);
+    animation: ringBreathe 2s ease-in-out infinite;
+  }
+  .hl-ring::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: 0 0 0 2px rgba(53, 214, 164, 0.5);
+    animation: ringHalo 2s ease-out infinite;
+  }
+  @keyframes ringBreathe {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(53, 214, 164, 0.15), 0 0 16px rgba(53, 214, 164, 0.35); opacity: 0.9; }
+    50%      { box-shadow: 0 0 0 5px rgba(53, 214, 164, 0.22), 0 0 28px rgba(53, 214, 164, 0.65); opacity: 1; }
+  }
+  @keyframes ringHalo {
+    0%   { transform: scale(1); opacity: 0.5; }
+    100% { transform: scale(1.14); opacity: 0; }
+  }
+
+  /* Wizard nav */
+  .wizard-nav {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 4px;
+  }
+  .wizard-nav .btn {
+    padding: 9px 16px;
+    font-size: 0.85rem;
+  }
+
+  /* Toast Flotante */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 30px;
+    transform: translate(-50%, 25px);
+    padding: 12px 22px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, var(--cy-accent), #2bb98d);
+    color: #04170f;
+    font-weight: 700;
+    font-size: 0.92rem;
+    box-shadow: 0 16px 36px rgba(53, 214, 164, 0.45);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.45s var(--cy-ease-back), opacity 0.35s var(--cy-ease);
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .toast.is-visible {
+    opacity: 1;
+    transform: translate(-50%, 0);
   }
 </style>
 
 <script>
   (function () {
-    // 1. Conmutador entre Modo Rápido y Modo Tutorial
-    const btnRapido = document.getElementById('tab-btn-rapido');
-    const btnTutorial = document.getElementById('tab-btn-tutorial');
-    const panelRapido = document.getElementById('panel-rapido');
-    const panelTutorial = document.getElementById('panel-tutorial');
-    const btnSaltarARapido = document.getElementById('btn-saltar-a-rapido');
+    const $ = (sel: string, ctx: Document | HTMLElement = document) => ctx.querySelector<HTMLElement>(sel);
+    const $$ = (sel: string, ctx: Document | HTMLElement = document) => Array.from(ctx.querySelectorAll<HTMLElement>(sel));
 
-    function activarModo(modo: 'rapido' | 'tutorial') {
-      if (modo === 'rapido') {
-        btnRapido?.classList.add('active');
-        btnRapido?.classList.remove('text-ink-muted');
-        btnRapido?.setAttribute('aria-selected', 'true');
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        btnTutorial?.classList.remove('active');
-        btnTutorial?.classList.add('text-ink-muted');
-        btnTutorial?.setAttribute('aria-selected', 'false');
-
-        panelRapido?.classList.remove('hidden');
-        panelTutorial?.classList.add('hidden');
-      } else {
-        btnTutorial?.classList.add('active');
-        btnTutorial?.classList.remove('text-ink-muted');
-        btnTutorial?.setAttribute('aria-selected', 'true');
-
-        btnRapido?.classList.remove('active');
-        btnRapido?.classList.add('text-ink-muted');
-        btnRapido?.setAttribute('aria-selected', 'false');
-
-        panelTutorial?.classList.remove('hidden');
-        panelRapido?.classList.add('hidden');
-      }
+    // Toast flotante
+    let toastTimer: ReturnType<typeof setTimeout> | null = null;
+    function toast(message: string, emoji = '✨') {
+      const el = $('[data-toast]');
+      if (!el) return;
+      el.innerHTML = `<span>${emoji}</span><span>${message}</span>`;
+      el.classList.add('is-visible');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove('is-visible'), 2000);
     }
 
-    btnRapido?.addEventListener('click', () => activarModo('rapido'));
-    btnTutorial?.addEventListener('click', () => activarModo('tutorial'));
-    btnSaltarARapido?.addEventListener('click', () => {
-      activarModo('rapido');
-      const input = document.getElementById('input-email-codigo') as HTMLInputElement | null;
-      if (input) {
-        input.focus();
-        input.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
-    });
-
-    // 2. Control del Stepper en Modo Tutorial
-    const steps = [1, 2, 3, 4];
-    const progressBar = document.getElementById('stepper-progress-bar');
-    const stepIndicators = document.querySelectorAll<HTMLButtonElement>('.step-indicator');
-    const stepPanels = document.querySelectorAll<HTMLElement>('.step-panel');
-
-    function irAlPaso(num: number) {
-      if (num < 1 || num > 4) return;
-      
-      // Actualizar ancho de barra de progreso
-      if (progressBar) {
-        const widths = ['10%', '37%', '68%', '100%'];
-        progressBar.style.width = widths[num - 1];
-      }
-
-      // Actualizar estilos de indicadores
-      stepIndicators.forEach((ind) => {
-        const target = Number(ind.getAttribute('data-step-target'));
-        if (target === num) {
-          ind.className = 'step-indicator active relative z-10 w-8 h-8 rounded-full bg-brand text-ground text-xs font-bold flex items-center justify-center transition-all cursor-pointer';
-        } else if (target < num) {
-          ind.className = 'step-indicator relative z-10 w-8 h-8 rounded-full bg-emerald-600 text-white text-xs font-bold flex items-center justify-center transition-all cursor-pointer';
-        } else {
-          ind.className = 'step-indicator relative z-10 w-8 h-8 rounded-full bg-ground border border-ground-border text-ink-muted text-xs font-bold flex items-center justify-center transition-all cursor-pointer';
-        }
+    // Consulta al backend
+    async function consultarCodigo(email: string) {
+      const res = await fetch('/api/codigos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
       });
-
-      // Mostrar panel activo
-      stepPanels.forEach((panel) => {
-        if (panel.id === `step-content-${num}`) {
-          panel.classList.remove('hidden');
-          panel.classList.add('animate-fade-in');
-        } else {
-          panel.classList.add('hidden');
-        }
-      });
+      if (res.status === 429) {
+        return { status: 'rate', mensaje: 'Demasiadas solicitudes. Espera un momento antes de volver a intentar.' };
+      }
+      return await res.json();
     }
 
-    stepIndicators.forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const target = Number(btn.getAttribute('data-step-target'));
-        if (target) irAlPaso(target);
-      });
-    });
+    const COPY_SVG =
+      '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" /></svg>';
 
-    document.querySelectorAll<HTMLButtonElement>('[data-step-next]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const next = Number(btn.getAttribute('data-step-next'));
-        if (next) irAlPaso(next);
-      });
-    });
+    // Renderizar resultado
+    function renderResult(box: HTMLElement, data: any, emailConsultado: string) {
+      if (data.status === 'ok') {
+        const code = String(data.code || '----');
+        const link = data.enlace_directo || '#';
+        const formattedExpires = data.expires_in_formatted || '15:00 min';
 
-    document.querySelectorAll<HTMLButtonElement>('[data-step-prev]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const prev = Number(btn.getAttribute('data-step-prev'));
-        if (prev) irAlPaso(prev);
-      });
-    });
+        box.innerHTML = `
+          <div class="result__head">
+            <span class="result__badge">Código temporal listo</span>
+            <button class="result__copy" type="button" data-copy title="Copiar código">
+              ${COPY_SVG}
+            </button>
+          </div>
+          <div class="result__code-box">
+            <span style="font-size:0.7rem;text-transform:uppercase;color:var(--cy-text-dim);display:block;margin-bottom:4px;letter-spacing:0.05em">Código de 4 dígitos</span>
+            <div class="result__code">${code}</div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px">
+            <span style="font-size:0.75rem;color:var(--cy-accent);font-weight:600">✓ Válido por: ${formattedExpires}</span>
+            <span style="font-size:0.7rem;color:var(--cy-text-dim)">${data.generado_hace || 'Recién generado'}</span>
+          </div>
+          <div class="result__actions">
+            <button class="btn btn--accent btn--sm" type="button" data-copy style="flex:1">Copiar código</button>
+            <a class="btn btn--ghost btn--sm" href="${link}" target="_blank" rel="noopener noreferrer">Abrir enlace ↗</a>
+          </div>
+          <p class="result__meta">Ingresa los 4 dígitos en la pantalla de tu dispositivo.</p>
+        `;
 
-    // 3. Sistema de Notificación Toast
-    const toast = document.getElementById('toast-notificacion');
-    const toastTexto = document.getElementById('toast-notificacion-texto');
-    let toastTimeout: ReturnType<typeof setTimeout> | null = null;
-
-    function mostrarToast(texto: string) {
-      if (!toast || !toastTexto) return;
-      toastTexto.textContent = texto;
-      toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
-      toast.classList.add('translate-y-0', 'opacity-100');
-
-      if (toastTimeout) clearTimeout(toastTimeout);
-      toastTimeout = setTimeout(() => {
-        toast.classList.remove('translate-y-0', 'opacity-100');
-        toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
-      }, 2400);
-    }
-
-    // 4. Botón "Pegar" desde Portapapeles
-    const btnPegar = document.getElementById('btn-pegar-portapapeles');
-    const inputEmail = document.getElementById('input-email-codigo') as HTMLInputElement | null;
-    const errorFeedback = document.getElementById('error-email-feedback');
-
-    btnPegar?.addEventListener('click', async () => {
-      try {
-        if (!navigator.clipboard?.readText) {
-          mostrarToast('Tu navegador no permite lectura automática. Pega manualmente.');
-          inputEmail?.focus();
-          return;
+        // Actualizar enlace global de WhatsApp
+        const waLink = document.getElementById('global-whatsapp-support-link') as HTMLAnchorElement | null;
+        if (waLink) {
+          waLink.href = `https://wa.me/51921319266?text=${encodeURIComponent(
+            `Hola TaiSTR, estoy solicitando el código de hogar para mi cuenta: ${emailConsultado}. ¿Me ayudan a verificarlo por favor?`
+          )}`;
         }
-        const text = await navigator.clipboard.readText();
-        if (text && inputEmail) {
-          inputEmail.value = text.trim();
-          mostrarToast('✓ Correo pegado del portapapeles');
-          if (errorFeedback) errorFeedback.classList.add('hidden');
-        }
-      } catch (_) {
-        mostrarToast('Permiso de portapapeles denegado. Pega manualmente.');
-        inputEmail?.focus();
-      }
-    });
 
-    // 5. Envío del Formulario y Consulta a /api/codigos
-    const formConsulta = document.getElementById('form-consulta-codigos');
-    const btnSubmit = document.getElementById('btn-submit-codigo');
-    const iconSearch = document.getElementById('icon-submit-search');
-    const spinnerSearch = document.getElementById('spinner-submit-search');
-    const labelSubmit = document.getElementById('label-submit-search');
-    const resultContainer = document.getElementById('resultado-codigo-container');
-    const valorCodigo = document.getElementById('valor-codigo');
-    const resultadoExpiracion = document.getElementById('resultado-expiracion');
-    const enlaceDirectoBtn = document.getElementById('enlace-directo-btn') as HTMLAnchorElement | null;
-    const btnCopiar = document.getElementById('btn-copiar-codigo');
-    const labelCopiar = document.getElementById('label-copiar-btn');
-    const btnWhatsapp = document.getElementById('btn-whatsapp-soporte-codigos') as HTMLAnchorElement | null;
-
-    let countdownInterval: ReturnType<typeof setInterval> | null = null;
-
-    formConsulta?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (!inputEmail) return;
-
-      const email = inputEmail.value.trim().toLowerCase();
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-      if (!email || !emailRegex.test(email)) {
-        if (errorFeedback) {
-          errorFeedback.textContent = 'Ingresa un correo electrónico con formato válido (ej. usuario@gmail.com).';
-          errorFeedback.classList.remove('hidden');
-        }
-        inputEmail.focus();
-        return;
-      }
-
-      if (errorFeedback) errorFeedback.classList.add('hidden');
-
-      // Estado cargando
-      if (btnSubmit) btnSubmit.setAttribute('disabled', 'true');
-      iconSearch?.classList.add('hidden');
-      spinnerSearch?.classList.remove('hidden');
-      if (labelSubmit) labelSubmit.textContent = 'Consultando código...';
-
-      try {
-        const response = await fetch('/api/codigos', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email }),
+        // Listener de copiar
+        box.querySelectorAll('[data-copy]').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            try {
+              await navigator.clipboard.writeText(code);
+              toast(`Código ${code} copiado al portapapeles`, '📋');
+            } catch {
+              toast(`Código: ${code}`, '📋');
+            }
+          });
         });
 
-        const data = await response.json();
-
-        if (response.ok && data.status === 'ok') {
-          // Mostrar código
-          if (valorCodigo) valorCodigo.textContent = data.code;
-          if (enlaceDirectoBtn && data.enlace_directo) {
-            enlaceDirectoBtn.href = data.enlace_directo;
-          }
-
-          // Iniciar temporizador regresivo
-          if (countdownInterval) clearInterval(countdownInterval);
-          let timeLeft = Number(data.expires_in_seconds) || 900;
-
-          const actualizarContador = () => {
-            const m = Math.floor(timeLeft / 60);
-            const s = timeLeft % 60;
-            if (resultadoExpiracion) {
-              resultadoExpiracion.textContent = `Expira en: ${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')} min`;
-            }
-            if (timeLeft <= 0) {
-              if (countdownInterval) clearInterval(countdownInterval);
-              if (resultadoExpiracion) resultadoExpiracion.textContent = 'Código expirado. Genera uno nuevo.';
-            }
-            timeLeft--;
-          };
-          actualizarContador();
-          countdownInterval = setInterval(actualizarContador, 1000);
-
-          // Actualizar botón de soporte con email prellenado
-          if (btnWhatsapp) {
-            btnWhatsapp.href = `https://wa.me/51921319266?text=${encodeURIComponent(
-              `Hola TaiSTR, estoy consultando el código de hogar para la cuenta: ${email}. ¿Me ayudan a verificarlo por favor?`
-            )}`;
-          }
-
-          resultContainer?.classList.remove('hidden');
-          resultContainer?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-          mostrarToast('✓ Código temporal encontrado');
-        } else {
-          const mensaje = data.mensaje || 'No se pudo obtener el código en este momento.';
-          if (errorFeedback) {
-            errorFeedback.textContent = mensaje;
-            errorFeedback.classList.remove('hidden');
-          }
-          mostrarToast(mensaje);
-        }
-      } catch (err) {
-        if (errorFeedback) {
-          errorFeedback.textContent = 'Error de conexión. Verifica tu internet o contacta a soporte.';
-          errorFeedback.classList.remove('hidden');
-        }
-        mostrarToast('Error de conexión con el servidor.');
-      } finally {
-        if (btnSubmit) btnSubmit.removeAttribute('disabled');
-        iconSearch?.classList.remove('hidden');
-        spinnerSearch?.classList.add('hidden');
-        if (labelSubmit) labelSubmit.textContent = 'Obtener código temporal';
+        toast('¡Código obtenido!', '🎉');
+      } else {
+        const msg = data.mensaje || 'No se pudo obtener el código en este momento.';
+        box.innerHTML = `
+          <div class="result__head">
+            <span class="result__badge" style="color:var(--cy-danger);background:rgba(255,107,129,0.15)">Aviso</span>
+          </div>
+          <p style="font-size:0.85rem;color:var(--cy-text);line-height:1.45;margin-bottom:10px">${msg}</p>
+          <a class="btn btn--accent btn--sm w-full" href="https://wa.me/51921319266?text=${encodeURIComponent(
+            `Hola TaiSTR, tengo una duda con el código de hogar de Netflix para el correo: ${emailConsultado}`
+          )}" target="_blank" rel="noopener noreferrer">Pedir ayuda por WhatsApp ↗</a>
+        `;
+        toast(msg, '⚠️');
       }
+
+      box.hidden = false;
+      box.style.animation = 'none';
+      void box.offsetWidth;
+      box.style.animation = '';
+    }
+
+    // Formulario de consulta
+    function wireQueryForm(form: HTMLElement) {
+      const field = $('.field', form);
+      const input = $('.field__input', form) as HTMLInputElement | null;
+      const errorEl = $('[data-field-error]', form);
+      const submitBtn = $('[data-submit]', form) as HTMLButtonElement | null;
+      const resultBox = form.parentElement?.querySelector<HTMLElement>('[data-result]');
+      const pasteBtn = $('[data-paste]', form);
+
+      input?.addEventListener('input', () => field?.classList.remove('has-error'));
+
+      pasteBtn?.addEventListener('click', async () => {
+        try {
+          const text = (await navigator.clipboard.readText()).trim();
+          if (text && input) {
+            input.value = text;
+            field?.classList.remove('has-error');
+            toast('Pegado', '📋');
+          }
+          input?.focus();
+        } catch {
+          input?.focus();
+          toast('Permiso de portapapeles denegado. Escribe tu correo.', '⚠️');
+        }
+      });
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = input?.value.trim() || '';
+
+        if (!EMAIL_RE.test(email)) {
+          field?.classList.add('has-error');
+          if (errorEl) errorEl.textContent = 'Introduce un correo válido.';
+          input?.focus();
+          return;
+        }
+
+        submitBtn?.classList.add('is-loading');
+        if (submitBtn) submitBtn.disabled = true;
+        if (resultBox) resultBox.hidden = true;
+
+        let data: any;
+        try {
+          data = await consultarCodigo(email);
+        } catch (err) {
+          data = { status: 'error', mensaje: 'Error de servidor, intenta más tarde.' };
+        } finally {
+          submitBtn?.classList.remove('is-loading');
+          if (submitBtn) submitBtn.disabled = false;
+        }
+
+        if (resultBox) renderResult(resultBox, data, email);
+      });
+    }
+
+    $$('[data-query-form]').forEach(wireQueryForm);
+
+    // ============================================================
+    // Switch de Modo (easy / tutorial)
+    // ============================================================
+    const modeButtons = $$('.mode-switch__btn');
+    const thumb = $('.mode-switch__thumb');
+    const views = $$('.view');
+
+    function positionThumb(activeBtn: HTMLElement) {
+      if (!thumb) return;
+      thumb.style.width = `${activeBtn.offsetWidth}px`;
+      thumb.style.transform = `translateX(${activeBtn.offsetLeft - 4}px)`;
+    }
+
+    function setMode(mode: string) {
+      modeButtons.forEach((btn) => {
+        const active = btn.dataset.mode === mode;
+        btn.classList.toggle('is-active', active);
+        btn.setAttribute('aria-selected', String(active));
+        if (active) positionThumb(btn);
+      });
+      views.forEach((v) => v.classList.toggle('is-active', v.dataset.view === mode));
+      if (mode === 'tutorial') resetWizard();
+    }
+
+    modeButtons.forEach((btn) => btn.addEventListener('click', () => setMode(btn.dataset.mode || 'easy')));
+
+    window.addEventListener('load', () => {
+      const active = $('.mode-switch__btn.is-active');
+      if (active) positionThumb(active);
+    });
+    window.addEventListener('resize', () => {
+      const active = $('.mode-switch__btn.is-active');
+      if (active) positionThumb(active);
     });
 
-    // 6. Copiado de Código al Portapapeles
-    btnCopiar?.addEventListener('click', async () => {
-      const codigoTexto = valorCodigo?.textContent?.trim();
-      if (!codigoTexto || codigoTexto === '----') return;
+    // ============================================================
+    // Wizard / Tutorial State Machine
+    // ============================================================
+    const TOTAL_STEPS = 4;
+    const wizard = {
+      current: 1,
+      choice: null as 'movil' | 'tv' | null,
+    };
 
-      try {
-        await navigator.clipboard.writeText(codigoTexto);
-        if (labelCopiar) labelCopiar.textContent = '¡Copiado!';
-        mostrarToast(`✓ Código ${codigoTexto} copiado`);
+    const stepEls = $$('.step');
+    const progressBar = $('[data-progress]');
+    const backBtn = $('[data-back]');
+
+    function updateStepper() {
+      if (progressBar) {
+        progressBar.style.width = `${(wizard.current / TOTAL_STEPS) * 100}%`;
+      }
+      $$('.stepper__dot').forEach((dot) => {
+        const n = Number(dot.dataset.dot);
+        dot.classList.toggle('is-active', n === wizard.current);
+        dot.classList.toggle('is-done', n < wizard.current);
+      });
+      if (backBtn) {
+        backBtn.hidden = wizard.current === 1;
+      }
+    }
+
+    function goToStep(n: number) {
+      if (n < 1 || n > TOTAL_STEPS) return;
+      const currentEl = stepEls.find((s) => s.classList.contains('is-active'));
+      const nextEl = stepEls.find((s) => Number(s.dataset.step) === n);
+      if (!nextEl || currentEl === nextEl) return;
+
+      wizard.current = n;
+      updateStepper();
+
+      if (currentEl) {
+        currentEl.classList.add('is-leaving');
+        currentEl.addEventListener(
+          'animationend',
+          () => {
+            currentEl.classList.remove('is-active', 'is-leaving');
+            nextEl.classList.add('is-active');
+          },
+          { once: true }
+        );
+      } else {
+        nextEl.classList.add('is-active');
+      }
+
+      if (n === 2) renderStep2();
+      if (n === 3) renderStep3();
+    }
+
+    backBtn?.addEventListener('click', () => goToStep(wizard.current - 1));
+
+    function resetWizard() {
+      wizard.current = 1;
+      wizard.choice = null;
+      stepEls.forEach((s) => s.classList.remove('is-active', 'is-leaving'));
+      const s1 = $('[data-step="1"]');
+      if (s1) s1.classList.add('is-active');
+      $$('.choice').forEach((c) => c.classList.remove('is-selected'));
+      const step1Action = $('[data-step1-action]');
+      if (step1Action) step1Action.hidden = true;
+      updateStepper();
+    }
+
+    // Paso 1: Elección móvil / tv INTERACTIVA
+    const step1Action = $('[data-step1-action]');
+    $$('.choice').forEach((choice) => {
+      choice.addEventListener('click', () => {
+        const choiceType = choice.dataset.choice as 'movil' | 'tv';
+        wizard.choice = choiceType;
+        $$('.choice').forEach((c) => c.classList.toggle('is-selected', c === choice));
+        if (step1Action) step1Action.hidden = false;
+        toast(choiceType === 'movil' ? 'Dispositivo móvil seleccionado' : 'Televisor seleccionado', '👍');
+        // Transición suave directa tras 650ms
         setTimeout(() => {
-          if (labelCopiar) labelCopiar.textContent = 'Copiar código';
-        }, 2000);
-      } catch (_) {
-        mostrarToast(`Código: ${codigoTexto}`);
-      }
+          if (wizard.current === 1 && wizard.choice) {
+            goToStep(2);
+          }
+        }, 650);
+      });
     });
+
+    $('[data-next-step="2"]')?.addEventListener('click', () => {
+      if (wizard.choice) goToStep(2);
+    });
+
+    // Imágenes locales descargadas
+    const IMAGES = {
+      paso2Movil: '/codigos/paso2-movil.png',
+      paso2Tv: '/codigos/paso2-tv.png',
+      paso3: '/codigos/paso3-comun.svg',
+    };
+
+    function buildIllus(box: HTMLElement, opts: {
+      caption: string;
+      imgSrc: string;
+      pointerStyle: string;
+      ringStyle: string;
+    }) {
+      const { caption, imgSrc, pointerStyle, ringStyle } = opts;
+      const pointer = `<span class="pointer" style="${pointerStyle}" aria-hidden="true">👆</span>`;
+      const captionHtml = `<span class="illus__caption">${caption}</span>`;
+      const ring = `<span class="hl-ring" style="${ringStyle}"><span class="hl-ring__core"></span></span>`;
+
+      box.innerHTML = captionHtml + '<span class="illus__stage"></span>';
+      const stage = box.querySelector<HTMLElement>('.illus__stage');
+      if (!stage) return;
+
+      const img = document.createElement('img');
+      img.className = 'illus__frame illus__img';
+      img.src = imgSrc;
+      img.alt = caption;
+      stage.appendChild(img);
+      stage.insertAdjacentHTML('beforeend', ring + pointer);
+    }
+
+    function renderStep2() {
+      const box = $('[data-illus-2]');
+      const title = $('[data-step2-title]');
+      if (!box || !title) return;
+
+      const isMovil = wizard.choice === 'movil';
+      title.textContent = isMovil ? 'Abre los ajustes de tu móvil' : 'Abre el menú de tu televisor';
+
+      buildIllus(box, {
+        caption: isMovil ? '📱 Pulsa «Ver temporalmente»' : '📺 Pulsa «Esta es mi Cuenta»',
+        imgSrc: isMovil ? IMAGES.paso2Movil : IMAGES.paso2Tv,
+        pointerStyle: isMovil ? 'top: 75%; left: 50%;' : 'top: 89%; left: 50.5%;',
+        ringStyle: isMovil
+          ? 'top: 68%; left: 50%; width: 84%; height: 7%;'
+          : 'top: 77.5%; left: 50.5%; width: 31%; height: 15%;',
+      });
+    }
+
+    function renderStep3() {
+      const box = $('[data-illus-3]');
+      if (!box) return;
+
+      buildIllus(box, {
+        caption: '✉️ Pulsa «Enviar email»',
+        imgSrc: IMAGES.paso3,
+        pointerStyle: 'top: 88%; left: 50%;',
+        ringStyle: 'top: 78%; left: 50%; width: 50%; height: 26%;',
+      });
+    }
+
+    // Confirmaciones en pasos 2 y 3
+    $$('[data-confirm-step]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const step = Number(btn.dataset.confirmStep);
+        if (step === 2) {
+          toast('¡Ya falta poco!', '⏳');
+          setTimeout(() => goToStep(3), 600);
+        } else if (step === 3) {
+          toast('¡Estamos a un paso!', '🚀');
+          setTimeout(() => goToStep(4), 600);
+        }
+      });
+    });
+
+    updateStepper();
   })();
 </script>
