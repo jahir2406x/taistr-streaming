@@ -11,7 +11,6 @@
 html {
   background-color: #09090B;
   color: #F4F4F5;
-  scroll-behavior: smooth;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -513,8 +512,7 @@ html[data-geo-ready="false"] .geo-price {
 .section-rhythm { padding-block: var(--section-py); }
 
 .section-below-fold {
-  content-visibility: auto;
-  contain-intrinsic-size: 1px 650px;
+  contain: paint;
 }
 
 .section-kicker {
@@ -556,21 +554,17 @@ details[open].surface-card {
 }
 
 /* ==========================================================================
-   HEADER CON EFECTO VIDRIO, COMPACTACIÓN Y SUBRAYADO DESLIZANTE
+   HEADER CON EFECTO VIDRIO Y COMPOSICIÓN LIGERA
    ========================================================================== */
 #site-header {
-  background-color: rgba(9, 9, 11, 0.78);
-  backdrop-filter: blur(18px) saturate(180%);
-  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  background-color: rgba(9, 9, 11, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
   box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.04);
-  transition-property: border-color, box-shadow, background-color, backdrop-filter;
-  transition-duration: var(--anim-media);
-  transition-timing-function: var(--ease-out);
-}
-
-#site-header .header-inner {
-  transition: height var(--anim-media) var(--ease-out);
+  transition: background-color var(--anim-media) var(--ease-out),
+              border-color var(--anim-media) var(--ease-out),
+              box-shadow var(--anim-media) var(--ease-out);
 }
 
 @supports not (backdrop-filter: blur(14px)) {
@@ -578,15 +572,9 @@ details[open].surface-card {
 }
 
 #site-header.header-scrolled {
-  background-color: rgba(9, 9, 11, 0.92);
-  backdrop-filter: blur(24px) saturate(190%);
-  -webkit-backdrop-filter: blur(24px) saturate(190%);
-  border-bottom-color: rgba(255, 255, 255, 0.13);
+  background-color: rgba(9, 9, 11, 0.94);
+  border-bottom-color: rgba(255, 255, 255, 0.12);
   box-shadow: 0 10px 30px -6px rgba(0, 0, 0, 0.72), inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
-}
-
-#site-header.header-scrolled .header-inner {
-  height: 3.35rem;
 }
 
 .nav-sliding-indicator {
@@ -621,8 +609,7 @@ details[open].surface-card {
 }
 
 .hero-noise-layer {
-  opacity: 0.032;
-  mix-blend-mode: overlay;
+  opacity: 0.02;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -634,10 +621,10 @@ details[open].surface-card {
   height: 32rem;
   border-radius: 9999px;
   background: radial-gradient(circle, color-mix(in srgb, var(--hero-accent, var(--glow-brand)) 25%, transparent) 0%, transparent 68%);
-  filter: blur(64px);
+  filter: blur(20px);
   opacity: 0.85;
   pointer-events: none;
-  transition: background 480ms var(--ease-out), transform 600ms var(--ease-out);
+  transition: background 480ms var(--ease-out);
 }
 
 .hero-glass-card {
@@ -709,18 +696,6 @@ html.js-anim:not([data-anim="off"]) .hero-aurora-section[data-offscreen="true"] 
   animation-play-state: paused;
 }
 
-@supports (animation-timeline: view()) {
-  @keyframes auroraScrollParallax {
-    from { transform: translate3d(0, -4%, 0); }
-    to { transform: translate3d(0, 8%, 0); }
-  }
-  html.js-anim:not([data-anim="off"]) .hero-aurora-bg {
-    animation: auroraScrollParallax linear both;
-    animation-timeline: view();
-    animation-range: entry 0% exit 100%;
-  }
-}
-
 @keyframes heroFadeUp {
   from { opacity: 0; transform: translateY(10px) scale(0.985); }
   to { opacity: 1; transform: translateY(0) scale(1); }
@@ -754,16 +729,16 @@ html.js-anim:not([data-anim="off"]) .hero-stagger {
    ========================================================================== */
 html.js-anim:not([data-anim="off"]) [data-revelar] {
   opacity: 0;
-  transform: translate3d(0, 20px, 0);
-  transition: opacity 250ms var(--ease-out), transform 280ms var(--ease-out);
-  transition-delay: 0s;
+  transform: translate3d(0, 14px, 0);
+  transition: none !important;
 }
 
 html.js-anim:not([data-anim="off"]) [data-revelar].revelado {
   opacity: 1;
   transform: translate3d(0, 0, 0);
-  transition: opacity 380ms var(--ease-out), transform 420ms var(--ease-out);
-  transition-delay: calc(var(--i, 0) * 45ms);
+  transition: opacity 280ms cubic-bezier(0.16, 1, 0.3, 1), transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--i, 0) * 30ms);
+  will-change: transform, opacity;
 }
 
 .hero-platform-divider {

@@ -87,39 +87,29 @@ import { AJUSTES } from '../../editar';
         }
 
         if (window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-          var rafPending = false;
-          var lastEv = null;
-          var activeMag = null;
+          var interactiveCards = document.querySelectorAll('.service-card, .tarjeta-plan');
+          interactiveCards.forEach(function (card) {
+            card.addEventListener('pointermove', function (e) {
+              var r = card.getBoundingClientRect();
+              card.style.setProperty('--x', Math.round(e.clientX - r.left) + 'px');
+              card.style.setProperty('--y', Math.round(e.clientY - r.top) + 'px');
+            }, { passive: true });
+          });
 
-          document.addEventListener('pointermove', function (e) {
-            lastEv = e;
-            if (rafPending) return;
-            rafPending = true;
-            requestAnimationFrame(function () {
-              rafPending = false;
-              if (!lastEv) return;
-              var t = lastEv.target;
-              var card = t && t.closest ? t.closest('.service-card, .tarjeta-plan') : null;
-              if (card) {
-                var r = card.getBoundingClientRect();
-                card.style.setProperty('--x', Math.round(lastEv.clientX - r.left) + 'px');
-                card.style.setProperty('--y', Math.round(lastEv.clientY - r.top) + 'px');
-              }
-              var mag = t && t.closest ? t.closest('.btn-magnetic') : null;
-              if (mag) {
-                activeMag = mag;
-                var mr = mag.getBoundingClientRect();
-                var dx = ((lastEv.clientX - (mr.left + mr.width / 2)) / (mr.width / 2)) * 5;
-                var dy = ((lastEv.clientY - (mr.top + mr.height / 2)) / (mr.height / 2)) * 5;
-                mag.style.setProperty('--mag-x', Math.max(-6, Math.min(6, dx)).toFixed(1) + 'px');
-                mag.style.setProperty('--mag-y', Math.max(-6, Math.min(6, dy)).toFixed(1) + 'px');
-              } else if (activeMag) {
-                activeMag.style.setProperty('--mag-x', '0px');
-                activeMag.style.setProperty('--mag-y', '0px');
-                activeMag = null;
-              }
-            });
-          }, { passive: true });
+          var magBtns = document.querySelectorAll('.btn-magnetic');
+          magBtns.forEach(function (mag) {
+            mag.addEventListener('pointermove', function (e) {
+              var mr = mag.getBoundingClientRect();
+              var dx = ((e.clientX - (mr.left + mr.width / 2)) / (mr.width / 2)) * 5;
+              var dy = ((e.clientY - (mr.top + mr.height / 2)) / (mr.height / 2)) * 5;
+              mag.style.setProperty('--mag-x', Math.max(-6, Math.min(6, dx)).toFixed(1) + 'px');
+              mag.style.setProperty('--mag-y', Math.max(-6, Math.min(6, dy)).toFixed(1) + 'px');
+            }, { passive: true });
+            mag.addEventListener('pointerleave', function () {
+              mag.style.setProperty('--mag-x', '0px');
+              mag.style.setProperty('--mag-y', '0px');
+            }, { passive: true });
+          });
         }
       })();
     </script>
