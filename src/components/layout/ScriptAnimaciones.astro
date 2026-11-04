@@ -65,21 +65,20 @@ import { AJUSTES } from '../../editar';
 
           var revealEls = document.querySelectorAll('[data-revelar]');
           if (revealEls.length > 0) {
-            var vh = window.innerHeight || document.documentElement.clientHeight || 800;
             var revealObserver = new IntersectionObserver(
               function (entries) {
                 for (var i = 0; i < entries.length; i++) {
                   var entry = entries[i];
                   if (entry.isIntersecting) {
                     entry.target.classList.add('revelado');
-                  } else if (entry.boundingClientRect.top > (window.innerHeight || document.documentElement.clientHeight || 800)) {
-                    // Solo reiniciar si el elemento sale por la parte inferior al volver arriba
-                    // Nunca cuando ya se scrolleó hacia abajo, para evitar parpadeos y entrecortes
+                  } else {
+                    // Siempre reiniciar al salir del viewport (arriba o abajo)
+                    // para que las animaciones vuelvan a ejecutarse cada vez que se scrollea
                     entry.target.classList.remove('revelado');
                   }
                 }
               },
-              { rootMargin: '0px 0px -30px 0px', threshold: 0.05 }
+              { rootMargin: '0px 0px -25px 0px', threshold: 0.06 }
             );
             for (var j = 0; j < revealEls.length; j++) {
               revealObserver.observe(revealEls[j]);

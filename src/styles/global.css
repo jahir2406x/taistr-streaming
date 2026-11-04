@@ -754,15 +754,16 @@ html.js-anim:not([data-anim="off"]) .hero-stagger {
    ========================================================================== */
 html.js-anim:not([data-anim="off"]) [data-revelar] {
   opacity: 0;
-  transform: translate3d(0, 18px, 0);
-  transition: opacity 380ms var(--ease-out), transform 420ms var(--ease-out);
+  transform: translate3d(0, 20px, 0);
+  transition: opacity 250ms var(--ease-out), transform 280ms var(--ease-out);
+  transition-delay: 0s;
 }
 
 html.js-anim:not([data-anim="off"]) [data-revelar].revelado {
   opacity: 1;
   transform: translate3d(0, 0, 0);
-  transition: opacity 400ms var(--ease-out), transform 450ms var(--ease-out);
-  transition-delay: calc(var(--i, 0) * 50ms);
+  transition: opacity 380ms var(--ease-out), transform 420ms var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 45ms);
 }
 
 .hero-platform-divider {
