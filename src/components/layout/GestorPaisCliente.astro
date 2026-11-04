@@ -56,6 +56,7 @@ for (const c of PAISES) {
           minimumFractionDigits: hasDecimals ? 2 : 0, maximumFractionDigits: 2,
         }).format(amount).replace(/\u00A0/g, ' ').trim();
       } catch (_) {}
+      if (formatted.toUpperCase().indexOf(iso + ' ') === 0) formatted = (iso === 'USD' ? '$' : '') + formatted.slice(iso.length + 1).trim();
       return formatted.toUpperCase().slice(-iso.length - 1) === ' ' + iso ? formatted : formatted + ' ' + iso;
     }
 
@@ -237,7 +238,7 @@ for (const c of PAISES) {
       } catch (_) {}
       try { var s = localStorage.getItem(STORAGE_KEY); if (s) { window.__STREAMING_GEO__.setCountry(s, false); return; } } catch (_) {}
       try {
-        var ctrl = new AbortController(), t = setTimeout(function () { ctrl.abort(); }, 800);
+        var ctrl = new AbortController(), t = setTimeout(function () { ctrl.abort(); }, 1800);
         var res = await fetch('/api/geo', { method: 'GET', headers: { Accept: 'application/json' }, cache: 'no-store', signal: ctrl.signal });
         clearTimeout(t);
         if (res && res.ok) {

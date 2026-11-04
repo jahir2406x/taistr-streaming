@@ -54,6 +54,7 @@ const acciones = TEXTOS_BOTONES.acciones;
       class="hero-glow-blob-3 absolute -bottom-24 left-1/3 w-[22rem] sm:w-[28rem] h-[22rem] sm:h-[28rem] rounded-full opacity-45 blur-3xl"
       style="background: radial-gradient(circle, var(--glow-brand-subtle) 0%, transparent 70%);"
     ></div>
+    <div class="hero-glow-dynamic" aria-hidden="true"></div>
     <div class="hero-grid-pattern absolute inset-0"></div>
     <div class="hero-noise-layer absolute inset-0"></div>
   </div>
@@ -62,9 +63,25 @@ const acciones = TEXTOS_BOTONES.acciones;
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
       <!-- Columna izquierda (asimétrica más ancha): Propuesta de valor -->
       <div class="lg:col-span-7 min-w-0 space-y-5">
-        <div class="hero-stagger inline-flex items-center gap-2 max-w-full text-xs sm:text-sm font-medium text-brand bg-[var(--surface-2)] border border-[var(--border-subtle)] px-3.5 py-1.5 rounded-full shadow-sm" style="--i: 0;">
-          <span class="w-2 h-2 rounded-full bg-brand shrink-0 animate-pulse" aria-hidden="true"></span>
-          <span data-texto-pais="hero_insignia" class="leading-snug">{defaultHeroInsignia}</span>
+        <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
+          <div class="hero-stagger inline-flex items-center gap-2 max-w-full text-xs sm:text-sm font-medium text-brand bg-[var(--surface-2)] border border-[var(--border-subtle)] px-3.5 py-1.5 rounded-full shadow-sm" style="--i: 0;">
+            <span class="w-2 h-2 rounded-full bg-brand shrink-0 animate-pulse" aria-hidden="true"></span>
+            <span data-texto-pais="hero_insignia" class="leading-snug">{defaultHeroInsignia}</span>
+          </div>
+
+          <div
+            id="live-support-badge"
+            data-open={MARCA.horarioAtencion.abre}
+            data-close={MARCA.horarioAtencion.cierra}
+            data-tz={MARCA.horarioAtencion.utcOffset}
+            class="hero-stagger inline-flex items-center gap-2 text-xs font-medium text-ink-muted bg-[var(--surface-2)] border border-[var(--border-subtle)] px-3 py-1.5 rounded-full shadow-sm"
+            style="--i: 0;"
+          >
+            <span id="live-support-dot" class="w-2 h-2 rounded-full bg-emerald-400 shrink-0 relative flex items-center justify-center">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            </span>
+            <span id="live-support-text" class="text-[11px] sm:text-xs">En línea ahora · Respuesta en 5-15 min</span>
+          </div>
         </div>
 
         <h1 data-texto-pais="hero_titulo" class="font-display font-extrabold text-[length:var(--text-h1)] text-ink tracking-tight leading-[1.08] pb-1">

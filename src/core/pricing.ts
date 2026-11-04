@@ -71,6 +71,12 @@ export function formatPrice(amount: number, currency: string, locale = 'es-419')
     formattedNumber = `${amount}`;
   }
 
+  // Algunos locales (es-419) anteponen el código ISO ("USD 3.20"): se normaliza a "$3.20 USD"
+  // para no mostrar la moneda dos veces.
+  if (formattedNumber.toUpperCase().startsWith(`${iso} `)) {
+    formattedNumber = `${iso === 'USD' ? '$' : ''}${formattedNumber.slice(iso.length + 1).trim()}`;
+  }
+
   if (formattedNumber.toUpperCase().endsWith(` ${iso}`)) {
     return formattedNumber;
   }

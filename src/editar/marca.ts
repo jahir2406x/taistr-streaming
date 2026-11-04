@@ -16,6 +16,9 @@ export const MARCA = {
   correoContacto: 'taicorp2406x@gmail.com',
   anioActual: 2026,
   horarioSoporte: 'Lunes a Domingo · 9:00 a.m. a 10:30 p.m. (GMT-5)',
+  // Horario en formato 24 h usado por el indicador "En línea ahora" del hero (debe coincidir con horarioSoporte).
+  // utcOffset: diferencia horaria respecto a UTC (Perú = -5).
+  horarioAtencion: { abre: '09:00', cierra: '22:30', utcOffset: -5 },
   tiempoRespuesta: '5 a 15 minutos en horario de atención',
   mediosPagoResumen: ['Yape', 'Plin', 'Transferencia BCP / Interbank / BBVA'],
   redesSociales: {

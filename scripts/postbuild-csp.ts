@@ -124,8 +124,28 @@ export function renderApacheHtaccess(cfg: ReturnType<typeof buildSecurityHeaders
   return `# Cabeceras de seguridad y caché equivalentes a _headers (generadas automáticamente tras el build).
 # Nota HSTS preload: para solicitar inclusión en hstspreload.org añade "; preload" a Strict-Transport-Security (ver docs/SEGURIDAD.md).
 # Justificación style-src 'unsafe-inline': requerido para variables CSS por servicio en atributos style="--acento:..." y transiciones CSSOM.
+Options -Indexes
+ServerSignature Off
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # Forzar HTTPS
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  # /api/geo -> endpoint PHP (equivalente a la Pages Function de Cloudflare)
+  RewriteRule ^api/geo/?$ api/geo.php [L,QSA]
+  # Bloquear archivos ocultos (excepto .well-known) y respaldos
+  RewriteRule (^|/)\\.(?!well-known/) - [F,L]
+  RewriteRule \\.(bak|old|orig|tmp|swp|map|sql|log|ini|env|zip)$ - [F,L,NC]
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/javascript application/json application/xml image/svg+xml
+</IfModule>
+
 <IfModule mod_headers.c>
 ${headerLines}
+  Header unset X-Powered-By
 
   <FilesMatch "\\.(html|xml|txt)$">
     Header set Cache-Control "${cfg.cacheHtml}"

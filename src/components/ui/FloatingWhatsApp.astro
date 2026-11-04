@@ -11,12 +11,12 @@ interface Props {
 const { tipo = 'boton_flotante', customMessage } = Astro.props;
 ---
 
-<div class="fixed bottom-4 right-4 z-30 print:hidden">
+<div class="fixed bottom-[calc(1rem+env(safe-area-inset-bottom,0px))] right-4 z-30 print:hidden">
   <BotonWhatsApp
     tipo={tipo}
     mensajePersonalizado={customMessage}
     ariaLabel="Abrir chat de WhatsApp para consultas"
-    class="floating-wa-pulse wa-btn-shine inline-flex items-center gap-2.5 bg-brand-whatsapp hover:bg-brand-whatsappHover text-white font-semibold text-sm px-4 py-3 rounded-full border border-white/15 transition-colors"
+    class="floating-wa-pulse wa-btn-shine inline-flex items-center gap-2.5 bg-brand-whatsapp hover:bg-brand-whatsappHover text-white font-semibold text-sm px-4 py-3 rounded-full border border-white/15 shadow-lg active:scale-95 transition-transform"
   >
     <svg
       class="w-5 h-5 shrink-0 fill-current"

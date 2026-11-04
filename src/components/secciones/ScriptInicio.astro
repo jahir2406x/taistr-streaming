@@ -151,6 +151,8 @@ const services = SERVICIOS;
       var nextPriceTxt = showPrices ? formattedPrice : 'Consultar precio por WhatsApp';
       var accent = svc.color_acento || '#F59E0B';
       if (ticketStubEl) ticketStubEl.style.setProperty('--ticket-accent', accent);
+      var heroSec = document.getElementById('hero-section');
+      if (heroSec) heroSec.style.setProperty('--hero-accent', accent);
       if (ticketDotEl) {
         ticketDotEl.style.backgroundColor = accent;
         ticketDotEl.style.boxShadow = '0 0 8px ' + accent;
@@ -199,6 +201,43 @@ const services = SERVICIOS;
       renderArmadorChips();
       rebuildPlanOptions(true);
       updateTicketDetails();
+
+      // Efecto interactivo: resplandor del Hero reacciona al cursor sobre cada plataforma
+      var heroSecEl = document.getElementById('hero-section');
+      var platformChips = document.querySelectorAll('.hero-platform-chip');
+      platformChips.forEach(function (chip) {
+        var chipAccent = chip.style.getPropertyValue('--chip-accent');
+        chip.addEventListener('mouseenter', function () {
+          if (heroSecEl && chipAccent) heroSecEl.style.setProperty('--hero-accent', chipAccent);
+        });
+        chip.addEventListener('mouseleave', function () {
+          var curSvc = getSelectedService();
+          if (heroSecEl) heroSecEl.style.setProperty('--hero-accent', curSvc ? curSvc.color_acento : '#F59E0B');
+        });
+      });
+    }
+
+    // Indicador dinámico de horario de soporte humano (GMT-5)
+    var supportBadge = document.getElementById('live-support-badge');
+    var supportText = document.getElementById('live-support-text');
+    var supportDot = document.getElementById('live-support-dot');
+    if (supportBadge && supportText && supportDot) {
+      try {
+        var now = new Date();
+        var utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+        var offset = parseInt(supportBadge.getAttribute('data-tz') || '-5', 10);
+        var targetDate = new Date(utc + (3600000 * offset));
+        var mins = (targetDate.getHours() * 60) + targetDate.getMinutes();
+        // Horario activo de 9:00 a.m. (540m) a 10:30 p.m. (1350m)
+        var isOpen = mins >= 540 && mins <= 1350;
+        if (isOpen) {
+          supportText.textContent = 'En línea ahora · Respuesta en 5-15 min';
+          supportDot.className = 'w-2 h-2 rounded-full bg-emerald-400 shrink-0 relative flex items-center justify-center';
+        } else {
+          supportText.textContent = 'Soporte por WhatsApp · 9:00 a.m. a 10:30 p.m.';
+          supportDot.className = 'w-2 h-2 rounded-full bg-amber-400 shrink-0 relative flex items-center justify-center';
+        }
+      } catch (_) {}
     }
   })();
 </script>

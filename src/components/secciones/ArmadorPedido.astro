@@ -42,41 +42,51 @@ const acciones = TEXTOS_BOTONES.acciones;
         <label for="quick-service" class="block text-xs font-medium text-ink-muted mb-1.5">
           {armador.paso1Label}
         </label>
-        <select
-          id="quick-service"
-          class="w-full bg-ground text-ink text-sm rounded border border-ground-border px-3.5 py-2.5 focus:border-brand"
-        >
-          {
-            services.map((s) => (
-              <option value={s.slug}>
-                {s.nombre} {!s.disponible ? `(${acciones.consultarDisponibilidad})` : ''}
-              </option>
-            ))
-          }
-        </select>
+        <div class="relative">
+          <select
+            id="quick-service"
+            class="w-full bg-[var(--surface-2)] text-ink text-sm rounded-lg border border-[var(--border-subtle)] hover:border-[var(--border-highlight)] px-3.5 py-2.5 focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-colors appearance-none cursor-pointer pr-10"
+          >
+            {
+              services.map((s) => (
+                <option value={s.slug} class="bg-[#121216] text-[#F4F4F5]">
+                  {s.nombre} {!s.disponible ? `(${acciones.consultarDisponibilidad})` : ''}
+                </option>
+              ))
+            }
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-ink-muted" aria-hidden="true">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </div>
+        </div>
       </div>
 
       <div>
         <label for="quick-plan" class="block text-xs font-medium text-ink-muted mb-1.5">
           {armador.paso2Label}
         </label>
-        <select
-          id="quick-plan"
-          class="w-full bg-ground text-ink text-sm rounded border border-ground-border px-3.5 py-2.5 focus:border-brand"
-        >
-          {
-            firstService.planes.map((plan, idx) => {
-              const pPen = resolvePlanPrice(plan.prices, 'PEN');
-              const pFormatted = formatPrice(pPen.amount, pPen.currency, 'es-PE');
-              return (
-                <option value={idx}>
-                  {plan.nombre} · {baseDurationLabel}
-                  {AJUSTES.SHOW_PRICES ? ` — ${pFormatted}` : ''}
-                </option>
-              );
-            })
-          }
-        </select>
+        <div class="relative">
+          <select
+            id="quick-plan"
+            class="w-full bg-[var(--surface-2)] text-ink text-sm rounded-lg border border-[var(--border-subtle)] hover:border-[var(--border-highlight)] px-3.5 py-2.5 focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-colors appearance-none cursor-pointer pr-10"
+          >
+            {
+              firstService.planes.map((plan, idx) => {
+                const pPen = resolvePlanPrice(plan.prices, 'PEN');
+                const pFormatted = formatPrice(pPen.amount, pPen.currency, 'es-PE');
+                return (
+                  <option value={idx} class="bg-[#121216] text-[#F4F4F5]">
+                    {plan.nombre} · {baseDurationLabel}
+                    {AJUSTES.SHOW_PRICES ? ` — ${pFormatted}` : ''}
+                  </option>
+                );
+              })
+            }
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-ink-muted" aria-hidden="true">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </div>
+        </div>
       </div>
 
       <!-- 3. Chips de medio de pago filtrados por país -->
@@ -140,6 +150,13 @@ const acciones = TEXTOS_BOTONES.acciones;
         <p id="ticket-note" class="text-xs text-ink-muted pt-1.5 border-t border-ground-border/70">
           {firstPlan.nota}
         </p>
+        <div class="flex items-center justify-between text-[11px] text-ink-subtle pt-1 border-t border-ground-border/50">
+          <span class="inline-flex items-center gap-1.5 text-emerald-400 font-medium">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            Entrega inmediata por WhatsApp
+          </span>
+          <span class="text-ink-muted">Garantía activa</span>
+        </div>
       </div>
 
       <BotonWhatsApp
